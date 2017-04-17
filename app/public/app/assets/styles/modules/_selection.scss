@@ -1,0 +1,68 @@
+.selection {
+    width: 100%;
+    overflow: hidden;
+
+    &__slider {
+        position: relative;
+        left: 0;
+        right: 0;
+
+        margin: 0;
+        width: 400%;
+
+        transition: transform 0.3s ease-in-out;
+       
+    }  
+
+    &__slide {
+        float: left;
+        width: 25%;
+        
+        background-color: #FFFFFF;
+
+    }
+
+    &__schedule {
+        display: none;
+    }
+
+    &__content {
+        
+        button {
+            display: none;
+
+            flex: 0 1 auto;
+            margin: 0.2rem;
+            width: 20rem;
+            height: 5rem;
+
+            text-align: right;
+            font-size: 1.7rem;
+        }
+
+
+        &--active {
+            .selection__schedule {
+                display: block;
+            }
+
+            button {
+                display: block;
+                
+            }
+        }
+    }
+
+    &__stops {
+        display: none;
+        
+
+        &--active {
+            display: block;
+        }
+
+        select {
+            width: 15rem;
+        }
+    }
+}

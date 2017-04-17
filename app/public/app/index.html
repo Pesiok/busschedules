@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hmm</title>
+    <!-- build:css assets/styles/styles.css -->
+    <link rel="stylesheet" href="temp/styles/styles.css">
+    <!-- endbuild -->
+</head>
+<body>
+    <h1>Rozkład Jazdy ZKM Bielawa - lite</h1>
+
+    <div id="selectionContainer" class="selection">
+        <div class="selection__slider">
+            <section id="startSelection" class="selection__slide">
+                <div class="selection__content selection__content--active">
+                    <h2>Znajdź przystanek</h2>
+                    <button id="startSelectionBtn">Kliknij by znaleźć przystanek</button>
+                </div>
+            </section>
+            <section id="citySelection" class="selection__slide">
+                <div class="selection__content">
+                    <h2>Wybierz miejscowość</h2>
+                    <div id="citySelectionBtns">
+                        <button data-value="stopSelection-0">Bielawa</button>
+                        <button data-value="stopSelection-1">Jodłownik</button>
+                        <button data-value="stopSelection-2">Dzierżoniów</button>
+                        <button data-value="stopSelection-3">Pieszyce</button>
+                        <button data-value="stopSelection-4">Kamionki</button>
+                        <button data-value="stopSelection-5">Rościszów</button>
+                        <button data-value="stopSelection-6">Piskorzów</button>
+                        <button data-value="stopSelection-7">Bartoszów</button>
+                        <button data-value="stopSelection-8">Piława Dolna</button>
+                        <button data-value="stopSelection-9">Piława Górna</button>
+                        <button data-value="stopSelection-10">Kośmin</button>
+                        <button data-value="stopSelection-11">Ostroszowice</button>
+                        <button data-value="stopSelection-12">Rudnica</button>
+                        <button data-value="stopSelection-13">Jemna</button>
+                        <button data-value="stopSelection-14">Dobrocin</button>
+                        <button data-value="stopSelection-15">Roztocznik</button>
+                        <button data-value="stopSelection-16">Byszów</button>
+                        <button data-value="stopSelection-17">Gilów</button>
+                        <button data-value="stopSelection-18">Gola Dzierżoniowska</button>
+                        <button data-value="stopSelection-19">Kietlin</button>
+                        <button data-value="stopSelection-20">Wilków Wielki</button>
+                        <button data-value="stopSelection-21">Niemcza</button>
+                        <button data-value="stopSelection-22">Nowa Wieś Niemczańska</button>
+                        <button data-value="stopSelection-23">Przerzeczyn Zdrój</button>
+                        <button data-value="stopSelection-24">Podlesie</button>
+                        <button data-value="stopSelection-25">Ligota Mała</button>
+                    </div>
+                    <button class="button button--back">Cofnij</button>
+                    <button class="button button--reset">Wyjdź</button>
+                </div>
+            </section>
+            <section id="stopSelection" class="selection__slide">
+                <div class="selection__content">
+                    <h2>Wybierz przystanek z listy</h2>
+                    <div id="stopSelection-0" class="selection__stops">
+                        <h3>Bielawa</h3>
+                        <button data-value="1">Bielawa Leśny Dworek</button>
+                        <button data-value="4">Bielawa Nowobielawska (kier. Dzierżoniów)</button>
+                        <button data-value="2">Bielawa Nowobielawska II (kier. Bielawa)</button>
+                        <button data-value="3">Bielawa Nowobielawska II (kier. Dzierżoniów)</button>
+                        <button data-value="7">Bielawa Sowia (kier. Bielawa)</button>
+                        <button data-value="8">Bielawa Sowia (kier. Dzierżoniów)</button>
+                        <button data-value="9">Bielawa Waryńskiego (kier. Bielawa)</button>
+                        <button data-value="10">Bielawa Waryńskiego (kier. Dzierżoniów)</button>
+                        <button data-value="11">Bielawa Słowiańska</button>
+                        <button data-value="12">Bielawa Os. Białe</button>
+                        <button data-value="13">Bielawa Sudety</button>
+                        <button data-value="14">Bielawa Kasztanowa</button>
+                        <button data-value="16">Bielawa Pl. KBielawa ościelny (kier. Bielawa)</button>
+                        <button data-value="17">Bielawa Pl. Kościelny (kier. Dzierżoniów)</button>
+                        <button data-value="18">Bielawa Przodowników Pracy</button>
+                        <button data-value="19">Bielawa Ostroszowicka</button>
+                        <button data-value="20">Bielawa Ace Rico (kier. Ostroszowice)</button>
+                        <button data-value="21">Bielawa Ace Rico (kier. Dzierżoniów)</button>
+                        <button data-value="22">Bielawa Szewska (kier. Ostroszowice)</button>
+                        <button data-value="23">Bielawa Szewska (kier. Dzierżoniów)</button>
+                        <button data-value="25">Bielawa Józefówek (kier. Ostroszowice)</button>
+                        <button data-value="26">Bielawa Józefówek (kier. Dzierżoniów)</button>
+                        <button data-value="27">Bielawa Lódowa (kier. Bielawa)</button>
+                        <button data-value="28">Bielawa Lódowa (kier. Dzierżoniów)</button>
+                        <button data-value="29">Bielawa Bielbaw (kier. Bielawa)</button>
+                        <button data-value="30">Bielawa Bielbaw (kier. Dzierżoniów)</button>
+                        <button data-value="31">Bielawa Góra Parkowa (kier. Bielawa)</button>
+                        <button data-value="32">Bielawa Góra Parkowa (kier. Dzierżoniów)</button>
+                        <button data-value="33">Bielawa Sikorskiego (kier. Bielawa)</button>
+                        <button data-value="34">Bielawa Sikorskiego (kier. Dzierżoniów)</button>
+                        <button data-value="35">Bielawa Sikorskiego Rondo (kier. Bielawa)</button>
+                        <button data-value="36">Bielawa Sikorskiego Rondo (kier. Dzierżoniów)</button>
+                        <button data-value="37">Bielawa Berlinga I (kier. Bielawa)</button>
+                        <button data-value="38">Bielawa Berlinga II (kier. Dzierżoniów)</button>
+                        <button data-value="39">Bielawa Berlinga III (kier. Dzierżoniów)</button>
+                        <button data-value="40">Bielawa Os. XXV-lecia</button>
+                        <button data-value="41">Bielawa Parkowa</button>
+                        <button data-value="42">Bielawa Bata (kier. Bielawa)</button>
+                        <button data-value="44">Bielawa Bata (kier. Dzierżoniów)</button>
+                        <button data-value="43">Bielawa Łącznik 1 Maja (kier. Bielawa)</button>
+                        <button data-value="45">Bielawa Łącznik 1 Maja (kier. Dzierżoniów)</button>
+                        <button data-value="46">Bielawa Bieltex I (kier. Bielawa)</button>
+                        <button data-value="47">Bielawa Bieltex I (kier. Dzierżoniów)</button>
+                        <button data-value="48">Bielawa Gazownia (kier. Bielawa)</button>
+                        <button data-value="49">Bielawa Gazownia (kier. Dzierżoniów)</button>
+                        <button data-value="51">Bielawa Cmentarz</button>
+                        <button data-value="56">Bielawa Bohaterów Getta (kier. Bielawa)</button>
+                        <button data-value="57">Bielawa Bohaterów Getta (kier. Pieszyce)</button>
+                        <button data-value="58">Bielawa LOK</button>
+                        <button data-value="59">Bielawa Hotel "Pod Wielką Sową"</button>
+                        <button data-value="60">Bielawa Żeromskiego</button>
+                        <button data-value="61">Bielawa L.O. (Pl. Wolności)</button>
+                        <button data-value="62">Bielawa Ogródki (kier. Bielawa)</button>
+                        <button data-value="63">Bielawa Ogródki (kier. Pieszyce)</button>
+                    </div>
+                    <div id="stopSelection-1" class="selection__stops">
+                        <h3>Jodłownik</h3>
+                        <button data-value="6">Jodłownik</button>
+                    </div>
+                    <div id="stopSelection-2" class="selection__stops">  
+                        <h3>Dzierżoniów</h3>
+                        <button data-value="66">Dzierżoniów MZK (kier. Bielawa)</button>
+                        <button data-value="65">Dzierżoniów MZK zajezdnia (kier. Dzierżoniów)</button>
+                        <button data-value="67">Dzierżoniów MZK (kier. Dzierżoniów)</button>
+                        <button data-value="68">Dzierżoniów Batalionów Chł. (kier. Bielawa)</button>
+                        <button data-value="69">Dzierżoniów Batalionów Chł. (kier. Dzierżoniów)</button>
+                        <button data-value="70">Dzierżoniów Dworzec PKS</button>
+                        <button data-value="71">Dzierżoniów Piłsudskiego (kier. Kamionki, Kośmin)</button>
+                        <button data-value="72">Dzierżoniów Piłsudskiego (kier. Bielawa)</button>
+                        <button data-value="73">Dzierżoniów Os. Jasne (kier. Dzierżoniów, Niemcza)</button>
+                        <button data-value="74">Dzierżoniów Os. Jasne (kier. Bielawa)</button>
+                        <button data-value="76">Dzierżoniów Lidl</button>
+                        <button data-value="77">Dzierżoniów Bar Kaprys</button>
+                        <button data-value="78">Dzierżoniów Diora</button>
+                        <button data-value="78">Dzierżoniów Diora</button>
+                        <button data-value="79">Dzierżoniów Kościuszki</button>
+                        <button data-value="80">Dzierżoniów Kościuszki</button>
+                        <button data-value="81">Dzierżoniów Dworzec PKP</button>
+                        <button data-value="82">Dzierżoniów Dworzec PKP</button>
+                        <button data-value="83">Dzierżoniów Klińskiego</button>
+                        <button data-value="84">Dzierżoniów Pieszyce-Dzierżoniów</button>
+                        <button data-value="85">Dzierżoniów DT. Ślązak</button>
+                        <button data-value="85">Dzierżoniów DT. Ślązak</button>
+                        <button data-value="86">Dzierżoniów Dworzec PKS</button>
+                        <button data-value="87">Dzierżoniów Dworzec PKS</button>
+                        <button data-value="88">Dzierżoniów Wrocławska</button>
+                        <button data-value="89">Dzierżoniów Wrocławska</button>
+                        <button data-value="90">Dzierżoniów Cmentarz</button>
+                        <button data-value="91">Dzierżoniów Korczaka</button>
+                        <button data-value="92">Dzierżoniów Korczaka</button>
+                        <button data-value="93">Dzierżoniów Sikorskiego I</button>
+                        <button data-value="94">Dzierżoniów Sikorskiego I</button>
+                        <button data-value="95">Dzierżoniów Sikorskiego II</button>
+                        <button data-value="96">Dzierżoniów Sikorskiego II</button>
+                        <button data-value="97">Dzierżoniów Os. Błękitne</button>
+                        <button data-value="101">Dzierżoniów Bielawska</button>
+                        <button data-value="102">Dzierżoniów Brzegowa</button>
+                        <button data-value="107">Dzierżoniów Dolny</button>
+                        <button data-value="108">Dzierżoniów Kasztanowa</button>
+                        <button data-value="109">Dzierżoniów Nowowiejska</button>
+                        <button data-value="109">Dzierżoniów Nowowiejska</button>
+                        <button data-value="112">Dzierżoniów Nowowiejska</button>
+                        <button data-value="113">Dzierżoniów Ogródki</button>
+                        <button data-value="114">Dzierżoniów Ogródki</button>
+                        <button data-value="115">Dzierżoniów Os. Zielone</button>
+                        <button data-value="116">Dzierżoniów Os. Zielone II</button>
+                        <button data-value="116">Dzierżoniów Os. Zielone II</button>
+                        <button data-value="121">Dzierżoniów Staszica</button>
+                        <button data-value="122">Dzierżoniów Strefa</button>
+                        <button data-value="123">Dzierżoniów Strefa Metzeler</button>
+                        <button data-value="124">Dzierżoniów Strefa Orion</button>
+                        <button data-value="125">Dzierżoniów Świdnicka</button>
+                        <button data-value="126">Dzierżoniów Technika Szpitalna</button>
+                        <button data-value="127">Dzierżoniów Technika Szpitalna</button>
+                        <button data-value="128">Dzierżoniów ul. Strefowa</button>
+                        <button data-value="130">Dzierżoniów Wojska Polskiego I</button>
+                        <button data-value="131">Dzierżoniów Wojska Polskiego I</button>
+                        <button data-value="133">Dzierżoniów Zajezdnia PKS</button>
+                        <button data-value="134">Dzierżoniów Zajezdnia PKS</button>
+                        <button data-value="135">Dzierżoniów Ząbkowicka</button>
+                        <button data-value="136">Dzierżoniów Ząbkowicka</button>
+                        <button data-value="137">Dzierżoniów Złota II</button>
+                        <button data-value="138">Dzierżoniów Złota III</button>
+                        <button data-value="139">Dzierżoniów Złota kotłownia</button>
+                        <button data-value="140">Dzierżoniów Klińskiego</button>
+                        <button data-value="141">Dzierżoniów Wojska Polskiego II</button>
+                    </div>
+                    <div id="stopSelection-3" class="selection__stops">
+                        <h3>Pieszyce</h3>
+                        <button data-value="142">Pieszyce Ogrodowa</button>
+                        <button data-value="143">Pieszyce Ogrodowa</button>
+                        <button data-value="144">Pieszyce Urząd Miejski</button>
+                        <button data-value="145">Pieszyce Urząd Miejski</button>
+                        <button data-value="146">Pieszyce Kino</button>
+                        <button data-value="147">Pieszyce Kino</button>
+                        <button data-value="148">Pieszyce IX oddział</button>
+                        <button data-value="149">Pieszyce IX oddział</button>
+                        <button data-value="150">Pieszyce Sklep</button>
+                        <button data-value="151">Pieszyce Sklep</button>
+                        <button data-value="152">Pieszyce VII oddział</button>
+                        <button data-value="153">Pieszyce VII oddział</button>
+                        <button data-value="154">Pieszyce Mostek</button>
+                        <button data-value="155">Pieszyce Mostek</button>
+                        <button data-value="163">Pieszyce Bielawska</button>
+                        <button data-value="164">Pieszyce Bielawska</button>
+                        <button data-value="165">Pieszyce Sanatoryjna</button>
+                        <button data-value="166">Pieszyce Sanatoryjna</button>
+                        <button data-value="166">Pieszyce Sanatoryjna</button>
+                        <button data-value="167">Pieszyce Urząd Miejski</button>
+                        <button data-value="168">Pieszyce Urząd Miejski</button>
+                        <button data-value="182">Pieszyce Tkalnia</button>
+                        <button data-value="183">Pieszyce Świdnicka</button>
+                        <button data-value="184">Pieszyce Świdnicka</button>
+                        <button data-value="185">Pieszyce Szkoła</button>
+                        <button data-value="186">Pieszyce Kółko Rolnicze</button>
+                        <button data-value="187">Pieszyce Dolne</button>
+                        <button data-value="187">Pieszyce Dolne</button>
+                        <button data-value="188">Pieszyce AUP K.Gajda</button>
+                        <button data-value="296">Pieszyce Osiedle Górskie</button>
+                        <button data-value="297">Pieszyce Osiedle Górskie</button>
+                    </div>
+                    <div id="stopSelection-4" class="selection__stops">
+                        <h3>Kamionki</h3>
+                        <button data-value="156">Kamionki Dolne</button>
+                        <button data-value="157">Kamionki Dolne</button>
+                        <button data-value="158">Kamionki I</button>
+                        <button data-value="159">Kamionki I</button>
+                        <button data-value="160">Kamionki II</button>
+                        <button data-value="161">Kamionki II</button>
+                        <button data-value="162">Kamionki III</button>
+                    </div>
+                    <div id="stopSelection-5" class="selection__stops">
+                        <h3>Rościszów</h3>
+                        <button data-value="169">Rościszów I</button>
+                        <button data-value="170">Rościszów I</button>
+                        <button data-value="171">Rościszów II</button>
+                        <button data-value="172">Rościszów II</button>
+                        <button data-value="173">Rościszów III</button>
+                        <button data-value="174">Rościszów III</button>
+                        <button data-value="175">Rościszów IV</button>
+                    </div>
+                    <div id="stopSelection-6" class="selection__stops">
+                        <h3>Piskorzów</h3>
+                        <button data-value="176">Piskorzów Kolonia</button>
+                        <button data-value="177">Piskorzów I</button>
+                        <button data-value="178">Piskorzów II</button>
+                        <button data-value="179">Piskorzów III</button>
+                    </div>
+                    <div id="stopSelection-7" class="selection__stops">
+                        <h3>Bratoszów</h3>
+                        <button data-value="180">Bratoszów I</button>
+                        <button data-value="181">Bratoszów II</button>
+                    </div>
+                    <div id="stopSelection-8" class="selection__stops">
+                        <h3>Piława Dolna</h3>
+                        <button data-value="189">Piława Dolna POM</button>
+                        <button data-value="190">Piława Dolna POM</button>
+                        <button data-value="191">Piława Dolna I</button>
+                        <button data-value="192">Piława Dolna I</button>
+                        <button data-value="193">Piława Dolna Szkoła</button>
+                        <button data-value="194">Piława Dolna Szkoła</button>
+                        <button data-value="195">Piława Dolna Remiza</button>
+                        <button data-value="196">Piława Dolna Remiza</button>
+                        <button data-value="197">Piława Dolna B. Kościół</button>
+                        <button data-value="198">Piława Dolna B. Kościół</button>
+                        <button data-value="199">Piława Dolna Cz. Kościół</button>
+                        <button data-value="200">Piława Dolna Cz. Kościół</button>
+                    </div>
+                    <div id="stopSelection-9" class="selection__stops">
+                        <h3>Piława Górna</h3>
+                        <button data-value="202">Piława Górna Staw</button>
+                        <button data-value="203">Piława Górna Staw</button>
+                        <button data-value="204">Piława Górna Os. Młyńskie</button>
+                        <button data-value="205">Piława Górna Os. Młyńskie</button>
+                        <button data-value="206">Piława Górna Żłobek</button>
+                        <button data-value="207">Piława Górna Żłobek</button>
+                        <button data-value="208">Piława Górna "BoBo"</button>
+                        <button data-value="209">Piława Górna "BoBo"</button>
+                        <button data-value="210">Piława Górna Kamieniołomy</button>
+                        <button data-value="211">Piława Górna Kamieniołomy</button>
+                        <button data-value="212">Piława Górna Szkoła</button>
+                        <button data-value="213">Piława Górna Szkoła</button>
+                        <button data-value="214">Piława Górna Dworzec PKP</button>
+                        <button data-value="215">Piława Górna Dworzec PKP</button>
+                        <button data-value="219">Piława Górna Kopanica</button>
+                        <button data-value="220">Piława Górna Zakłady</button>
+                        <button data-value="221">Piława Górna Zakłady</button>
+                    </div>
+                    <div id="stopSelection-10" class="selection__stops">
+                        <h3>Kośmin</h3>
+                        <button data-value="216">Kośmin I</button>
+                        <button data-value="217">Kośmin I</button>
+                        <button data-value="218">Kośmin</button>
+                    </div>
+                    <div id="stopSelection-11" class="selection__stops">
+                        <h3>Ostroszowice</h3>          
+                        <button data-value="223">Ostroszowice I</button>
+                        <button data-value="224">Ostroszowice I</button>
+                        <button data-value="235">Ostroszowice I</button>
+                        <button data-value="236">Ostroszowice I</button>
+                        <button data-value="225">Ostroszowice Sklep</button>
+                        <button data-value="226">Ostroszowice Sklep</button>
+                        <button data-value="237">Ostroszowice Sklep</button>
+                        <button data-value="227">Ostroszowice Fabryka Mebli</button>
+                        <button data-value="228">Ostroszowice Poczta</button>
+                        <button data-value="229">Ostroszowice Poczta</button>
+                        <button data-value="229">Ostroszowice Poczta</button>
+                        <button data-value="230">Ostroszowice Zakład Stolarski</button>
+                        <button data-value="231">Ostroszowice Zakład Stolarski</button>
+                        <button data-value="232">Ostroszowice Ośrodek Zdrowia</button>
+                        <button data-value="233">Ostroszowice Ośrodek Zdrowia</button>
+                    </div>
+                    <div id="stopSelection-12" class="selection__stops">
+                        <h3>Rudnica</h3>
+                        <button data-value="238">Rudnica I</button>
+                        <button data-value="239">Rudnica I</button>
+                        <button data-value="240">Rudnica II</button>
+                        <button data-value="241">Rudnica II</button>
+                        <button data-value="242">Rudnica III</button>
+                        <button data-value="243">Rudnica III</button>
+                    </div>
+                    <div id="stopSelection-13" class="selection__stops">
+                        <h3>Jemna</h3>
+                        <button data-value="244">Jemna</button>
+                    </div>
+                    <div id="stopSelection-14" class="selection__stops">
+                        <h3>Dobrocin</h3>
+                        <button data-value="245">Dobrocin I</button>
+                        <button data-value="246">Dobrocin I</button>
+                        <button data-value="249">Dobrocin II</button>
+                        <button data-value="250">Dobrocin II</button>
+                        <button data-value="247">Dobrocin Sklep</button>
+                        <button data-value="248">Dobrocin Sklep</button>
+                    </div>
+                    <div id="stopSelection-15" class="selection__stops">
+                        <h3>Roztocznik</h3>
+                        <button data-value="251">Roztocznik I</button>
+                        <button data-value="252">Roztocznik I</button>
+                        <button data-value="253">Roztocznik Wieś</button>
+                        <button data-value="254">Roztocznik Wieś</button>
+                        <button data-value="255">Roztocznik Wieś II</button>
+                        <button data-value="257">Roztocznik Skrzyżowanie</button>
+                        <button data-value="258">Roztocznik Skrzyżowanie</button>
+                    </div>
+                    <div id="stopSelection-16" class="selection__stops">
+                        <h3>Byszów</h3>
+                        <button data-value="259">Byszów</button>
+                        <button data-value="260">Byszów</button>
+                    </div>
+                    <div id="stopSelection-17" class="selection__stops">
+                        <h3>Gilów</h3>
+                        <button data-value="261">Gilów I</button>
+                        <button data-value="262">Gilów I</button>
+                        <button data-value="263">Gilów Sklep</button>
+                        <button data-value="264">Gilów Sklep</button>
+                        <button data-value="265">Gilów Skrzyżowanie</button>
+                        <button data-value="266">Gilów Skrzyżowanie</button>
+                        <button data-value="267">Gilów II</button>
+                        <button data-value="268">Gilów II</button>
+                    </div>
+                    <div id="stopSelection-18" class="selection__stops">
+                        <h3>Gola Dzierżoniowska</h3>
+                        <button data-value="271">Gola Dzierżoniowska</button>
+                        <button data-value="272">Gola Dzierżoniowska</button>
+                    </div>
+                    <div id="stopSelection-19" class="selection__stops">
+                        <h3>Kietlin</h3>
+                        <button data-value="273">Kietlin</button>
+                        <button data-value="274">Kietlin</button>
+                    </div>
+                    <div id="stopSelection-20" class="selection__stops">
+                        <h3>Wilków Wielki</h3>
+                        <button data-value="275">Skrzyżowanie</button>
+                        <button data-value="277">Sklep<buttonn>
+                    </div>
+                    <div id="stopSelection-21" class="selection__stops">
+                        <h3>Niemcza</h3>
+                        <button data-value="278">Niemcza Os. Podmiejskie</button>
+                        <button data-value="279">Niemcza Os. Podmiejskie</button>
+                        <button data-value="280">Niemcza Dworzec PKP</button>
+                        <button data-value="281">Niemcza Dworzec PKP</button>
+                        <button data-value="282">Niemcza Słowackiego</button>
+                        <button data-value="283">Niemcza Słowackiego</button>
+                        <button data-value="284">Niemcza Remiza</button>
+                    </div>
+                    <div id="stopSelection-22" class="selection__stops">
+                        <h3>Nowa Wieś Niemczańska</h3>
+                        <button data-value="285">Nowa Wieś Niemczańska</button>
+                        <button data-value="286">Nowa Wieś Niemczańska</button>
+                    </div>
+                    <div id="stopSelection-23" class="selection__stops">
+                        <h3>Przerzeczyn Zdrój</h3>
+                        <button data-value="287">Przerzeczyn Zdrój</button>
+                        <button data-value="288">Przerzeczyn Zdrój</button>
+                        <button data-value="289">Sklep</button>
+                    </div>
+                    <div id="stopSelection-24" class="selection__stops">
+                        <h3>Podlesie</h3>
+                        <button data-value="290">Podlesie I</button>
+                        <button data-value="291">Podlesie I</button>
+                        <button data-value="292">Podlesie</button>
+                    </div>
+                    <div id="stopSelection-25" class="selection__stops">
+                        <h3>Ligota Mała</h3>
+                        <button data-value="293">Ligota Mała</button>
+                        <button data-value="294">Ligota Mała</button>
+                    </div>
+                    <button class="button button--back">Cofnij</button>
+                    <button class="button button--reset">Wyjdź</button>
+                </div>
+            </section>
+            <section class="selection__slide">
+                <div class="selection__content">
+                    <div id="schedule" class="selection__schedule">
+
+                    </div>
+                    <button class="button button--back">Cofnij</button>
+                    <button class="button button--fav">Dodaj do ulubionych</button>
+                    <button class="button button--reset">Wyjdź</button>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div id="favStops" class="fav-stops">
+        <h2>Twoje ulubione przystanki</h2>
+
+    </div>
+    
+
+    <!-- build:js assets/scripts/app.js -->
+    <script src="/temp/scripts/app.js"></script>
+    <!-- endbuild -->
+</body>
+</html>
