@@ -1,21 +1,28 @@
 "use strict";
 
 import Slider from './Slider';
-const slider = new Slider();
 
-//elements
+//DOM elements
+const selectionSlider = document.querySelector(".selection__slider");
+const slidesContent = [...document.querySelectorAll(".selection__content")];
 const startSelection = document.getElementById("startSelection");
 const citySelection = document.getElementById("citySelection");
 const citySelectionBtns = document.getElementById("citySelectionBtns");
 const stopSelection = document.getElementById("stopSelection");
 const scheduleContainer = document.getElementById("schedule");
+const favStopsContainer = document.getElementById("favStops");
 const startBtn = document.getElementById("startSelectionBtn");
 const backBtns = [...document.querySelectorAll(".button--back")];
 const resetBtns = [...document.querySelectorAll(".button--reset")];
 const addToFavBtn = document.querySelector(".button--fav");
-//temp varibles
+
+//initialize slider
+const slider = new Slider(selectionSlider, slidesContent);
+
+//temp variables
 let chosenCity = null;
 
+//priv methods
 function citySelectionHandler(event) {
     if (event.target && event.target.matches("button")) {
         //hide prev city if there was any
@@ -32,12 +39,16 @@ function citySelectionHandler(event) {
 function stopSelectionHandler(event) {
     if (event.target && event.target.matches("button")) {
         const stopNumber = event.target.dataset.value;
-        this.controller.requestSchedule(stopNumber);
-        slider.slide("next");
+        console.log("requested schedule!");
+        // ???????????????
+        this.controller.requestSchedule(stopNumber)
+            .then(slider.slide("next"))
+            .then(this.view.renderSchedule);
     }
 }
 
-class View {
+//
+class View  {
     constructor(model, controller) {
         this.model = model;
         this.controller = controller;
@@ -51,7 +62,7 @@ class View {
         backBtns.forEach(element => element.addEventListener("click", () => slider.slide("prev")));
         resetBtns.forEach(element => element.addEventListener("click", () => slider.slide("reset")));
 
-        //stop selection handlers
+        //selection handlers
         const stopHandler = stopSelectionHandler.bind(this);
         citySelectionBtns.addEventListener("click", event => {
             //remove old listener if there was any
@@ -62,12 +73,12 @@ class View {
         });
 
         //favourites stops' handlers
-        //addToFavBtn.addEventListener("click", this.controller.addToFavourites);
+        addToFavBtn.addEventListener("click", this.controller.addToFavourites.bind(this));
     }
 
-    renderSchedule() {
-        const schedule = this.model.schedule;
+    renderSchedule(json = this.model.schedule) {
         const container = scheduleContainer;
+        const schedule = json;
         let departures = "";
 
         for (let departure of schedule.departures) {
@@ -90,7 +101,19 @@ class View {
                 ${departures}
             </table>
         `
+        //slider.slide("next");
     }
+    /*
+    renderFavourites() {
+        const favs = this.model.favouriteStops;
+        favs.forEach(id => {
+            if (id === this.model.stopId) {
+                renderSchedule(id, )
+            }
+        }); 
+
+    }
+    */
     
 }
 

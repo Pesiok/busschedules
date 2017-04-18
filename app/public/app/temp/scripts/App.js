@@ -91,6 +91,15 @@ var Controller = function () {
         value: function initialize(model, view) {
             this.model = model;
             this.view = view;
+
+            this.storageInit();
+        }
+    }, {
+        key: "storageInit",
+        value: function storageInit() {
+            if (!localStorage.favouriteStops) {
+                localStorage.favouriteStops = [];
+            }
         }
     }, {
         key: "requestSchedule",
@@ -107,20 +116,31 @@ var Controller = function () {
                 })
             };
             var url = "/schedule";
+            // ?????????????????????????????
+            return new Promise(function (resolve, reject) {
+                fetch(url, options).then(function (response) {
+                    return response.json();
+                }).then(function (json) {
 
-            fetch(url, options).then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                _this.model.saveSchedule(json, stopNumber);
-                _this.view.renderSchedule();
-            }).catch(function (err) {
-                return console.error(err);
+                    resolve(function () {
+                        return _this.model.saveSchedule(json, stopNumber);
+                    });
+                }).catch(function (err) {
+                    return reject(console.error(err));
+                });
             });
         }
     }, {
-        key: "addToFavorites",
-        value: function addToFavorites() {
-            console.log("hello from controller");
+        key: "addToFavourites",
+        value: function addToFavourites() {
+            console.log("adding to favs!");
+            var currentId = this.model.stopId;
+            //adding to local storage
+            localStorage.favouriteStops.push(currentId);
+            //saving current state to model
+            this.model.saveToFavourites(currentId);
+            //updating the view
+            this.view.renderFavourites();
         }
     }]);
 
@@ -146,44 +166,43 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var priv = new WeakMap();
-var _ = function _(instance) {
-    return priv.get(instance);
-};
+var favStops = [];
+var maxFavStops = 10;
+var schedule = {};
+var stopId = null;
 
 var Model = function () {
     function Model() {
-        _classCallCheck(this, Model);
+        //
 
-        var privateMembrs = {
-            schedule: {},
-            stopId: 0,
-            favStops: [],
-            maxFavStops: 10
-        };
-        priv.set(this, privateMembrs);
+        _classCallCheck(this, Model);
     }
 
     _createClass(Model, [{
         key: "saveSchedule",
         value: function saveSchedule(json, id) {
-            _(this).schedule = json;
-            _(this).stopId = id;
+            schedule = json;
+            stopId = id;
         }
     }, {
         key: "saveToFavourites",
         value: function saveToFavourites(id) {
-            _(this).stopId.push(id);
+            favStops.push(id);
+        }
+    }, {
+        key: "favouriteStops",
+        get: function get() {
+            return favStops;
         }
     }, {
         key: "schedule",
         get: function get() {
-            return _(this).schedule;
+            return schedule;
         }
     }, {
         key: "stopId",
         get: function get() {
-            return _(this).stopId;
+            return stopId;
         }
     }]);
 
@@ -215,21 +234,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var slider = new _Slider2.default();
-
-//elements
+//DOM elements
+var selectionSlider = document.querySelector(".selection__slider");
+var slidesContent = [].concat(_toConsumableArray(document.querySelectorAll(".selection__content")));
 var startSelection = document.getElementById("startSelection");
 var citySelection = document.getElementById("citySelection");
 var citySelectionBtns = document.getElementById("citySelectionBtns");
 var stopSelection = document.getElementById("stopSelection");
 var scheduleContainer = document.getElementById("schedule");
+var favStopsContainer = document.getElementById("favStops");
 var startBtn = document.getElementById("startSelectionBtn");
 var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--back")));
 var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--reset")));
 var addToFavBtn = document.querySelector(".button--fav");
-//temp varibles
+
+//initialize slider
+var slider = new _Slider2.default(selectionSlider, slidesContent);
+
+//temp variables
 var chosenCity = null;
 
+//priv methods
 function citySelectionHandler(event) {
     if (event.target && event.target.matches("button")) {
         //hide prev city if there was any
@@ -246,10 +271,13 @@ function citySelectionHandler(event) {
 function stopSelectionHandler(event) {
     if (event.target && event.target.matches("button")) {
         var stopNumber = event.target.dataset.value;
-        this.controller.requestSchedule(stopNumber);
-        slider.slide("next");
+        console.log("requested schedule!");
+        // ???????????????
+        this.controller.requestSchedule(stopNumber).then(slider.slide("next")).then(this.view.renderSchedule);
     }
 }
+
+//
 
 var View = function () {
     function View(model, controller) {
@@ -279,7 +307,7 @@ var View = function () {
                 });
             });
 
-            //stop selection handlers
+            //selection handlers
             var stopHandler = stopSelectionHandler.bind(this);
             citySelectionBtns.addEventListener("click", function (event) {
                 //remove old listener if there was any
@@ -290,13 +318,15 @@ var View = function () {
             });
 
             //favourites stops' handlers
-            //addToFavBtn.addEventListener("click", this.controller.addToFavourites);
+            addToFavBtn.addEventListener("click", this.controller.addToFavourites.bind(this));
         }
     }, {
         key: "renderSchedule",
         value: function renderSchedule() {
-            var schedule = this.model.schedule;
+            var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.schedule;
+
             var container = scheduleContainer;
+            var schedule = json;
             var departures = "";
 
             var _iteratorNormalCompletion = true;
@@ -325,7 +355,19 @@ var View = function () {
             }
 
             container.innerHTML = "\n            <h2>" + schedule.stop + "</h2>\n            <table>\n                <tr>\n                    <th>Godzina odjazdu</th>\n                    <th>Linia</th>\n                    <th>Kierunek</th>\n                </tr>\n                " + departures + "\n            </table>\n        ";
+            //slider.slide("next");
         }
+        /*
+        renderFavourites() {
+            const favs = this.model.favouriteStops;
+            favs.forEach(id => {
+                if (id === this.model.stopId) {
+                    renderSchedule(id, )
+                }
+            }); 
+          }
+        */
+
     }]);
 
     return View;
@@ -360,8 +402,7 @@ var init = function init() {
     var view = new _View2.default(model, controller);
 
     controller.initialize(model, view);
-}; //import SelectStop from './modules/SelectStop.js';
-//const selectStop = new SelectStop();
+};
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -371,7 +412,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 "use strict";
 
-//elements
+//priv variables
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -381,29 +422,24 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var selectionSlider = document.querySelector(".selection__slider");
-var slideContents = [].concat(_toConsumableArray(document.querySelectorAll(".selection__content")));
-//variables
 var translated = 0;
 var slideCounter = 0;
 
 var Slider = function () {
-    function Slider() {
-        var translateValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 25;
-
+    function Slider(slider, slides) {
         _classCallCheck(this, Slider);
 
-        this.translateValue = translateValue;
+        this.slider = slider;
+        this.slides = slides;
+        this.translateValue = 100 / slides.length;
     }
 
     _createClass(Slider, [{
         key: "slide",
         value: function slide(value) {
-            var currentSlide = slideContents[slideCounter];
-            var nextSlide = slideContents[slideCounter + 1];
-            var prevSlide = slideContents[slideCounter - 1];
+            var currentSlide = this.slides[slideCounter];
+            var nextSlide = this.slides[slideCounter + 1];
+            var prevSlide = this.slides[slideCounter - 1];
 
             switch (value) {
                 case "next":
@@ -426,7 +462,7 @@ var Slider = function () {
                     {
                         translated = 0;
                         slideCounter = 0;
-                        slideContents.forEach(function (element, index) {
+                        this.slides.forEach(function (element, index) {
                             if (index == 0) {
                                 element.classList.add("selection__content--active");
                             } else {
@@ -434,9 +470,14 @@ var Slider = function () {
                             }
                         });
                     }
+                    break;
+                default:
+                    {
+                        console.log("Incorrect input value");
+                    }
             }
 
-            selectionSlider.style.transform = "translateX(" + translated + "%)";
+            this.slider.style.transform = "translateX(" + translated + "%)";
         }
     }]);
 

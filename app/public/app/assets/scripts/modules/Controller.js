@@ -4,6 +4,14 @@ class Controller {
     initialize(model, view) {
         this.model = model;
         this.view = view;
+
+        this.storageInit();
+    }
+
+    storageInit() {
+        if (!localStorage.favouriteStops) {
+            localStorage.favouriteStops = [];
+        }
     }
 
     requestSchedule(stopNumber) {
@@ -17,19 +25,28 @@ class Controller {
             }), 
         }
         const url = "/schedule";
-
-        fetch(url, options)
+        // ?????????????????????????????
+        return new Promise((resolve, reject) => {
+            fetch(url, options)
             .then(response => response.json())
             .then(json => {
-                this.model.saveSchedule(json, stopNumber);
-                this.view.renderSchedule();
+            
+                resolve(() => this.model.saveSchedule(json, stopNumber));
             })
-            .catch(err => console.error(err));
-        
+            .catch(err => reject(console.error(err)));
+        })
     }
 
-    addToFavorites() {
-        console.log("hello from controller");
+    addToFavourites() {
+        console.log("adding to favs!")
+        const currentId = this.model.stopId;
+        //adding to local storage
+        localStorage.favouriteStops.push(currentId);
+        //saving current state to model
+        this.model.saveToFavourites(currentId);
+        //updating the view
+        this.view.renderFavourites();
+        
     }
 }
 

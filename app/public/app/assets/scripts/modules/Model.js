@@ -1,36 +1,37 @@
 "use strict";
 
 //private variables
-const priv = new WeakMap();
-const _ = instance => priv.get(instance);
+const favStops = [];
+const maxFavStops = 10;
+let schedule = {};
+let stopId = null;
 
 class Model {
     constructor() {
-        const privateMembrs = {
-            schedule: {},
-            stopId: 0, 
-            favStops: [], 
-            maxFavStops: 10
-        }
-        priv.set(this, privateMembrs);
+        //
     }
 
     saveSchedule(json, id) {
-         _(this).schedule = json;
-         _(this).stopId = id;
+         schedule = json;
+         stopId = id;
     }
 
     saveToFavourites(id) {
-        _(this).stopId.push(id);
+        favStops.push(id);
+    }
+
+    get favouriteStops() {
+        return favStops;
     }
 
     get schedule() {
-        return _(this).schedule;
+        return schedule;
     }
 
     get stopId() {
-        return _(this).stopId;
+        return stopId;
     }
+
 
 }
 

@@ -1,22 +1,21 @@
 "use strict";
-//elements
-const selectionSlider = document.querySelector(".selection__slider");
-const slideContents = [...document.querySelectorAll(".selection__content")];
-//variables
+//priv variables
 let translated = 0;
 let slideCounter = 0;
 
 class Slider {
-    constructor(translateValue = 25) {
-        this.translateValue = translateValue;
+    constructor(slider, slides) {
+        this.slider = slider;
+        this.slides = slides;
+        this.translateValue = 100 / slides.length;
     }
 
     slide(value) {
-        const currentSlide = slideContents[slideCounter];
-        const nextSlide = slideContents[slideCounter + 1];
-        const prevSlide = slideContents[slideCounter - 1];
+        const currentSlide = this.slides[slideCounter];
+        const nextSlide = this.slides[slideCounter + 1];
+        const prevSlide = this.slides[slideCounter - 1];
 
-        switch (value) {
+        switch(value) {
             case "next": {
                 translated -= this.translateValue;
                 nextSlide.classList.add("selection__content--active");
@@ -36,7 +35,7 @@ class Slider {
             case "reset": {
                 translated = 0;
                 slideCounter = 0;
-                slideContents.forEach((element, index) => {
+                this.slides.forEach((element, index) => {
                     if (index == 0) {
                         element.classList.add("selection__content--active");
                     } else {
@@ -44,9 +43,13 @@ class Slider {
                     }
                 });
             }
+            break;
+            default: {
+                console.log("Incorrect input value");
+            }
         }
 
-        selectionSlider.style.transform = `translateX(${translated}%)`;
+        this.slider.style.transform = `translateX(${translated}%)`;
     }
 
 }
