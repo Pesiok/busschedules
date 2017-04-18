@@ -2,15 +2,11 @@
 
 //private variables
 const favStops = [];
-const maxFavStops = 10;
 let schedule = {};
 let stopId = null;
 
 class Model {
-    constructor() {
-        //
-    }
-
+    
     saveSchedule(json, id) {
          schedule = json;
          stopId = id;

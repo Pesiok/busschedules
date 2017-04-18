@@ -9,8 +9,16 @@ class Controller {
     }
 
     storageInit() {
-        if (!localStorage.favouriteStops) {
-            localStorage.favouriteStops = [];
+        if (!localStorage.getItem("favouriteStops")) {
+            const favStops = [];
+            favStops.push("null");
+            localStorage.setItem("favouriteStops", JSON.stringify(favStops));
+        } else {
+            const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+            
+            favStopsArr
+                .filter(element => parseInt(element))
+                .map(element => this.model.saveToFavourites(element));
         }
     }
 
@@ -25,23 +33,24 @@ class Controller {
             }), 
         }
         const url = "/schedule";
-        // ?????????????????????????????
+        console.log(this);
         return new Promise((resolve, reject) => {
             fetch(url, options)
-            .then(response => response.json())
-            .then(json => {
-            
-                resolve(() => this.model.saveSchedule(json, stopNumber));
-            })
-            .catch(err => reject(console.error(err)));
+                .then(response => response.json())
+                .then(json => {
+                    this.model.saveSchedule(json, stopNumber)
+                    resolve();
+                })
+                .catch(err => reject(console.error(err)));
         })
     }
 
     addToFavourites() {
-        console.log("adding to favs!")
         const currentId = this.model.stopId;
         //adding to local storage
-        localStorage.favouriteStops.push(currentId);
+        const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+        favStopsArr.push(currentId);
+        localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
         //saving current state to model
         this.model.saveToFavourites(currentId);
         //updating the view
