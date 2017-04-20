@@ -100,12 +100,13 @@ var Controller = function () {
             var _this = this;
 
             if (!localStorage.getItem("favouriteStops")) {
+                //create new array in localStorage
                 var favStops = [];
                 favStops.push("null");
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             } else {
                 var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-
+                //get array from localStorage and update the view
                 favStopsArr.filter(function (element) {
                     return parseInt(element);
                 }).map(function (element) {
@@ -118,6 +119,8 @@ var Controller = function () {
         value: function requestSchedule(stopNumber) {
             var _this2 = this;
 
+            var saveToModel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
             var options = {
                 method: "POST",
                 headers: new Headers({
@@ -128,13 +131,13 @@ var Controller = function () {
                 })
             };
             var url = "/schedule";
-            console.log(this);
+
             return new Promise(function (resolve, reject) {
                 fetch(url, options).then(function (response) {
                     return response.json();
                 }).then(function (json) {
-                    _this2.model.saveSchedule(json, stopNumber);
-                    resolve();
+                    if (saveToModel) _this2.model.saveSchedule(json, stopNumber);
+                    resolve(json);
                 }).catch(function (err) {
                     return reject(console.error(err));
                 });
@@ -144,14 +147,22 @@ var Controller = function () {
         key: "addToFavourites",
         value: function addToFavourites() {
             var currentId = this.model.stopId;
-            //adding to local storage
+            //accessing localStorage
             var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+            //check if it already is in favs
+            // !!!
             favStopsArr.push(currentId);
             localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
             //saving current state to model
             this.model.saveToFavourites(currentId);
             //updating the view
             this.view.renderFavourites();
+        }
+    }, {
+        key: "removeFromFavourites",
+        value: function removeFromFavourites(id) {
+            var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+            //remove element from the array
         }
     }]);
 
@@ -178,6 +189,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var favStops = [];
+var maxFavs = 5;
 var schedule = {};
 var stopId = null;
 
@@ -255,14 +267,10 @@ var startBtn = document.getElementById("startSelectionBtn");
 var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--back")));
 var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--reset")));
 var addToFavBtn = document.querySelector(".button--fav");
+var removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
 
 //initialize slider
 var slider = new _Slider2.default(selectionSlider, slidesContent);
-
-//temp variables
-var chosenCity = null;
-
-//
 
 var View = function () {
     function View(model, controller) {
@@ -270,6 +278,8 @@ var View = function () {
 
         this.model = model;
         this.controller = controller;
+        //temp variable
+        this.chosenCity = null;
         //initialize main events
         this.events();
     }
@@ -298,23 +308,55 @@ var View = function () {
             var stopHandler = this.stopSelectionHandler.bind(this);
             citySelectionBtns.addEventListener("click", function (event) {
                 //remove old listener if there was any
-                if (chosenCity) chosenCity.removeEventListener("click", stopHandler);
+                if (_this.chosenCity) _this.chosenCity.removeEventListener("click", stopHandler);
                 //get new city, attach event listener only to stops' container from given city
                 _this.citySelectionHandler(event);
-                chosenCity.addEventListener("click", stopHandler);
+                _this.chosenCity.addEventListener("click", stopHandler);
             });
 
-            //favourites stops' handlers
+            //favourite handlers
             addToFavBtn.addEventListener("click", function () {
                 return _this.controller.addToFavourites();
             });
+            this.updateRemoveFavBtnsListeners();
+        }
+    }, {
+        key: "updateRemoveFavBtnsListeners",
+        value: function updateRemoveFavBtnsListeners() {
+            var _this2 = this;
+
+            //called whenever new remove btn was added
+            removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
+
+            if (removeFromFavBtns.length > 0) {
+                removeFromFavBtns.forEach(function (element) {
+                    return element.addEventListener("click", function (event) {
+                        return _this2.removeFromFavHandler(event);
+                    });
+                });
+            }
+        }
+    }, {
+        key: "removeFromFavHandler",
+        value: function removeFromFavHandler(event) {
+            var id = event.target.dataset.value;
+            //const scheduleToRemove = document.getElementById(`stop-${id}`).outerHTML="";
+            //err Deleting local variable in strict mode
+            // !!!
+            //delete scheduleToRemove;
+            console.log(id);
+
+            this.controller.removeFromFavourites(id);
         }
     }, {
         key: "stopSelectionHandler",
         value: function stopSelectionHandler(event) {
             if (event.target && event.target.matches("button")) {
-                var stopNumber = event.target.dataset.value;
-                this.controller.requestSchedule(stopNumber).then(this.renderSchedule.bind(this)).then(slider.slide("next"));
+                var id = event.target.dataset.value;
+
+                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displayReqSchedule.bind(this)).catch(function (err) {
+                    return console.error(err);
+                });
             }
         }
     }, {
@@ -322,12 +364,12 @@ var View = function () {
         value: function citySelectionHandler(event) {
             if (event.target && event.target.matches("button")) {
                 //hide prev city if there was any
-                if (chosenCity) chosenCity.classList.remove("selection__stops--active");
+                if (this.chosenCity) this.chosenCity.classList.remove("selection__stops--active");
                 var value = event.target.dataset.value;
                 //get new city
-                chosenCity = stopSelection.querySelector("#" + value);
+                this.chosenCity = stopSelection.querySelector("#" + value);
                 //display only stops from chosen city
-                chosenCity.classList.add("selection__stops--active");
+                this.chosenCity.classList.add("selection__stops--active");
                 slider.slide("next");
             }
         }
@@ -335,7 +377,7 @@ var View = function () {
         key: "renderSchedule",
         value: function renderSchedule() {
             var schedule = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.schedule;
-            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scheduleContainer;
+            var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.model.stopId;
 
             var departures = "";
 
@@ -364,23 +406,45 @@ var View = function () {
                 }
             }
 
-            container.innerHTML = "\n            <h2>" + schedule.stop + "</h2>\n            <table>\n                <tr>\n                    <th>Godzina odjazdu</th>\n                    <th>Linia</th>\n                    <th>Kierunek</th>\n                </tr>\n                " + departures + "\n            </table>\n        ";
+            return new Promise(function (resolve) {
+                resolve("\n            <div id=\"stop-" + id + "\">\n                <h2>" + schedule.stop + "</h2>\n                <table>\n                    <tr>\n                        <th>Godzina odjazdu</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n                <button data-value=\"" + id + "\" class=\"button button--remove\">Usu\u0144 z ulubionych</button>\n            </div>\n        ");
+            });
+        }
+    }, {
+        key: "displayReqSchedule",
+        value: function displayReqSchedule(htmlString) {
+            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scheduleContainer;
+
+            container.innerHTML = htmlString;
+            slider.slide("next");
+            this.updateRemoveFavBtnsListeners();
         }
     }, {
         key: "renderFavourites",
         value: function renderFavourites() {
-            var _this2 = this;
+            var _this3 = this;
 
             var favs = this.model.favouriteStops;
-            console.log(favs);
 
             favs.forEach(function (id) {
-                if (id === _this2.model.stopId) {
-                    _this2.renderSchedule(_this2.model.schedule, favStopsContainer);
+                if (id === _this3.model.stopId) {
+                    _this3.renderSchedule(_this3.model.schedule, id);
                 } else {
-                    _this2.controller.requestSchedule(id).then(_this2.renderSchedule.bind(_this2, id, favStopsContainer));
+                    _this3.controller.requestSchedule(id, false).then(function (json) {
+                        return _this3.renderSchedule(json, id);
+                    }).then(_this3.displayFavourites.bind(_this3)).catch(function (err) {
+                        return console.error(err);
+                    });
                 }
             }, this);
+        }
+    }, {
+        key: "displayFavourites",
+        value: function displayFavourites(htmlString) {
+            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : favStopsContainer;
+
+            container.insertAdjacentHTML("beforeend", htmlString);
+            this.updateRemoveFavBtnsListeners();
         }
     }]);
 

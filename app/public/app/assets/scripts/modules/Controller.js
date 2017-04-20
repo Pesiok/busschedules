@@ -10,19 +10,20 @@ class Controller {
 
     storageInit() {
         if (!localStorage.getItem("favouriteStops")) {
+            //create new array in localStorage
             const favStops = [];
             favStops.push("null");
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
         } else {
             const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-            
+            //get array from localStorage and update the view
             favStopsArr
                 .filter(element => parseInt(element))
                 .map(element => this.model.saveToFavourites(element));
         }
     }
 
-    requestSchedule(stopNumber) {
+    requestSchedule(stopNumber, saveToModel = true) {
         const options = {
             method: "POST",
             headers: new Headers({
@@ -33,13 +34,13 @@ class Controller {
             }), 
         }
         const url = "/schedule";
-        console.log(this);
+
         return new Promise((resolve, reject) => {
             fetch(url, options)
                 .then(response => response.json())
                 .then(json => {
-                    this.model.saveSchedule(json, stopNumber)
-                    resolve();
+                    if (saveToModel) this.model.saveSchedule(json, stopNumber);
+                    resolve(json);
                 })
                 .catch(err => reject(console.error(err)));
         })
@@ -47,8 +48,10 @@ class Controller {
 
     addToFavourites() {
         const currentId = this.model.stopId;
-        //adding to local storage
+        //accessing localStorage
         const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+        //check if it already is in favs
+        // !!!
         favStopsArr.push(currentId);
         localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
         //saving current state to model
@@ -56,6 +59,12 @@ class Controller {
         //updating the view
         this.view.renderFavourites();
         
+    }
+
+    removeFromFavourites(id) {
+        const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
+        //remove element from the array
+
     }
 }
 

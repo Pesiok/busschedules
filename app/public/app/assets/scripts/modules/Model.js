@@ -2,6 +2,7 @@
 
 //private variables
 const favStops = [];
+const maxFavs = 5;
 let schedule = {};
 let stopId = null;
 
