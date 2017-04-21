@@ -455,3 +455,11 @@ body {
       display: block; }
     .selection__stops select {
       width: 15rem; }
+
+.message-box {
+  display: none;
+  opacity: 0; }
+  .message-box--active {
+    display: block; }
+  .message-box--show {
+    opacity: 1; }

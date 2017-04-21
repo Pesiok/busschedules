@@ -1,0 +1,12 @@
+.message-box {
+    display: none;
+    opacity: 0;
+
+    &--active {
+        display: block;
+    }
+
+    &--show {
+        opacity: 1;
+    }
+}

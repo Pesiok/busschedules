@@ -16,14 +16,18 @@ class Controller {
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
         } else {
             const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-            //get array from localStorage and update the view
+            //get array from localStorage and update the model
             favStopsArr
                 .filter(element => parseInt(element))
                 .map(element => this.model.saveToFavourites(element));
         }
+        //display favourite stops on load
+        this.view.renderFavourites();
     }
 
     requestSchedule(stopNumber, saveToModel = true) {
+        console.log("requested new schedule");
+
         const options = {
             method: "POST",
             headers: new Headers({
@@ -51,13 +55,16 @@ class Controller {
         //accessing localStorage
         const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
         //check if it already is in favs
-        // !!!
-        favStopsArr.push(currentId);
-        localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
-        //saving current state to model
-        this.model.saveToFavourites(currentId);
-        //updating the view
-        this.view.renderFavourites();
+        if (favStopsArr.indexOf(currentId) >= 0) {
+            //view.message("This stop is already in your favourites")
+        } else {
+            favStopsArr.push(currentId);
+            localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
+            //saving current state to model
+            this.model.saveToFavourites(currentId);
+            //updating the view
+            this.view.renderFavourites();
+        }
         
     }
 

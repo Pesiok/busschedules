@@ -15,6 +15,7 @@ const startBtn = document.getElementById("startSelectionBtn");
 const backBtns = [...document.querySelectorAll(".button--back")];
 const resetBtns = [...document.querySelectorAll(".button--reset")];
 const addToFavBtn = document.querySelector(".button--fav");
+const msgBox = document.getElementById("messageBox");
 let removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
 
 //initialize slider
@@ -71,17 +72,6 @@ class View  {
         this.controller.removeFromFavourites(id);
     }
 
-    stopSelectionHandler(event) {
-        if (event.target && event.target.matches("button")) {
-            const id = event.target.dataset.value;
-        
-            this.controller.requestSchedule(id)
-                .then(this.renderSchedule.bind(this))
-                .then(this.displayReqSchedule.bind(this))
-                .catch(err => console.error(err));
-        }
-    }
-
     citySelectionHandler(event) {
         if (event.target && event.target.matches("button")) {
             //hide prev city if there was any
@@ -94,8 +84,18 @@ class View  {
             slider.slide("next");
         }
     }
-    
 
+    stopSelectionHandler(event) {
+        if (event.target && event.target.matches("button")) {
+            const id = event.target.dataset.value;
+        
+            this.controller.requestSchedule(id)
+                .then(this.renderSchedule.bind(this))
+                .then(this.displaySchedule.bind(this))
+                .catch(err => console.error(err));
+        }
+    }
+    
     renderSchedule(schedule = this.model.schedule, id = this.model.stopId) {
         let departures = "";
         
@@ -125,31 +125,47 @@ class View  {
         `)});
     }
 
-    displayReqSchedule(htmlString, container = scheduleContainer) {
+    displaySchedule(htmlString, container = scheduleContainer) {
         container.innerHTML = htmlString;
         slider.slide("next");
         this.updateRemoveFavBtnsListeners()
+    }
+
+    displayFavourites(schedules, container = favStopsContainer) {
+        let htmlString = "";
+        schedules.forEach(schedule => htmlString += schedule);
+        container.innerHTML = htmlString;
+        this.updateRemoveFavBtnsListeners();
     }
     
     renderFavourites() {
         const favs = this.model.favouriteStops;
 
-        favs.forEach(id => {
-            if (id === this.model.stopId) {
-                this.renderSchedule(this.model.schedule, id);
-            } else {
-                this.controller.requestSchedule(id, false)
-                    .then(json => this.renderSchedule(json, id))
-                    .then(this.displayFavourites.bind(this))
-                    .catch(err => console.error(err));
-            }
-        }, this); 
+        Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
+                        .then(json => this.renderSchedule(json, id))))
+            .then(schedules => {
+                this.displayFavourites(schedules);
+                
+            })
+            .catch(err => console.error(err));
         
     }
 
-    displayFavourites(htmlString, container = favStopsContainer) {
-        container.insertAdjacentHTML("beforeend", htmlString);
-        this.updateRemoveFavBtnsListeners()
+    message(msg, timeout = 2000) {
+        msgBox.classList.add('message-box--active');
+
+        setTimeout(() => {
+            if (msgBox.classList.contains('message-box--active')) {
+                msgBox.classList.add('message-box--show')
+            }
+        }, 150);
+
+        setTimeout(() => {
+            if (msgBox.classList.contains('message-box--active')) {
+                msgBox.classList.add('message-box--show')
+            }
+        }, msg);
+        
     }
     
     

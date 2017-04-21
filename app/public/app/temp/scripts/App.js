@@ -106,13 +106,15 @@ var Controller = function () {
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             } else {
                 var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-                //get array from localStorage and update the view
+                //get array from localStorage and update the model
                 favStopsArr.filter(function (element) {
                     return parseInt(element);
                 }).map(function (element) {
                     return _this.model.saveToFavourites(element);
                 });
             }
+            //display favourite stops on load
+            this.view.renderFavourites();
         }
     }, {
         key: "requestSchedule",
@@ -120,6 +122,8 @@ var Controller = function () {
             var _this2 = this;
 
             var saveToModel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            console.log("requested new schedule");
 
             var options = {
                 method: "POST",
@@ -150,13 +154,16 @@ var Controller = function () {
             //accessing localStorage
             var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
             //check if it already is in favs
-            // !!!
-            favStopsArr.push(currentId);
-            localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
-            //saving current state to model
-            this.model.saveToFavourites(currentId);
-            //updating the view
-            this.view.renderFavourites();
+            if (favStopsArr.indexOf(currentId) >= 0) {
+                //view.message("This stop is already in your favourites")
+            } else {
+                favStopsArr.push(currentId);
+                localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
+                //saving current state to model
+                this.model.saveToFavourites(currentId);
+                //updating the view
+                this.view.renderFavourites();
+            }
         }
     }, {
         key: "removeFromFavourites",
@@ -267,6 +274,7 @@ var startBtn = document.getElementById("startSelectionBtn");
 var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--back")));
 var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--reset")));
 var addToFavBtn = document.querySelector(".button--fav");
+var msgBox = document.getElementById("messageBox");
 var removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
 
 //initialize slider
@@ -349,17 +357,6 @@ var View = function () {
             this.controller.removeFromFavourites(id);
         }
     }, {
-        key: "stopSelectionHandler",
-        value: function stopSelectionHandler(event) {
-            if (event.target && event.target.matches("button")) {
-                var id = event.target.dataset.value;
-
-                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displayReqSchedule.bind(this)).catch(function (err) {
-                    return console.error(err);
-                });
-            }
-        }
-    }, {
         key: "citySelectionHandler",
         value: function citySelectionHandler(event) {
             if (event.target && event.target.matches("button")) {
@@ -371,6 +368,17 @@ var View = function () {
                 //display only stops from chosen city
                 this.chosenCity.classList.add("selection__stops--active");
                 slider.slide("next");
+            }
+        }
+    }, {
+        key: "stopSelectionHandler",
+        value: function stopSelectionHandler(event) {
+            if (event.target && event.target.matches("button")) {
+                var id = event.target.dataset.value;
+
+                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function (err) {
+                    return console.error(err);
+                });
             }
         }
     }, {
@@ -411,12 +419,24 @@ var View = function () {
             });
         }
     }, {
-        key: "displayReqSchedule",
-        value: function displayReqSchedule(htmlString) {
+        key: "displaySchedule",
+        value: function displaySchedule(htmlString) {
             var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scheduleContainer;
 
             container.innerHTML = htmlString;
             slider.slide("next");
+            this.updateRemoveFavBtnsListeners();
+        }
+    }, {
+        key: "displayFavourites",
+        value: function displayFavourites(schedules) {
+            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : favStopsContainer;
+
+            var htmlString = "";
+            schedules.forEach(function (schedule) {
+                return htmlString += schedule;
+            });
+            container.innerHTML = htmlString;
             this.updateRemoveFavBtnsListeners();
         }
     }, {
@@ -426,25 +446,34 @@ var View = function () {
 
             var favs = this.model.favouriteStops;
 
-            favs.forEach(function (id) {
-                if (id === _this3.model.stopId) {
-                    _this3.renderSchedule(_this3.model.schedule, id);
-                } else {
-                    _this3.controller.requestSchedule(id, false).then(function (json) {
-                        return _this3.renderSchedule(json, id);
-                    }).then(_this3.displayFavourites.bind(_this3)).catch(function (err) {
-                        return console.error(err);
-                    });
-                }
-            }, this);
+            Promise.all(favs.map(function (id) {
+                return _this3.controller.requestSchedule(id, false).then(function (json) {
+                    return _this3.renderSchedule(json, id);
+                });
+            })).then(function (schedules) {
+                _this3.displayFavourites(schedules);
+            }).catch(function (err) {
+                return console.error(err);
+            });
         }
     }, {
-        key: "displayFavourites",
-        value: function displayFavourites(htmlString) {
-            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : favStopsContainer;
+        key: "message",
+        value: function message(msg) {
+            var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
 
-            container.insertAdjacentHTML("beforeend", htmlString);
-            this.updateRemoveFavBtnsListeners();
+            msgBox.classList.add('message-box--active');
+
+            setTimeout(function () {
+                if (msgBox.classList.contains('message-box--active')) {
+                    msgBox.classList.add('message-box--show');
+                }
+            }, 150);
+
+            setTimeout(function () {
+                if (msgBox.classList.contains('message-box--active')) {
+                    msgBox.classList.add('message-box--show');
+                }
+            }, msg);
         }
     }]);
 

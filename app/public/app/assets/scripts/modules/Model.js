@@ -29,7 +29,6 @@ class Model {
         return stopId;
     }
 
-
 }
 
 export default Model;
