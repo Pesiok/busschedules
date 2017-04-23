@@ -97,8 +97,6 @@ var Controller = function () {
     }, {
         key: "storageInit",
         value: function storageInit() {
-            var _this = this;
-
             if (!localStorage.getItem("favouriteStops")) {
                 //create new array in localStorage
                 var favStops = [];
@@ -107,11 +105,10 @@ var Controller = function () {
             } else {
                 var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
                 //get array from localStorage and update the model
-                favStopsArr.filter(function (element) {
+                var filtredArr = favStopsArr.filter(function (element) {
                     return parseInt(element);
-                }).map(function (element) {
-                    return _this.model.saveToFavourites(element);
                 });
+                this.model.setFavourites(filtredArr);
             }
             //display favourite stops on load
             this.view.renderFavourites();
@@ -119,7 +116,7 @@ var Controller = function () {
     }, {
         key: "requestSchedule",
         value: function requestSchedule(stopNumber) {
-            var _this2 = this;
+            var _this = this;
 
             var saveToModel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
@@ -140,7 +137,7 @@ var Controller = function () {
                 fetch(url, options).then(function (response) {
                     return response.json();
                 }).then(function (json) {
-                    if (saveToModel) _this2.model.saveSchedule(json, stopNumber);
+                    if (saveToModel) _this.model.saveSchedule(json, stopNumber);
                     resolve(json);
                 }).catch(function (err) {
                     return reject(console.error(err));
@@ -151,16 +148,15 @@ var Controller = function () {
         key: "addToFavourites",
         value: function addToFavourites() {
             var currentId = this.model.stopId;
-            //accessing localStorage
-            var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-            //check if it already is in favs
-            if (favStopsArr.indexOf(currentId) >= 0) {
-                //view.message("This stop is already in your favourites")
+
+            if (this.model.favouriteStops.indexOf(currentId) >= 0) {
+                this.view.message("This stop is already in your favourites");
             } else {
-                favStopsArr.push(currentId);
-                localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
-                //saving current state to model
-                this.model.saveToFavourites(currentId);
+                var favStops = this.model.favouriteStops;
+                favStops.push(currentId);
+                //saving current state to model and local storage
+                this.model.setFavourites(favStops);
+                localStorage.setItem("favouriteStops", JSON.stringify(favStops));
                 //updating the view
                 this.view.renderFavourites();
             }
@@ -168,8 +164,18 @@ var Controller = function () {
     }, {
         key: "removeFromFavourites",
         value: function removeFromFavourites(id) {
-            var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-            //remove element from the array
+            if (this.model.favouriteStops.indexOf(id) < 0) {
+                this.view.message("This stop is not yet in your favourites");
+            } else {
+                var filtredArr = this.model.favouriteStops.filter(function (element) {
+                    return element !== id;
+                });
+                //saving current state to model and local storage
+                this.model.setFavourites(filtredArr);
+                localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
+                //updating the view
+                this.view.renderFavourites();
+            }
         }
     }]);
 
@@ -196,7 +202,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var favStops = [];
-var maxFavs = 5;
 var schedule = {};
 var stopId = null;
 
@@ -212,9 +217,9 @@ var Model = function () {
             stopId = id;
         }
     }, {
-        key: "saveToFavourites",
-        value: function saveToFavourites(id) {
-            favStops.push(id);
+        key: "setFavourites",
+        value: function setFavourites(arr) {
+            favStops = arr;
         }
     }, {
         key: "favouriteStops",
@@ -288,6 +293,7 @@ var View = function () {
         this.controller = controller;
         //temp variable
         this.chosenCity = null;
+        this.msgTimeoutIds = [];
         //initialize main events
         this.events();
     }
@@ -450,9 +456,7 @@ var View = function () {
                 return _this3.controller.requestSchedule(id, false).then(function (json) {
                     return _this3.renderSchedule(json, id);
                 });
-            })).then(function (schedules) {
-                _this3.displayFavourites(schedules);
-            }).catch(function (err) {
+            })).then(this.displayFavourites.bind(this)).catch(function (err) {
                 return console.error(err);
             });
         }
@@ -461,19 +465,25 @@ var View = function () {
         value: function message(msg) {
             var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
 
+            msgBox.innerHTML = msg;
+            //clearing last timeouts
+            this.msgTimeoutIds.map(function (timeoutId) {
+                return clearTimeout(timeoutId);
+            });
+            //show msg
             msgBox.classList.add('message-box--active');
-
-            setTimeout(function () {
-                if (msgBox.classList.contains('message-box--active')) {
-                    msgBox.classList.add('message-box--show');
-                }
+            var id1 = setTimeout(function () {
+                return msgBox.classList.add('message-box--show');
             }, 150);
-
-            setTimeout(function () {
-                if (msgBox.classList.contains('message-box--active')) {
-                    msgBox.classList.add('message-box--show');
-                }
-            }, msg);
+            //remove msg after timeout
+            var id2 = setTimeout(function () {
+                return msgBox.classList.remove('message-box--show');
+            }, timeout);
+            var id3 = setTimeout(function () {
+                return msgBox.classList.remove('message-box--active');
+            }, timeout + 150);
+            //saving id's
+            this.msgTimeoutIds.push(id1, id2, id3);
         }
     }]);
 

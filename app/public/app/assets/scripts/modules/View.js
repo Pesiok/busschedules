@@ -27,6 +27,7 @@ class View  {
         this.controller = controller;
         //temp variable
         this.chosenCity = null;
+        this.msgTimeoutIds = [];
         //initialize main events
         this.events()
     }
@@ -143,28 +144,23 @@ class View  {
 
         Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
                         .then(json => this.renderSchedule(json, id))))
-            .then(schedules => {
-                this.displayFavourites(schedules);
-                
-            })
+            .then(this.displayFavourites.bind(this))
             .catch(err => console.error(err));
-        
     }
 
     message(msg, timeout = 2000) {
+        msgBox.innerHTML = msg;
+        //clearing last timeouts
+        this.msgTimeoutIds.map(timeoutId => clearTimeout(timeoutId));
+        //show msg
         msgBox.classList.add('message-box--active');
+        const id1 = setTimeout(() => msgBox.classList.add('message-box--show'), 150);
+        //remove msg after timeout
+        const id2 = setTimeout(() => msgBox.classList.remove('message-box--show'), timeout);
+        const id3 = setTimeout(() => msgBox.classList.remove('message-box--active'), timeout + 150);
+        //saving id's
+        this.msgTimeoutIds.push(id1, id2, id3);
 
-        setTimeout(() => {
-            if (msgBox.classList.contains('message-box--active')) {
-                msgBox.classList.add('message-box--show')
-            }
-        }, 150);
-
-        setTimeout(() => {
-            if (msgBox.classList.contains('message-box--active')) {
-                msgBox.classList.add('message-box--show')
-            }
-        }, msg);
         
     }
     

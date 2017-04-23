@@ -1,8 +1,7 @@
 "use strict";
 
 //private variables
-const favStops = [];
-const maxFavs = 5;
+let favStops = [];
 let schedule = {};
 let stopId = null;
 
@@ -13,8 +12,8 @@ class Model {
          stopId = id;
     }
 
-    saveToFavourites(id) {
-        favStops.push(id);
+    setFavourites(arr) {
+        favStops = arr;
     }
 
     get favouriteStops() {

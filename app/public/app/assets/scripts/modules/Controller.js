@@ -17,9 +17,8 @@ class Controller {
         } else {
             const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
             //get array from localStorage and update the model
-            favStopsArr
-                .filter(element => parseInt(element))
-                .map(element => this.model.saveToFavourites(element));
+            const filtredArr = favStopsArr.filter(element => parseInt(element));
+            this.model.setFavourites(filtredArr);
         }
         //display favourite stops on load
         this.view.renderFavourites();
@@ -52,16 +51,15 @@ class Controller {
 
     addToFavourites() {
         const currentId = this.model.stopId;
-        //accessing localStorage
-        const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-        //check if it already is in favs
-        if (favStopsArr.indexOf(currentId) >= 0) {
-            //view.message("This stop is already in your favourites")
+        
+        if (this.model.favouriteStops.indexOf(currentId) >= 0) {
+            this.view.message("This stop is already in your favourites");
         } else {
-            favStopsArr.push(currentId);
-            localStorage.setItem("favouriteStops", JSON.stringify(favStopsArr));
-            //saving current state to model
-            this.model.saveToFavourites(currentId);
+            const favStops = this.model.favouriteStops;
+            favStops.push(currentId);
+            //saving current state to model and local storage
+            this.model.setFavourites(favStops);
+            localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             //updating the view
             this.view.renderFavourites();
         }
@@ -69,9 +67,16 @@ class Controller {
     }
 
     removeFromFavourites(id) {
-        const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
-        //remove element from the array
-
+        if (this.model.favouriteStops.indexOf(id) < 0) {
+            this.view.message("This stop is not yet in your favourites");
+        } else {
+            const filtredArr = this.model.favouriteStops.filter(element => element !== id);
+            //saving current state to model and local storage
+            this.model.setFavourites(filtredArr);
+            localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
+            //updating the view
+            this.view.renderFavourites();
+        }
     }
 }
 
