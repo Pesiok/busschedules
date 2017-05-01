@@ -10,19 +10,21 @@
     <!-- endbuild -->
 </head>
 <body>
-    <h1>Rozkład Jazdy ZKM Bielawa - lite</h1>
-
-    <div id="selectionContainer" class="selection">
+    <header>
+        <h1>Rozkład Jazdy ZKM Bielawa - lite</h1>
+    </header>
+    <section id="selectionContainer" class="selection">
+        <h2>Znajdź przystanek</h2>
         <div class="selection__slider">
             <section id="startSelection" class="selection__slide">
                 <div class="selection__content selection__content--active">
-                    <h2>Znajdź przystanek</h2>
-                    <button id="startSelectionBtn">Kliknij by znaleźć przystanek</button>
+                    <h3>Kliknij poniżej by znaleźć przystanek</h3>
+                    <button id="startSelectionBtn">Start</button>
                 </div>
             </section>
             <section id="citySelection" class="selection__slide">
                 <div class="selection__content">
-                    <h2>Wybierz miejscowość</h2>
+                    <h3>Wybierz miejscowość</h3>
                     <div id="citySelectionBtns">
                         <button data-value="stopSelection-0">Bielawa</button>
                         <button data-value="stopSelection-1">Jodłownik</button>
@@ -57,9 +59,9 @@
             </section>
             <section id="stopSelection" class="selection__slide">
                 <div class="selection__content">
-                    <h2>Wybierz przystanek z listy</h2>
+                    <h3>Wybierz przystanek z listy</h3>
                     <div id="stopSelection-0" class="selection__stops">
-                        <h3>Bielawa</h3>
+                        <h4>Bielawa</h4>
                         <button data-value="1">Bielawa Leśny Dworek</button>
                         <button data-value="4">Bielawa Nowobielawska (kier. Dzierżoniów)</button>
                         <button data-value="2">Bielawa Nowobielawska II (kier. Bielawa)</button>
@@ -116,11 +118,11 @@
                         <button data-value="63">Bielawa Ogródki (kier. Pieszyce)</button>
                     </div>
                     <div id="stopSelection-1" class="selection__stops">
-                        <h3>Jodłownik</h3>
+                        <h4>Jodłownik</h4>
                         <button data-value="6">Jodłownik</button>
                     </div>
                     <div id="stopSelection-2" class="selection__stops">  
-                        <h3>Dzierżoniów</h3>
+                        <h4>Dzierżoniów</h4>
                         <button data-value="66">Dzierżoniów MZK (kier. Bielawa)</button>
                         <button data-value="65">Dzierżoniów MZK zajezdnia (kier. Dzierżoniów)</button>
                         <button data-value="67">Dzierżoniów MZK (kier. Dzierżoniów)</button>
@@ -188,7 +190,7 @@
                         <button data-value="141">Dzierżoniów Wojska Polskiego II</button>
                     </div>
                     <div id="stopSelection-3" class="selection__stops">
-                        <h3>Pieszyce</h3>
+                        <h4>Pieszyce</h4>
                         <button data-value="142">Pieszyce Ogrodowa</button>
                         <button data-value="143">Pieszyce Ogrodowa</button>
                         <button data-value="144">Pieszyce Urząd Miejski</button>
@@ -222,7 +224,7 @@
                         <button data-value="297">Pieszyce Osiedle Górskie</button>
                     </div>
                     <div id="stopSelection-4" class="selection__stops">
-                        <h3>Kamionki</h3>
+                        <h4>Kamionki</h4>
                         <button data-value="156">Kamionki Dolne</button>
                         <button data-value="157">Kamionki Dolne</button>
                         <button data-value="158">Kamionki I</button>
@@ -232,7 +234,7 @@
                         <button data-value="162">Kamionki III</button>
                     </div>
                     <div id="stopSelection-5" class="selection__stops">
-                        <h3>Rościszów</h3>
+                        <h4>Rościszów</h4>
                         <button data-value="169">Rościszów I</button>
                         <button data-value="170">Rościszów I</button>
                         <button data-value="171">Rościszów II</button>
@@ -242,19 +244,19 @@
                         <button data-value="175">Rościszów IV</button>
                     </div>
                     <div id="stopSelection-6" class="selection__stops">
-                        <h3>Piskorzów</h3>
+                        <h4>Piskorzów</h4>
                         <button data-value="176">Piskorzów Kolonia</button>
                         <button data-value="177">Piskorzów I</button>
                         <button data-value="178">Piskorzów II</button>
                         <button data-value="179">Piskorzów III</button>
                     </div>
                     <div id="stopSelection-7" class="selection__stops">
-                        <h3>Bratoszów</h3>
+                        <h4>Bratoszów</h4>
                         <button data-value="180">Bratoszów I</button>
                         <button data-value="181">Bratoszów II</button>
                     </div>
                     <div id="stopSelection-8" class="selection__stops">
-                        <h3>Piława Dolna</h3>
+                        <h4>Piława Dolna</h4>
                         <button data-value="189">Piława Dolna POM</button>
                         <button data-value="190">Piława Dolna POM</button>
                         <button data-value="191">Piława Dolna I</button>
@@ -269,7 +271,7 @@
                         <button data-value="200">Piława Dolna Cz. Kościół</button>
                     </div>
                     <div id="stopSelection-9" class="selection__stops">
-                        <h3>Piława Górna</h3>
+                        <h4>Piława Górna</h4>
                         <button data-value="202">Piława Górna Staw</button>
                         <button data-value="203">Piława Górna Staw</button>
                         <button data-value="204">Piława Górna Os. Młyńskie</button>
@@ -289,13 +291,13 @@
                         <button data-value="221">Piława Górna Zakłady</button>
                     </div>
                     <div id="stopSelection-10" class="selection__stops">
-                        <h3>Kośmin</h3>
+                        <h4>Kośmin</h4>
                         <button data-value="216">Kośmin I</button>
                         <button data-value="217">Kośmin I</button>
                         <button data-value="218">Kośmin</button>
                     </div>
                     <div id="stopSelection-11" class="selection__stops">
-                        <h3>Ostroszowice</h3>          
+                        <h4>Ostroszowice</h4>          
                         <button data-value="223">Ostroszowice I</button>
                         <button data-value="224">Ostroszowice I</button>
                         <button data-value="235">Ostroszowice I</button>
@@ -313,7 +315,7 @@
                         <button data-value="233">Ostroszowice Ośrodek Zdrowia</button>
                     </div>
                     <div id="stopSelection-12" class="selection__stops">
-                        <h3>Rudnica</h3>
+                        <h4>Rudnica</h4>
                         <button data-value="238">Rudnica I</button>
                         <button data-value="239">Rudnica I</button>
                         <button data-value="240">Rudnica II</button>
@@ -322,11 +324,11 @@
                         <button data-value="243">Rudnica III</button>
                     </div>
                     <div id="stopSelection-13" class="selection__stops">
-                        <h3>Jemna</h3>
+                        <h4>Jemna</h4>
                         <button data-value="244">Jemna</button>
                     </div>
                     <div id="stopSelection-14" class="selection__stops">
-                        <h3>Dobrocin</h3>
+                        <h4>Dobrocin</h4>
                         <button data-value="245">Dobrocin I</button>
                         <button data-value="246">Dobrocin I</button>
                         <button data-value="249">Dobrocin II</button>
@@ -335,7 +337,7 @@
                         <button data-value="248">Dobrocin Sklep</button>
                     </div>
                     <div id="stopSelection-15" class="selection__stops">
-                        <h3>Roztocznik</h3>
+                        <h4>Roztocznik</h4>
                         <button data-value="251">Roztocznik I</button>
                         <button data-value="252">Roztocznik I</button>
                         <button data-value="253">Roztocznik Wieś</button>
@@ -345,12 +347,12 @@
                         <button data-value="258">Roztocznik Skrzyżowanie</button>
                     </div>
                     <div id="stopSelection-16" class="selection__stops">
-                        <h3>Byszów</h3>
+                        <h4>Byszów</h4>
                         <button data-value="259">Byszów</button>
                         <button data-value="260">Byszów</button>
                     </div>
                     <div id="stopSelection-17" class="selection__stops">
-                        <h3>Gilów</h3>
+                        <h4>Gilów</h4>
                         <button data-value="261">Gilów I</button>
                         <button data-value="262">Gilów I</button>
                         <button data-value="263">Gilów Sklep</button>
@@ -361,22 +363,22 @@
                         <button data-value="268">Gilów II</button>
                     </div>
                     <div id="stopSelection-18" class="selection__stops">
-                        <h3>Gola Dzierżoniowska</h3>
+                        <h4>Gola Dzierżoniowska</h4>
                         <button data-value="271">Gola Dzierżoniowska</button>
                         <button data-value="272">Gola Dzierżoniowska</button>
                     </div>
                     <div id="stopSelection-19" class="selection__stops">
-                        <h3>Kietlin</h3>
+                        <h4>Kietlin</h4>
                         <button data-value="273">Kietlin</button>
                         <button data-value="274">Kietlin</button>
                     </div>
                     <div id="stopSelection-20" class="selection__stops">
-                        <h3>Wilków Wielki</h3>
+                        <h4>Wilków Wielki</h4>
                         <button data-value="275">Skrzyżowanie</button>
                         <button data-value="277">Sklep<buttonn>
                     </div>
                     <div id="stopSelection-21" class="selection__stops">
-                        <h3>Niemcza</h3>
+                        <h4>Niemcza</h4>
                         <button data-value="278">Niemcza Os. Podmiejskie</button>
                         <button data-value="279">Niemcza Os. Podmiejskie</button>
                         <button data-value="280">Niemcza Dworzec PKP</button>
@@ -386,24 +388,24 @@
                         <button data-value="284">Niemcza Remiza</button>
                     </div>
                     <div id="stopSelection-22" class="selection__stops">
-                        <h3>Nowa Wieś Niemczańska</h3>
+                        <h4>Nowa Wieś Niemczańska</h4>
                         <button data-value="285">Nowa Wieś Niemczańska</button>
                         <button data-value="286">Nowa Wieś Niemczańska</button>
                     </div>
                     <div id="stopSelection-23" class="selection__stops">
-                        <h3>Przerzeczyn Zdrój</h3>
+                        <h4>Przerzeczyn Zdrój</h4>
                         <button data-value="287">Przerzeczyn Zdrój</button>
                         <button data-value="288">Przerzeczyn Zdrój</button>
                         <button data-value="289">Sklep</button>
                     </div>
                     <div id="stopSelection-24" class="selection__stops">
-                        <h3>Podlesie</h3>
+                        <h4>Podlesie</h4>
                         <button data-value="290">Podlesie I</button>
                         <button data-value="291">Podlesie I</button>
                         <button data-value="292">Podlesie</button>
                     </div>
                     <div id="stopSelection-25" class="selection__stops">
-                        <h3>Ligota Mała</h3>
+                        <h4>Ligota Mała</h4>
                         <button data-value="293">Ligota Mała</button>
                         <button data-value="294">Ligota Mała</button>
                     </div>
@@ -412,9 +414,10 @@
                 </div>
             </section>
             <section class="selection__slide">
+                <h3>Twój przystanek</h3>
                 <div class="selection__content">
                     <div id="schedule" class="selection__schedule">
-
+                         <!-- live content -->
                     </div>
                     <button class="button button--back">Cofnij</button>
                     <button class="button button--fav">Dodaj do ulubionych</button>
@@ -422,16 +425,24 @@
                 </div>
             </section>
         </div>
-    </div>
-    <div id="favStops" class="fav-stops">
+    </section>
+    <section class="fav-stops">
         <h2>Twoje ulubione przystanki</h2>
+        <button id="refreshBtn" class="button">Odźwież rozkłady</button>
+        <div id="favStops">
+            <!-- live content -->
+        </div>
+    </section>
 
-    </div>
+
+
+    <footer>
+        <p>Strona ma za zadanie ułatwić korzystanie z rozkładów jazdy przygotowanych przez ZKM Bielawa. Korzysta ona z informacji publicznie udostępnianych przez ZKM Bielawa aktualizowanych na bieżąco na <a href="http://bielawa.trapeze.fi">tej stronie</a></p>
+        <p>Autor nie uzyskuje żadnych korzyści materialnych związanych z działalnością witryny i nie ponosi odpowiedzialności za informacje zawarte w rozkładach.</p>
+    </footer>
     <div id="messageBox" class="message-box">
-        
+         <!-- live content -->
     </div>
-    
-
     <!-- build:js assets/scripts/app.js -->
     <script src="/temp/scripts/app.js"></script>
     <!-- endbuild -->

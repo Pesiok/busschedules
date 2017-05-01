@@ -1,6 +1,8 @@
-import Model from './modules/Model.js';
-import View from './modules/View.js';
-import Controller from './modules/Controller.js';
+"use strict";
+
+import Model from "./modules/Model.js";
+import View from "./modules/View.js";
+import Controller from "./modules/Controller.js";
 
 const init = function() {
     const model = new Model();

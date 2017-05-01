@@ -24,6 +24,7 @@
 
     &__schedule {
         display: none;
+        
     }
 
     &__content {
@@ -55,14 +56,10 @@
 
     &__stops {
         display: none;
-        
 
         &--active {
             display: block;
         }
 
-        select {
-            width: 15rem;
-        }
     }
 }

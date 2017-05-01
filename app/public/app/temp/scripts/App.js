@@ -97,12 +97,7 @@ var Controller = function () {
     }, {
         key: "storageInit",
         value: function storageInit() {
-            if (!localStorage.getItem("favouriteStops")) {
-                //create new array in localStorage
-                var favStops = [];
-                favStops.push("null");
-                localStorage.setItem("favouriteStops", JSON.stringify(favStops));
-            } else {
+            if (localStorage.getItem("favouriteStops")) {
                 var favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
                 //get array from localStorage and update the model
                 var filtredArr = favStopsArr.filter(function (element) {
@@ -140,32 +135,37 @@ var Controller = function () {
                     if (saveToModel) _this.model.saveSchedule(json, stopNumber);
                     resolve(json);
                 }).catch(function (err) {
-                    return reject(console.error(err));
+                    _this.view.message("Couldn't get the shedule, try again later!", 10000);
+                    reject(console.error(err));
                 });
             });
         }
     }, {
         key: "addToFavourites",
         value: function addToFavourites() {
-            var currentId = this.model.stopId;
+            var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.stopId;
 
-            if (this.model.favouriteStops.indexOf(currentId) >= 0) {
-                this.view.message("This stop is already in your favourites");
+            if (this.model.favouriteStops.indexOf(id) >= 0) {
+                this.view.message("This stop is already in your favourites!");
+                return false;
             } else {
                 var favStops = this.model.favouriteStops;
-                favStops.push(currentId);
+                favStops.push(id);
                 //saving current state to model and local storage
                 this.model.setFavourites(favStops);
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
                 //updating the view
                 this.view.renderFavourites();
+                this.view.message("Added to your favourites.");
+                return true;
             }
         }
     }, {
         key: "removeFromFavourites",
         value: function removeFromFavourites(id) {
             if (this.model.favouriteStops.indexOf(id) < 0) {
-                this.view.message("This stop is not yet in your favourites");
+                this.view.message("This stop is not yet in your favourites!");
+                return false;
             } else {
                 var filtredArr = this.model.favouriteStops.filter(function (element) {
                     return element !== id;
@@ -173,8 +173,8 @@ var Controller = function () {
                 //saving current state to model and local storage
                 this.model.setFavourites(filtredArr);
                 localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
-                //updating the view
-                this.view.renderFavourites();
+                this.view.message("Removed from favourites!");
+                return true;
             }
         }
     }]);
@@ -279,6 +279,7 @@ var startBtn = document.getElementById("startSelectionBtn");
 var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--back")));
 var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--reset")));
 var addToFavBtn = document.querySelector(".button--fav");
+var refreshBtn = document.getElementById("refreshBtn");
 var msgBox = document.getElementById("messageBox");
 var removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
 
@@ -291,9 +292,11 @@ var View = function () {
 
         this.model = model;
         this.controller = controller;
-        //temp variable
+        //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
+        //removeFavBtnHandler reference
+        this.removeFav = this.removeFromFavHandler.bind(this);
         //initialize main events
         this.events();
     }
@@ -303,7 +306,7 @@ var View = function () {
         value: function events() {
             var _this = this;
 
-            //slider buttons
+            //slider handlers//
             startBtn.addEventListener("click", function () {
                 return slider.slide("next");
             });
@@ -318,7 +321,7 @@ var View = function () {
                 });
             });
 
-            //selection handlers
+            //selection handlers//
             var stopHandler = this.stopSelectionHandler.bind(this);
             citySelectionBtns.addEventListener("click", function (event) {
                 //remove old listener if there was any
@@ -328,39 +331,50 @@ var View = function () {
                 _this.chosenCity.addEventListener("click", stopHandler);
             });
 
-            //favourite handlers
-            addToFavBtn.addEventListener("click", function () {
-                return _this.controller.addToFavourites();
-            });
+            //fav handlers//
+            addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
             this.updateRemoveFavBtnsListeners();
+
+            //refresh handler//
+            refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
         }
     }, {
         key: "updateRemoveFavBtnsListeners",
         value: function updateRemoveFavBtnsListeners() {
             var _this2 = this;
 
-            //called whenever new remove btn was added
+            //called whenever new remove btn is added
             removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
 
             if (removeFromFavBtns.length > 0) {
                 removeFromFavBtns.forEach(function (element) {
-                    return element.addEventListener("click", function (event) {
-                        return _this2.removeFromFavHandler(event);
-                    });
+                    return element.addEventListener("click", _this2.removeFav);
                 });
             }
+        }
+    }, {
+        key: "addToFavHandler",
+        value: function addToFavHandler(event) {
+            var btn = event.target;
+            if (this.controller.addToFavourites()) {
+                //success animation!!!
+            } else {
+                    //failure animation!!!
+                }
         }
     }, {
         key: "removeFromFavHandler",
         value: function removeFromFavHandler(event) {
             var id = event.target.dataset.value;
-            //const scheduleToRemove = document.getElementById(`stop-${id}`).outerHTML="";
-            //err Deleting local variable in strict mode
-            // !!!
-            //delete scheduleToRemove;
-            console.log(id);
+            var btn = event.target;
 
-            this.controller.removeFromFavourites(id);
+            if (this.controller.removeFromFavourites(id)) {
+                //remove old listener if action is valid
+                btn.removeEventListener("click", this.removeFav);
+                //remove schedule with that id from the DOM
+                var schedule = document.querySelector("#favStops #stop-" + id);
+                schedule.parentNode.removeChild(schedule);
+            }
         }
     }, {
         key: "citySelectionHandler",
@@ -442,8 +456,13 @@ var View = function () {
             schedules.forEach(function (schedule) {
                 return htmlString += schedule;
             });
-            container.innerHTML = htmlString;
-            this.updateRemoveFavBtnsListeners();
+
+            if (htmlString.length > 0) {
+                container.innerHTML = htmlString;
+                this.updateRemoveFavBtnsListeners();
+            } else {
+                container.innerHTML = "\n            <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n            <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" przy wybranym przystanku.</p>\n            <p>Ulubione przystanki s\u0105 zapisywane lokalnie w pami\u0119cie przegl\u0105darki danego urz\u0105dzenia a\u017C do jej wyczyszczenia.</p>\n            ";
+            }
         }
     }, {
         key: "renderFavourites",
@@ -452,6 +471,7 @@ var View = function () {
 
             var favs = this.model.favouriteStops;
 
+            //request schedule for each stop id in favourites
             Promise.all(favs.map(function (id) {
                 return _this3.controller.requestSchedule(id, false).then(function (json) {
                     return _this3.renderSchedule(json, id);
@@ -528,6 +548,7 @@ document.addEventListener("DOMContentLoaded", init);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
 
 //priv variables
 

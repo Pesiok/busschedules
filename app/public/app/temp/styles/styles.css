@@ -453,8 +453,6 @@ body {
     display: none; }
     .selection__stops--active {
       display: block; }
-    .selection__stops select {
-      width: 15rem; }
 
 .message-box {
   display: none;

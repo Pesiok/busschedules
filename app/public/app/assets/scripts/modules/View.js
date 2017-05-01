@@ -15,6 +15,7 @@ const startBtn = document.getElementById("startSelectionBtn");
 const backBtns = [...document.querySelectorAll(".button--back")];
 const resetBtns = [...document.querySelectorAll(".button--reset")];
 const addToFavBtn = document.querySelector(".button--fav");
+const refreshBtn = document.getElementById("refreshBtn");
 const msgBox = document.getElementById("messageBox");
 let removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
 
@@ -25,20 +26,22 @@ class View  {
     constructor(model, controller) {
         this.model = model;
         this.controller = controller;
-        //temp variable
+        //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
+        //removeFavBtnHandler reference
+        this.removeFav = this.removeFromFavHandler.bind(this);
         //initialize main events
         this.events()
     }
 
     events() {
-        //slider buttons
+        //slider handlers//
         startBtn.addEventListener("click", () => slider.slide("next"));
         backBtns.forEach(element => element.addEventListener("click", () => slider.slide("prev")));
         resetBtns.forEach(element => element.addEventListener("click", () => slider.slide("reset")));
 
-        //selection handlers
+        //selection handlers//
         const stopHandler = this.stopSelectionHandler.bind(this);
         citySelectionBtns.addEventListener("click", event => {
             //remove old listener if there was any
@@ -48,29 +51,43 @@ class View  {
             this.chosenCity.addEventListener("click", stopHandler);
         });
 
-        //favourite handlers
-        addToFavBtn.addEventListener("click", () => this.controller.addToFavourites());
-        this.updateRemoveFavBtnsListeners()
+        //fav handlers//
+        addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
+        this.updateRemoveFavBtnsListeners();
+
+        //refresh handler//
+        refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
         
     }
     updateRemoveFavBtnsListeners() {
-        //called whenever new remove btn was added
+        //called whenever new remove btn is added
         removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
 
         if (removeFromFavBtns.length > 0) {
-            removeFromFavBtns.forEach(element => element.addEventListener("click", event => this.removeFromFavHandler(event)));
+            removeFromFavBtns.forEach(element => element.addEventListener("click", this.removeFav));
+        }
+    }
+
+    addToFavHandler(event) {
+        const btn = event.target;
+        if (this.controller.addToFavourites()) {
+            //success animation!!!
+        } else {
+            //failure animation!!!
         }
     }
 
     removeFromFavHandler(event) {
         const id = event.target.dataset.value;
-        //const scheduleToRemove = document.getElementById(`stop-${id}`).outerHTML="";
-        //err Deleting local variable in strict mode
-        // !!!
-        //delete scheduleToRemove;
-        console.log(id);
+        const btn = event.target;
 
-        this.controller.removeFromFavourites(id);
+        if (this.controller.removeFromFavourites(id)) {
+            //remove old listener if action is valid
+            btn.removeEventListener("click", this.removeFav);
+            //remove schedule with that id from the DOM
+            const schedule = document.querySelector(`#favStops #stop-${id}`);
+            schedule.parentNode.removeChild(schedule);
+        }
     }
 
     citySelectionHandler(event) {
@@ -135,13 +152,24 @@ class View  {
     displayFavourites(schedules, container = favStopsContainer) {
         let htmlString = "";
         schedules.forEach(schedule => htmlString += schedule);
-        container.innerHTML = htmlString;
-        this.updateRemoveFavBtnsListeners();
+
+        if (htmlString.length > 0) {
+            container.innerHTML = htmlString;
+            this.updateRemoveFavBtnsListeners();
+        } else {
+            container.innerHTML = `
+            <p>Brak ulubionych przystanków do wyświetlenia.</p>
+            <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" przy wybranym przystanku.</p>
+            <p>Ulubione przystanki są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia.</p>
+            `
+        }
+        
     }
     
     renderFavourites() {
         const favs = this.model.favouriteStops;
-
+        
+        //request schedule for each stop id in favourites
         Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
                         .then(json => this.renderSchedule(json, id))))
             .then(this.displayFavourites.bind(this))
@@ -160,11 +188,7 @@ class View  {
         const id3 = setTimeout(() => msgBox.classList.remove('message-box--active'), timeout + 150);
         //saving id's
         this.msgTimeoutIds.push(id1, id2, id3);
-
-        
     }
-    
-    
 }
 
 export default View;

@@ -9,17 +9,12 @@ class Controller {
     }
 
     storageInit() {
-        if (!localStorage.getItem("favouriteStops")) {
-            //create new array in localStorage
-            const favStops = [];
-            favStops.push("null");
-            localStorage.setItem("favouriteStops", JSON.stringify(favStops));
-        } else {
+        if (localStorage.getItem("favouriteStops")) {
             const favStopsArr = JSON.parse(localStorage.getItem("favouriteStops"));
             //get array from localStorage and update the model
             const filtredArr = favStopsArr.filter(element => parseInt(element));
             this.model.setFavourites(filtredArr);
-        }
+        } 
         //display favourite stops on load
         this.view.renderFavourites();
     }
@@ -45,37 +40,42 @@ class Controller {
                     if (saveToModel) this.model.saveSchedule(json, stopNumber);
                     resolve(json);
                 })
-                .catch(err => reject(console.error(err)));
+                .catch(err => {
+                    this.view.message("Couldn't get the shedule, try again later!", 10000);
+                    reject(console.error(err));
+                });
         })
     }
 
-    addToFavourites() {
-        const currentId = this.model.stopId;
-        
-        if (this.model.favouriteStops.indexOf(currentId) >= 0) {
-            this.view.message("This stop is already in your favourites");
+    addToFavourites(id = this.model.stopId) {
+        if (this.model.favouriteStops.indexOf(id) >= 0) {
+            this.view.message("This stop is already in your favourites!");
+            return false;
         } else {
             const favStops = this.model.favouriteStops;
-            favStops.push(currentId);
+            favStops.push(id);
             //saving current state to model and local storage
             this.model.setFavourites(favStops);
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             //updating the view
             this.view.renderFavourites();
+            this.view.message("Added to your favourites.");
+            return true;
         }
         
     }
 
     removeFromFavourites(id) {
         if (this.model.favouriteStops.indexOf(id) < 0) {
-            this.view.message("This stop is not yet in your favourites");
+            this.view.message("This stop is not yet in your favourites!");
+            return false;
         } else {
             const filtredArr = this.model.favouriteStops.filter(element => element !== id);
             //saving current state to model and local storage
             this.model.setFavourites(filtredArr);
             localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
-            //updating the view
-            this.view.renderFavourites();
+            this.view.message("Removed from favourites!");
+            return true;
         }
     }
 }

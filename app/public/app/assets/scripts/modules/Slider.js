@@ -1,4 +1,5 @@
 "use strict";
+
 //priv variables
 let translated = 0;
 let slideCounter = 0;
