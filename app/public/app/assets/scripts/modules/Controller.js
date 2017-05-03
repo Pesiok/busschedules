@@ -16,7 +16,7 @@ class Controller {
             this.model.setFavourites(filtredArr);
         } 
         //display favourite stops on load
-        this.view.renderFavourites();
+        //this.view.renderFavourites();
     }
 
     requestSchedule(stopNumber, saveToModel = true) {

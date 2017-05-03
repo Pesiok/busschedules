@@ -5,10 +5,11 @@ let translated = 0;
 let slideCounter = 0;
 
 class Slider {
-    constructor(slider, slides) {
+    constructor(slider, slides, transitionTime = 300) {
         this.slider = slider;
         this.slides = slides;
         this.translateValue = 100 / slides.length;
+        this.delay = transitionTime;
     }
 
     slide(value) {
@@ -20,7 +21,7 @@ class Slider {
             case "next": {
                 translated -= this.translateValue;
                 nextSlide.classList.add("selection__content--active");
-                currentSlide.classList.remove("selection__content--active");
+                setTimeout(() => currentSlide.classList.remove("selection__content--active"), this.delay);
                 slideCounter++;
                 
             }
@@ -28,7 +29,7 @@ class Slider {
             case "prev": {
                 translated += this.translateValue;
                 prevSlide.classList.add("selection__content--active");
-                currentSlide.classList.remove("selection__content--active");
+                setTimeout(() => currentSlide.classList.remove("selection__content--active"), this.delay);
                 slideCounter--;
                 
             }
@@ -38,9 +39,9 @@ class Slider {
                 slideCounter = 0;
                 this.slides.forEach((element, index) => {
                     if (index == 0) {
-                        element.classList.add("selection__content--active");
+                        setTimeout(() => element.classList.add("selection__content--active"), this.delay);
                     } else {
-                        element.classList.remove("selection__content--active");
+                        setTimeout(() => element.classList.remove("selection__content--active"), this.delay);
                     }
                 });
             }

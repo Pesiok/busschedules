@@ -11,34 +11,75 @@
         width: 400%;
 
         transition: transform 0.3s ease-in-out;
-       
     }  
 
     &__slide {
         float: left;
+
         width: 25%;
         
-        background-color: #FFFFFF;
+        background-color: $mainBlue;
+        border-bottom: 0.5rem solid $darkBlue;
+    }
 
+    &__start {
+        display: block;
+        cursor: pointer;
+
+        border: none;
+        background: none;
+
+        padding: 1rem;
+        margin: 1.5rem auto;
+
+        background-color: $darkBlue;
+
+        text-align: center;
+        font-size: 1.8rem;
+        color: rgb(255, 255, 255);
+        font-family: 'Lato', sans-serif;
+
+
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+
+        height: 3.5rem;
+        margin: 0;
+
+        background-color: $darkBlue;
+
+        text-align: center;
+        font-size: 1.8rem;
+        color: rgb(255, 255, 255);
+        font-family: 'Lato', sans-serif; 
+    }
+
+    &__button {
+        display: block;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        color: rgb(255, 255, 255);
+    }
+
+    &__title {
+        margin: 0.5rem;
+        width: 100%;
+        text-align: center;
     }
 
     &__schedule {
         display: none;
-        
     }
 
     &__content {
         
         button {
             display: none;
-
-            flex: 0 1 auto;
-            margin: 0.2rem;
-            width: 20rem;
-            height: 5rem;
-
-            text-align: right;
-            font-size: 1.7rem;
         }
 
 
@@ -48,8 +89,7 @@
             }
 
             button {
-                display: block;
-                
+                display: inherit;
             }
         }
     }

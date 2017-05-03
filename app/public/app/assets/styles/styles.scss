@@ -1,5 +1,7 @@
 @import 'normalize/_import-now.scss';
-@import 'base/_mixins.scss';
+@import 'base/_variables.scss';
 @import 'base/_global.scss';
 @import 'modules/_selection.scss';
 @import 'modules/_message-box.scss';
+@import 'modules/_sprite.scss';
+@import 'modules/_cities.scss';

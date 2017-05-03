@@ -106,7 +106,7 @@ var Controller = function () {
                 this.model.setFavourites(filtredArr);
             }
             //display favourite stops on load
-            this.view.renderFavourites();
+            //this.view.renderFavourites();
         }
     }, {
         key: "requestSchedule",
@@ -276,8 +276,8 @@ var stopSelection = document.getElementById("stopSelection");
 var scheduleContainer = document.getElementById("schedule");
 var favStopsContainer = document.getElementById("favStops");
 var startBtn = document.getElementById("startSelectionBtn");
-var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--back")));
-var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--reset")));
+var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--back")));
+var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--reset")));
 var addToFavBtn = document.querySelector(".button--fav");
 var refreshBtn = document.getElementById("refreshBtn");
 var msgBox = document.getElementById("messageBox");
@@ -326,9 +326,10 @@ var View = function () {
             citySelectionBtns.addEventListener("click", function (event) {
                 //remove old listener if there was any
                 if (_this.chosenCity) _this.chosenCity.removeEventListener("click", stopHandler);
-                //get new city, attach event listener only to stops' container from given city
+                //get new city after click on btn
                 _this.citySelectionHandler(event);
-                _this.chosenCity.addEventListener("click", stopHandler);
+                //if city was clicked, attach event handler
+                if (_this.chosenCity) _this.chosenCity.addEventListener("click", stopHandler);
             });
 
             //fav handlers//
@@ -461,7 +462,7 @@ var View = function () {
                 container.innerHTML = htmlString;
                 this.updateRemoveFavBtnsListeners();
             } else {
-                container.innerHTML = "\n            <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n            <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" przy wybranym przystanku.</p>\n            <p>Ulubione przystanki s\u0105 zapisywane lokalnie w pami\u0119cie przegl\u0105darki danego urz\u0105dzenia a\u017C do jej wyczyszczenia.</p>\n            ";
+                container.innerHTML = "\n            <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n            <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" po wybraniu przystanku.</p>\n            ";
             }
         }
     }, {
@@ -565,16 +566,21 @@ var slideCounter = 0;
 
 var Slider = function () {
     function Slider(slider, slides) {
+        var transitionTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
+
         _classCallCheck(this, Slider);
 
         this.slider = slider;
         this.slides = slides;
         this.translateValue = 100 / slides.length;
+        this.delay = transitionTime;
     }
 
     _createClass(Slider, [{
         key: "slide",
         value: function slide(value) {
+            var _this = this;
+
             var currentSlide = this.slides[slideCounter];
             var nextSlide = this.slides[slideCounter + 1];
             var prevSlide = this.slides[slideCounter - 1];
@@ -584,7 +590,9 @@ var Slider = function () {
                     {
                         translated -= this.translateValue;
                         nextSlide.classList.add("selection__content--active");
-                        currentSlide.classList.remove("selection__content--active");
+                        setTimeout(function () {
+                            return currentSlide.classList.remove("selection__content--active");
+                        }, this.delay);
                         slideCounter++;
                     }
                     break;
@@ -592,7 +600,9 @@ var Slider = function () {
                     {
                         translated += this.translateValue;
                         prevSlide.classList.add("selection__content--active");
-                        currentSlide.classList.remove("selection__content--active");
+                        setTimeout(function () {
+                            return currentSlide.classList.remove("selection__content--active");
+                        }, this.delay);
                         slideCounter--;
                     }
                     break;
@@ -602,9 +612,13 @@ var Slider = function () {
                         slideCounter = 0;
                         this.slides.forEach(function (element, index) {
                             if (index == 0) {
-                                element.classList.add("selection__content--active");
+                                setTimeout(function () {
+                                    return element.classList.add("selection__content--active");
+                                }, _this.delay);
                             } else {
-                                element.classList.remove("selection__content--active");
+                                setTimeout(function () {
+                                    return element.classList.remove("selection__content--active");
+                                }, _this.delay);
                             }
                         });
                     }

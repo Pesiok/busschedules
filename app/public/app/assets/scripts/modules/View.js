@@ -12,8 +12,8 @@ const stopSelection = document.getElementById("stopSelection");
 const scheduleContainer = document.getElementById("schedule");
 const favStopsContainer = document.getElementById("favStops");
 const startBtn = document.getElementById("startSelectionBtn");
-const backBtns = [...document.querySelectorAll(".button--back")];
-const resetBtns = [...document.querySelectorAll(".button--reset")];
+const backBtns = [...document.querySelectorAll(".selection__button--back")];
+const resetBtns = [...document.querySelectorAll(".selection__button--reset")];
 const addToFavBtn = document.querySelector(".button--fav");
 const refreshBtn = document.getElementById("refreshBtn");
 const msgBox = document.getElementById("messageBox");
@@ -46,9 +46,10 @@ class View  {
         citySelectionBtns.addEventListener("click", event => {
             //remove old listener if there was any
             if (this.chosenCity) this.chosenCity.removeEventListener("click", stopHandler);
-            //get new city, attach event listener only to stops' container from given city
+            //get new city after click on btn
             this.citySelectionHandler(event);
-            this.chosenCity.addEventListener("click", stopHandler);
+            //if city was clicked, attach event handler
+            if (this.chosenCity) this.chosenCity.addEventListener("click", stopHandler);
         });
 
         //fav handlers//
@@ -159,8 +160,7 @@ class View  {
         } else {
             container.innerHTML = `
             <p>Brak ulubionych przystanków do wyświetlenia.</p>
-            <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" przy wybranym przystanku.</p>
-            <p>Ulubione przystanki są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia.</p>
+            <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" po wybraniu przystanku.</p>
             `
         }
         

@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html lang="pl">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>hmm</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
     <!-- build:css assets/styles/styles.css -->
     <link rel="stylesheet" href="temp/styles/styles.css">
     <!-- endbuild -->
@@ -16,50 +17,185 @@
     <section id="selectionContainer" class="selection">
         <h2>Znajdź przystanek</h2>
         <div class="selection__slider">
-            <section id="startSelection" class="selection__slide">
+            <div id="startSelection" class="selection__slide">
                 <div class="selection__content selection__content--active">
-                    <h3>Kliknij poniżej by znaleźć przystanek</h3>
-                    <button id="startSelectionBtn">Start</button>
+                    <button id="startSelectionBtn" class="selection__start">Kliknij by znaleźć przystanek</button>
                 </div>
-            </section>
+            </div>
             <section id="citySelection" class="selection__slide">
                 <div class="selection__content">
-                    <h3>Wybierz miejscowość</h3>
-                    <div id="citySelectionBtns">
-                        <button data-value="stopSelection-0">Bielawa</button>
-                        <button data-value="stopSelection-1">Jodłownik</button>
-                        <button data-value="stopSelection-2">Dzierżoniów</button>
-                        <button data-value="stopSelection-3">Pieszyce</button>
-                        <button data-value="stopSelection-4">Kamionki</button>
-                        <button data-value="stopSelection-5">Rościszów</button>
-                        <button data-value="stopSelection-6">Piskorzów</button>
-                        <button data-value="stopSelection-7">Bartoszów</button>
-                        <button data-value="stopSelection-8">Piława Dolna</button>
-                        <button data-value="stopSelection-9">Piława Górna</button>
-                        <button data-value="stopSelection-10">Kośmin</button>
-                        <button data-value="stopSelection-11">Ostroszowice</button>
-                        <button data-value="stopSelection-12">Rudnica</button>
-                        <button data-value="stopSelection-13">Jemna</button>
-                        <button data-value="stopSelection-14">Dobrocin</button>
-                        <button data-value="stopSelection-15">Roztocznik</button>
-                        <button data-value="stopSelection-16">Byszów</button>
-                        <button data-value="stopSelection-17">Gilów</button>
-                        <button data-value="stopSelection-18">Gola Dzierżoniowska</button>
-                        <button data-value="stopSelection-19">Kietlin</button>
-                        <button data-value="stopSelection-20">Wilków Wielki</button>
-                        <button data-value="stopSelection-21">Niemcza</button>
-                        <button data-value="stopSelection-22">Nowa Wieś Niemczańska</button>
-                        <button data-value="stopSelection-23">Przerzeczyn Zdrój</button>
-                        <button data-value="stopSelection-24">Podlesie</button>
-                        <button data-value="stopSelection-25">Ligota Mała</button>
+                    <header class="selection__header">
+                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
+                        <h3 class="selection__title">Wybierz miejscowość</h3>
+                        <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
+                    </header>
+                    <div id="citySelectionBtns" class="cities">
+                        <button class="cities__city" data-value="stopSelection-0">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--bielawa"></span>
+                            </span>
+                            <span class="cities__name">Bielawa</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-2">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow"></span>
+                            </span>
+                            <span class="cities__name">Dzierżoniów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-1">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Jodłownik</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-8">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Piława Dolna</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-11">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Ostroszowice</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-14">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Dobrocin</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-15">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Roztocznik</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-16">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--dzierzoniow-commune"></span>
+                            </span>
+                            <span class="cities__name">Byszów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-3">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pieszyce"></span>
+                            </span>
+                            <span class="cities__name">Pieszyce</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-4">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pieszyce"></span>
+                            </span>
+                            <span class="cities__name">Kamionki</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-5">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pieszyce"></span>
+                            </span>
+                            <span class="cities__name">Rościszów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-6">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pieszyce"></span>
+                            </span>
+                            <span class="cities__name">Piskorzów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-7">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pieszyce"></span>
+                            </span>
+                            <span class="cities__name">Bratoszów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-9">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pilawa-gorna"></span>
+                            </span>
+                            <span class="cities__name">Piława Górna</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-10">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--pilawa-gorna"></span>
+                            </span>
+                            <span class="cities__name">Kośmin</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-12">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--placeholder"></span>
+                            </span>
+                            <span class="cities__name">Rudnica</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-13">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--placeholder"></span>
+                            </span>
+                            <span class="cities__name">Jemna</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-21">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Niemcza</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-17">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Gilów</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-18">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Gola Dzierżoniowska</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-19">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Kietlin</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-20">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Wilków Wielki</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-22">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Nowa Wieś Niemczańska</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-23">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Przerzeczyn Zdrój</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-24">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Podlesie</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-25">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Ligota Mała</span>
+                        </button>
                     </div>
-                    <button class="button button--back">Cofnij</button>
-                    <button class="button button--reset">Wyjdź</button>
                 </div>
             </section>
             <section id="stopSelection" class="selection__slide">
                 <div class="selection__content">
-                    <h3>Wybierz przystanek z listy</h3>
+                    <header class="selection__header">
+                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
+                        <h3 class="selection__title">Wybierz przystanek z listy</h3>
+                        <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
+                    </header>
                     <div id="stopSelection-0" class="selection__stops">
                         <h4>Bielawa</h4>
                         <button data-value="1">Bielawa Leśny Dworek</button>
@@ -414,7 +550,11 @@
                 </div>
             </section>
             <section class="selection__slide">
-                <h3>Twój przystanek</h3>
+                <header class="selection__header">
+                    <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
+                    <h3 class="selection__title">Twój przystanek</h3>
+                    <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
+                </header>
                 <div class="selection__content">
                     <div id="schedule" class="selection__schedule">
                          <!-- live content -->
@@ -439,6 +579,7 @@
     <footer>
         <p>Strona ma za zadanie ułatwić korzystanie z rozkładów jazdy przygotowanych przez ZKM Bielawa. Korzysta ona z informacji publicznie udostępnianych przez ZKM Bielawa aktualizowanych na bieżąco na <a href="http://bielawa.trapeze.fi">tej stronie</a></p>
         <p>Autor nie uzyskuje żadnych korzyści materialnych związanych z działalnością witryny i nie ponosi odpowiedzialności za informacje zawarte w rozkładach.</p>
+        <p>Ulubione przystanki są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia.</p>
     </footer>
     <div id="messageBox" class="message-box">
          <!-- live content -->

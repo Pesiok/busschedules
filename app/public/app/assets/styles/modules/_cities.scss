@@ -1,0 +1,51 @@
+.cities {
+    z-index: -10;
+    display: flex;
+    flex-wrap: wrap;
+
+    margin: 2rem auto;
+    max-width: 100rem;
+
+    &__city {
+        z-index: 9999;
+        position: relative;
+        cursor: pointer;
+
+        height: 4.5rem;
+        min-width: 15rem;
+
+        background-color: rgba(255, 255, 255, 0.1);
+        border: none;
+        margin: 0.5rem;
+
+    }
+
+    &__icon {
+        z-index: -5;
+        display: block;
+        position: absolute;
+        pointer-events: none;
+        top: 0.5rem;
+        left: 0.5rem;
+        
+        span {
+            display: block;
+        }
+    }
+
+    &__name {
+        z-index: -4;
+        pointer-events: none;
+
+        padding-left: 1.75rem;
+
+        font-family: 'Lato', sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 0.1rem;
+        text-align: right;
+        color: rgb(255, 255, 255);
+        text-shadow: -2px 0px 2px rgba(0, 0, 0, 1);
+    }
+
+    
+}
