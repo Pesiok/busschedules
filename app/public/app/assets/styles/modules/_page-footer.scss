@@ -1,0 +1,17 @@
+.page-footer {
+    background-color: $mainBlue;
+    margin-bottom: 0;
+
+    &__content {
+        padding: 1rem;
+        margin: 0;
+    }
+
+    &__text {
+        margin: 0.25rem;
+
+        font-size: 1rem;
+        color: rgb(255, 255, 255);
+        font-family: 'Lato', sans-serif; 
+    }
+}

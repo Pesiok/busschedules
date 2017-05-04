@@ -1,0 +1,10 @@
+.fav-stops {
+    
+    &__header {
+        @include sectionHeader();
+    }
+
+    &__title {
+        @include sectionTitle();
+    }
+}

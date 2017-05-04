@@ -2,30 +2,14 @@
 
 import Slider from './Slider';
 
-//DOM elements
-const selectionSlider = document.querySelector(".selection__slider");
-const slidesContent = [...document.querySelectorAll(".selection__content")];
-const startSelection = document.getElementById("startSelection");
-const citySelection = document.getElementById("citySelection");
-const citySelectionBtns = document.getElementById("citySelectionBtns");
-const stopSelection = document.getElementById("stopSelection");
-const scheduleContainer = document.getElementById("schedule");
-const favStopsContainer = document.getElementById("favStops");
-const startBtn = document.getElementById("startSelectionBtn");
-const backBtns = [...document.querySelectorAll(".selection__button--back")];
-const resetBtns = [...document.querySelectorAll(".selection__button--reset")];
-const addToFavBtn = document.querySelector(".button--fav");
-const refreshBtn = document.getElementById("refreshBtn");
-const msgBox = document.getElementById("messageBox");
-let removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
-
-//initialize slider
-const slider = new Slider(selectionSlider, slidesContent);
-
 class View  {
-    constructor(model, controller) {
+    constructor(model, controller, elements) {
         this.model = model;
         this.controller = controller;
+        //DOM elements
+        this.elements = elements;
+        //initialize slider
+        this.slider = new Slider(elements.selectionSlider, elements.slidesContent);
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
@@ -37,13 +21,13 @@ class View  {
 
     events() {
         //slider handlers//
-        startBtn.addEventListener("click", () => slider.slide("next"));
-        backBtns.forEach(element => element.addEventListener("click", () => slider.slide("prev")));
-        resetBtns.forEach(element => element.addEventListener("click", () => slider.slide("reset")));
+        this.elements.startBtn.addEventListener("click", () => this.slider.slide("next"));
+        this.elements.backBtns.forEach(element => element.addEventListener("click", () => this.slider.slide("prev")));
+        this.elements.resetBtns.forEach(element => element.addEventListener("click", () => this.slider.slide("reset")));
 
         //selection handlers//
         const stopHandler = this.stopSelectionHandler.bind(this);
-        citySelectionBtns.addEventListener("click", event => {
+        this.elements.citySelectionBtns.addEventListener("click", event => {
             //remove old listener if there was any
             if (this.chosenCity) this.chosenCity.removeEventListener("click", stopHandler);
             //get new city after click on btn
@@ -53,19 +37,19 @@ class View  {
         });
 
         //fav handlers//
-        addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
+        this.elements.addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
         this.updateRemoveFavBtnsListeners();
 
         //refresh handler//
-        refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
+        this.elements.refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
         
     }
     updateRemoveFavBtnsListeners() {
         //called whenever new remove btn is added
-        removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
+        this.elements.removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
 
-        if (removeFromFavBtns.length > 0) {
-            removeFromFavBtns.forEach(element => element.addEventListener("click", this.removeFav));
+        if (this.elements.removeFromFavBtns.length > 0) {
+            this.elements.removeFromFavBtns.forEach(element => element.addEventListener("click", this.removeFav));
         }
     }
 
@@ -97,10 +81,10 @@ class View  {
             if (this.chosenCity) this.chosenCity.classList.remove("selection__stops--active");
             const value = event.target.dataset.value;
             //get new city
-            this.chosenCity = stopSelection.querySelector(`#${value}`);
+            this.chosenCity = this.elements.stopSelection.querySelector(`#${value}`);
             //display only stops from chosen city
             this.chosenCity.classList.add("selection__stops--active");
-            slider.slide("next");
+            this.slider.slide("next");
         }
     }
 
@@ -144,13 +128,13 @@ class View  {
         `)});
     }
 
-    displaySchedule(htmlString, container = scheduleContainer) {
+    displaySchedule(htmlString, container = this.elements.scheduleContainer) {
         container.innerHTML = htmlString;
-        slider.slide("next");
+        this.slider.slide("next");
         this.updateRemoveFavBtnsListeners()
     }
 
-    displayFavourites(schedules, container = favStopsContainer) {
+    displayFavourites(schedules, container = this.elements.favStopsContainer) {
         let htmlString = "";
         schedules.forEach(schedule => htmlString += schedule);
 
@@ -162,8 +146,7 @@ class View  {
             <p>Brak ulubionych przystanków do wyświetlenia.</p>
             <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" po wybraniu przystanku.</p>
             `
-        }
-        
+        } 
     }
     
     renderFavourites() {
@@ -177,6 +160,8 @@ class View  {
     }
 
     message(msg, timeout = 2000) {
+        const msgBox = this.elements.msgBox;
+
         msgBox.innerHTML = msg;
         //clearing last timeouts
         this.msgTimeoutIds.map(timeoutId => clearTimeout(timeoutId));

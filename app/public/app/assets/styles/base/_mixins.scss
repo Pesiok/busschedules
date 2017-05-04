@@ -1,0 +1,19 @@
+@mixin sectionHeader() {
+    display: flex;
+    justify-content: space-between;
+
+    height: 3.5rem;
+    margin: 0;
+
+    background-color: $darkBlue;
+}
+
+@mixin sectionTitle() {
+    margin: 0.5rem;
+    width: 100%;
+
+    text-align: center;
+    font-size: 1.8rem;
+    color: rgb(255, 255, 255);
+    font-family: 'Lato', sans-serif; 
+}

@@ -1,0 +1,37 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+
+    height: 3rem;
+
+    background-color: $darkBlue;
+
+    border-bottom: 0.1rem solid $mainBlue;
+    
+
+    &__title {
+        margin: 0;
+        padding: 0.3rem;
+        
+        font-size: 1.8rem;
+        font-family: 'Lato', sans-serif;
+        color: rgb(255, 255, 255);
+    }
+
+    &__refresh {
+        display: block;
+
+        background: none;
+        border: none;
+
+        font-size: 2.5rem;
+        color: rgb(255, 255, 255);
+
+        transition: color 0.1s ease-in;
+    }
+
+    &__refresh:hover,
+    &__refresh:focus {
+        color: $mainGreen;
+    }
+}

@@ -19,7 +19,7 @@
         width: 25%;
         
         background-color: $mainBlue;
-        border-bottom: 0.5rem solid $darkBlue;
+        border-bottom: 0.15rem solid $darkBlue;
     }
 
     &__start {
@@ -32,44 +32,48 @@
         padding: 1rem;
         margin: 1.5rem auto;
 
-        background-color: $darkBlue;
+        border: 0.1em solid $darkBlue;
+        background-color: rgba(0, 0, 0, 0.1);
 
         text-align: center;
+        font-family: 'Lato', sans-serif;
         font-size: 1.8rem;
         color: rgb(255, 255, 255);
-        font-family: 'Lato', sans-serif;
+        text-shadow: -1px 0px 2px rgba(0, 0, 0, 1);
 
+    }
 
+    &__start:hover,
+    &__start:focus {
+        background-color: rgba(0, 0, 0, 0.05);
     }
 
     &__header {
-        display: flex;
-        justify-content: space-between;
-
-        height: 3.5rem;
-        margin: 0;
-
-        background-color: $darkBlue;
-
-        text-align: center;
-        font-size: 1.8rem;
-        color: rgb(255, 255, 255);
-        font-family: 'Lato', sans-serif; 
+        @include sectionHeader();
     }
 
     &__button {
-        display: block;
+        display: none;
         cursor: pointer;
         background: none;
         border: none;
 
+        transition: color 0.1s ease-in;
         color: rgb(255, 255, 255);
+        font-size: 1.7rem;
+
+        &--back:hover,
+        &--back:focus {
+            color: rgb(202, 185, 16);
+        }
+        &--reset:hover,
+        &--reset:focus {
+            color: $mainRed;
+        }
     }
 
     &__title {
-        margin: 0.5rem;
-        width: 100%;
-        text-align: center;
+        @include sectionTitle();
     }
 
     &__schedule {

@@ -11,14 +11,17 @@
     <!-- endbuild -->
 </head>
 <body>
-    <header>
-        <h1>Rozkład Jazdy ZKM Bielawa - lite</h1>
+    <header class="page-header">
+        <h1 class="page-header__title">Rozkład Jazdy ZKM Bielawa - lite</h1>
+        <button title="Odśwież rozkłady" aria-label="Odśwież rozkłady" id="refreshBtn" class="page-header__refresh">&#8635;</button>
     </header>
     <section id="selectionContainer" class="selection">
-        <h2>Znajdź przystanek</h2>
         <div class="selection__slider">
             <div id="startSelection" class="selection__slide">
                 <div class="selection__content selection__content--active">
+                    <header class="selection__header">
+                        <h2 class="selection__title">Znajdź przystanek</h2>
+                    </header>
                     <button id="startSelectionBtn" class="selection__start">Kliknij by znaleźć przystanek</button>
                 </div>
             </div>
@@ -545,8 +548,6 @@
                         <button data-value="293">Ligota Mała</button>
                         <button data-value="294">Ligota Mała</button>
                     </div>
-                    <button class="button button--back">Cofnij</button>
-                    <button class="button button--reset">Wyjdź</button>
                 </div>
             </section>
             <section class="selection__slide">
@@ -559,27 +560,25 @@
                     <div id="schedule" class="selection__schedule">
                          <!-- live content -->
                     </div>
-                    <button class="button button--back">Cofnij</button>
                     <button class="button button--fav">Dodaj do ulubionych</button>
-                    <button class="button button--reset">Wyjdź</button>
                 </div>
             </section>
         </div>
     </section>
     <section class="fav-stops">
-        <h2>Twoje ulubione przystanki</h2>
-        <button id="refreshBtn" class="button">Odźwież rozkłady</button>
+        <header class="fav-stops__header">
+            <h2 class="fav-stops__title">Twoje ulubione przystanki</h2>
+        </header>
         <div id="favStops">
             <!-- live content -->
         </div>
     </section>
-
-
-
-    <footer>
-        <p>Strona ma za zadanie ułatwić korzystanie z rozkładów jazdy przygotowanych przez ZKM Bielawa. Korzysta ona z informacji publicznie udostępnianych przez ZKM Bielawa aktualizowanych na bieżąco na <a href="http://bielawa.trapeze.fi">tej stronie</a></p>
-        <p>Autor nie uzyskuje żadnych korzyści materialnych związanych z działalnością witryny i nie ponosi odpowiedzialności za informacje zawarte w rozkładach.</p>
-        <p>Ulubione przystanki są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia.</p>
+    <footer class="page-footer">
+        <div class="page-footer__content">
+            <p class="page-footer__text">Strona ma za zadanie ułatwić korzystanie z rozkładów jazdy przygotowanych przez ZKM Bielawa. Korzysta ona z informacji publicznie udostępnianych przez ZKM Bielawa aktualizowanych na bieżąco na <a href="http://bielawa.trapeze.fi">tej stronie</a></p>
+            <p class="page-footer__text">Autor nie uzyskuje żadnych korzyści materialnych związanych z działalnością witryny i nie ponosi odpowiedzialności za informacje zawarte w rozkładach.</p>
+            <p class="page-footer__text">Przystanki dodane do ulubionych są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia - ręcznego lub automatycznego.</p>
+        </div>
     </footer>
     <div id="messageBox" class="message-box">
          <!-- live content -->

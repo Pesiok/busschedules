@@ -262,36 +262,20 @@ var _Slider2 = _interopRequireDefault(_Slider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-//DOM elements
-var selectionSlider = document.querySelector(".selection__slider");
-var slidesContent = [].concat(_toConsumableArray(document.querySelectorAll(".selection__content")));
-var startSelection = document.getElementById("startSelection");
-var citySelection = document.getElementById("citySelection");
-var citySelectionBtns = document.getElementById("citySelectionBtns");
-var stopSelection = document.getElementById("stopSelection");
-var scheduleContainer = document.getElementById("schedule");
-var favStopsContainer = document.getElementById("favStops");
-var startBtn = document.getElementById("startSelectionBtn");
-var backBtns = [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--back")));
-var resetBtns = [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--reset")));
-var addToFavBtn = document.querySelector(".button--fav");
-var refreshBtn = document.getElementById("refreshBtn");
-var msgBox = document.getElementById("messageBox");
-var removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
-
-//initialize slider
-var slider = new _Slider2.default(selectionSlider, slidesContent);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var View = function () {
-    function View(model, controller) {
+    function View(model, controller, elements) {
         _classCallCheck(this, View);
 
         this.model = model;
         this.controller = controller;
+        //DOM elements
+        this.elements = elements;
+        //initialize slider
+        this.slider = new _Slider2.default(elements.selectionSlider, elements.slidesContent);
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
@@ -307,23 +291,23 @@ var View = function () {
             var _this = this;
 
             //slider handlers//
-            startBtn.addEventListener("click", function () {
-                return slider.slide("next");
+            this.elements.startBtn.addEventListener("click", function () {
+                return _this.slider.slide("next");
             });
-            backBtns.forEach(function (element) {
+            this.elements.backBtns.forEach(function (element) {
                 return element.addEventListener("click", function () {
-                    return slider.slide("prev");
+                    return _this.slider.slide("prev");
                 });
             });
-            resetBtns.forEach(function (element) {
+            this.elements.resetBtns.forEach(function (element) {
                 return element.addEventListener("click", function () {
-                    return slider.slide("reset");
+                    return _this.slider.slide("reset");
                 });
             });
 
             //selection handlers//
             var stopHandler = this.stopSelectionHandler.bind(this);
-            citySelectionBtns.addEventListener("click", function (event) {
+            this.elements.citySelectionBtns.addEventListener("click", function (event) {
                 //remove old listener if there was any
                 if (_this.chosenCity) _this.chosenCity.removeEventListener("click", stopHandler);
                 //get new city after click on btn
@@ -333,11 +317,11 @@ var View = function () {
             });
 
             //fav handlers//
-            addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
+            this.elements.addToFavBtn.addEventListener("click", this.addToFavHandler.bind(this));
             this.updateRemoveFavBtnsListeners();
 
             //refresh handler//
-            refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
+            this.elements.refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
         }
     }, {
         key: "updateRemoveFavBtnsListeners",
@@ -345,10 +329,10 @@ var View = function () {
             var _this2 = this;
 
             //called whenever new remove btn is added
-            removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
+            this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
 
-            if (removeFromFavBtns.length > 0) {
-                removeFromFavBtns.forEach(function (element) {
+            if (this.elements.removeFromFavBtns.length > 0) {
+                this.elements.removeFromFavBtns.forEach(function (element) {
                     return element.addEventListener("click", _this2.removeFav);
                 });
             }
@@ -385,10 +369,10 @@ var View = function () {
                 if (this.chosenCity) this.chosenCity.classList.remove("selection__stops--active");
                 var value = event.target.dataset.value;
                 //get new city
-                this.chosenCity = stopSelection.querySelector("#" + value);
+                this.chosenCity = this.elements.stopSelection.querySelector("#" + value);
                 //display only stops from chosen city
                 this.chosenCity.classList.add("selection__stops--active");
-                slider.slide("next");
+                this.slider.slide("next");
             }
         }
     }, {
@@ -442,16 +426,16 @@ var View = function () {
     }, {
         key: "displaySchedule",
         value: function displaySchedule(htmlString) {
-            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : scheduleContainer;
+            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.elements.scheduleContainer;
 
             container.innerHTML = htmlString;
-            slider.slide("next");
+            this.slider.slide("next");
             this.updateRemoveFavBtnsListeners();
         }
     }, {
         key: "displayFavourites",
         value: function displayFavourites(schedules) {
-            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : favStopsContainer;
+            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.elements.favStopsContainer;
 
             var htmlString = "";
             schedules.forEach(function (schedule) {
@@ -485,6 +469,8 @@ var View = function () {
         key: "message",
         value: function message(msg) {
             var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
+
+            var msgBox = this.elements.msgBox;
 
             msgBox.innerHTML = msg;
             //clearing last timeouts
@@ -534,10 +520,31 @@ var _Controller2 = _interopRequireDefault(_Controller);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//DOM elements
+var elements = {
+    selectionSlider: document.querySelector(".selection__slider"),
+    slidesContent: [].concat(_toConsumableArray(document.querySelectorAll(".selection__content"))),
+    startSelection: document.getElementById("startSelection"),
+    citySelection: document.getElementById("citySelection"),
+    citySelectionBtns: document.getElementById("citySelectionBtns"),
+    stopSelection: document.getElementById("stopSelection"),
+    scheduleContainer: document.getElementById("schedule"),
+    favStopsContainer: document.getElementById("favStops"),
+    startBtn: document.getElementById("startSelectionBtn"),
+    backBtns: [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--back"))),
+    resetBtns: [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--reset"))),
+    addToFavBtn: document.querySelector(".button--fav"),
+    refreshBtn: document.getElementById("refreshBtn"),
+    msgBox: document.getElementById("messageBox"),
+    removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")))
+};
+
 var init = function init() {
     var model = new _Model2.default();
     var controller = new _Controller2.default();
-    var view = new _View2.default(model, controller);
+    var view = new _View2.default(model, controller, elements);
 
     controller.initialize(model, view);
 };
