@@ -329,7 +329,7 @@ var View = function () {
             var _this2 = this;
 
             //called whenever new remove btn is added
-            this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")));
+            this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")));
 
             if (this.elements.removeFromFavBtns.length > 0) {
                 this.elements.removeFromFavBtns.forEach(function (element) {
@@ -402,7 +402,7 @@ var View = function () {
                 for (var _iterator = schedule.departures[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var departure = _step.value;
 
-                    departures += "\n            <tr>\n                <td>" + departure.time + "</td>\n                <td>" + departure.line + "</td>\n                <td>" + departure.destination + "</td>\n            </tr>\n                ";
+                    departures += "\n            <tr class=\"schedule__row\">\n                <td>" + departure.time + "</td>\n                <td>" + departure.line + "</td>\n                <td>" + departure.destination + "</td>\n            </tr>\n                ";
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -420,7 +420,7 @@ var View = function () {
             }
 
             return new Promise(function (resolve) {
-                resolve("\n            <div id=\"stop-" + id + "\">\n                <h2>" + schedule.stop + "</h2>\n                <table>\n                    <tr>\n                        <th>Godzina odjazdu</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n                <button data-value=\"" + id + "\" class=\"button button--remove\">Usu\u0144 z ulubionych</button>\n            </div>\n        ");
+                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <div class=\"schedule__header\">\n                    <h2 class=\"schedule__title\">" + schedule.stop + "</h2>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove\">&#9587;\n                    </button>\n                </div>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
             });
         }
     }, {
@@ -538,7 +538,7 @@ var elements = {
     addToFavBtn: document.querySelector(".button--fav"),
     refreshBtn: document.getElementById("refreshBtn"),
     msgBox: document.getElementById("messageBox"),
-    removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".button--remove")))
+    removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")))
 };
 
 var init = function init() {

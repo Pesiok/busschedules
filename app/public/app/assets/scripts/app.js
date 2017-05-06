@@ -20,7 +20,7 @@ const elements = {
     addToFavBtn: document.querySelector(".button--fav"),
     refreshBtn: document.getElementById("refreshBtn"),
     msgBox: document.getElementById("messageBox"),
-    removeFromFavBtns: [...document.querySelectorAll(".button--remove")]
+    removeFromFavBtns: [...document.querySelectorAll(".schedule__button--remove")]
 }
 
 const init = function() {

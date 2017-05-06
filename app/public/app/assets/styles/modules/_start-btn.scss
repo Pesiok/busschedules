@@ -1,0 +1,36 @@
+.start-btn {
+    align-items: center;
+    cursor: pointer;
+
+    padding: 1rem;
+    margin: 1.5rem auto;
+
+    border: none;
+    background: none;
+    background-color: $secondary;
+    transition: box-shadow 0.3s ease-in;
+    @include mdShadow(2);
+
+    &:focus,
+    &:hover {
+        @include mdShadow(3);
+    }
+
+    color: $text;
+
+
+    &__title {
+        font-size: 1.7rem;
+        vertical-align: middle;
+    }
+
+    &__icon {
+        margin-left: 0.75rem;
+        vertical-align: middle;
+    }
+
+   
+
+
+
+}

@@ -1,37 +1,39 @@
 .page-header {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
 
-    height: 3rem;
+    height: 5rem;
+    padding: 1rem;
 
-    background-color: $darkBlue;
-
-    border-bottom: 0.1rem solid $mainBlue;
+    background-color: $primaryDark;
+    @include mdShadow(1);
     
-
     &__title {
         margin: 0;
-        padding: 0.3rem;
         
-        font-size: 1.8rem;
-        font-family: 'Lato', sans-serif;
-        color: rgb(255, 255, 255);
+        font-size: 2rem;
+        color: $text;
+
+        vertical-align: center;
     }
 
     &__refresh {
         display: block;
+        cursor: pointer;
 
         background: none;
         border: none;
 
         font-size: 2.5rem;
-        color: rgb(255, 255, 255);
+
+        color: $text;
 
         transition: color 0.1s ease-in;
     }
 
     &__refresh:hover,
     &__refresh:focus {
-        color: $mainGreen;
+        color: $secondary;
     }
 }

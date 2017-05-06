@@ -1,6 +1,6 @@
 "use strict";
 
-import Slider from './Slider';
+import Slider from "./Slider"; 
 
 class View  {
     constructor(model, controller, elements) {
@@ -46,7 +46,7 @@ class View  {
     }
     updateRemoveFavBtnsListeners() {
         //called whenever new remove btn is added
-        this.elements.removeFromFavBtns = [...document.querySelectorAll(".button--remove")];
+        this.elements.removeFromFavBtns = [...document.querySelectorAll(".schedule__button--remove")];
 
         if (this.elements.removeFromFavBtns.length > 0) {
             this.elements.removeFromFavBtns.forEach(element => element.addEventListener("click", this.removeFav));
@@ -104,7 +104,7 @@ class View  {
         
         for (let departure of schedule.departures) {
             departures += `
-            <tr>
+            <tr class="schedule__row">
                 <td>${departure.time}</td>
                 <td>${departure.line}</td>
                 <td>${departure.destination}</td>
@@ -113,17 +113,23 @@ class View  {
         }
         return new Promise(resolve => {
             resolve(`
-            <div id="stop-${id}">
-                <h2>${schedule.stop}</h2>
-                <table>
-                    <tr>
-                        <th>Godzina odjazdu</th>
+            <div id="stop-${id}" class="schedule">
+                <div class="schedule__header">
+                    <h2 class="schedule__title">${schedule.stop}</h2>
+                    <button data-value="${id}" 
+                        title="Usuń z ulubionych" 
+                        aria-label="Usuń z ulubionych" 
+                        class="schedule__button schedule__button--remove">&#9587;
+                    </button>
+                </div>
+                <table class="schedule__table">
+                    <tr class="schedule__headings">
+                        <th>Odjazd</th>
                         <th>Linia</th>
                         <th>Kierunek</th>
                     </tr>
                     ${departures}
                 </table>
-                <button data-value="${id}" class="button button--remove">Usuń z ulubionych</button>
             </div>
         `)});
     }

@@ -1,6 +1,11 @@
 .selection {
-    width: 100%;
+    width: 97.5%;
+    margin: 1rem auto;
     overflow: hidden;
+
+    color: $text;
+
+    @include mdShadow(2);
 
     &__slider {
         position: relative;
@@ -10,7 +15,7 @@
         margin: 0;
         width: 400%;
 
-        transition: transform 0.3s ease-in-out;
+        transition: transform 0.35s ease-in-out;
     }  
 
     &__slide {
@@ -18,34 +23,6 @@
 
         width: 25%;
         
-        background-color: $mainBlue;
-        border-bottom: 0.15rem solid $darkBlue;
-    }
-
-    &__start {
-        display: block;
-        cursor: pointer;
-
-        border: none;
-        background: none;
-
-        padding: 1rem;
-        margin: 1.5rem auto;
-
-        border: 0.1em solid $darkBlue;
-        background-color: rgba(0, 0, 0, 0.1);
-
-        text-align: center;
-        font-family: 'Lato', sans-serif;
-        font-size: 1.8rem;
-        color: rgb(255, 255, 255);
-        text-shadow: -1px 0px 2px rgba(0, 0, 0, 1);
-
-    }
-
-    &__start:hover,
-    &__start:focus {
-        background-color: rgba(0, 0, 0, 0.05);
     }
 
     &__header {
@@ -59,16 +36,15 @@
         border: none;
 
         transition: color 0.1s ease-in;
-        color: rgb(255, 255, 255);
-        font-size: 1.7rem;
+        color: $text;
 
         &--back:hover,
         &--back:focus {
-            color: rgb(202, 185, 16);
+            color: $secondary;
         }
         &--reset:hover,
         &--reset:focus {
-            color: $mainRed;
+            color: $secondary;
         }
     }
 

@@ -6,6 +6,8 @@
     margin: 2rem auto;
     max-width: 100rem;
 
+    color: $text;
+
     &__city {
         z-index: 9999;
         position: relative;
@@ -13,10 +15,19 @@
 
         height: 4.5rem;
         min-width: 15rem;
+        margin: 1rem;
 
-        background-color: $transparentDarkBlue;
         border: none;
-        margin: 0.5rem;
+        background: none;
+        background-color: $secondary;
+
+        @include mdShadow(2);
+        transition: box-shadow 0.3s ease-in;
+
+        &:focus,
+        &:hover {
+            @include mdShadow(3);
+        }
 
     }
 
@@ -34,17 +45,20 @@
     }
 
     &__name {
+        display: block;
+
         z-index: -4;
         pointer-events: none;
 
-        padding-left: 1.75rem;
+        width: 100%;
+        height: 100%;
 
-        font-family: 'Lato', sans-serif;
+        background-color: $secondaryDark;
+
+        color: $text;
         font-size: 1.8rem;
         letter-spacing: 0.1rem;
         text-align: right;
-        color: rgb(255, 255, 255);
-        text-shadow: -2px 0px 2px rgba(0, 0, 0, 1);
     }
 
     

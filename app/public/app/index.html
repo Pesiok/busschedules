@@ -5,32 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>hmm</title>
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin-ext" rel="stylesheet">
     <!-- build:css assets/styles/styles.css -->
     <link rel="stylesheet" href="temp/styles/styles.css">
     <!-- endbuild -->
 </head>
 <body>
     <header class="page-header">
-        <h1 class="page-header__title">Rozkład Jazdy ZKM Bielawa - lite</h1>
-        <button title="Odśwież rozkłady" aria-label="Odśwież rozkłady" id="refreshBtn" class="page-header__refresh">&#8635;</button>
+        <h1 class="page-header__title">ZKM Bielawa - Rozkład Jazdy</h1>
     </header>
     <section id="selectionContainer" class="selection">
+
+        <!--<header class="selection__header">
+            <button style="display: block" title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
+            <h3 class="selection__title">Dummy</h3>
+            <button style="display: block" title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
+        </header>-->
+
         <div class="selection__slider">
             <div id="startSelection" class="selection__slide">
                 <div class="selection__content selection__content--active">
                     <header class="selection__header">
                         <h2 class="selection__title">Znajdź przystanek</h2>
                     </header>
-                    <button id="startSelectionBtn" class="selection__start">Kliknij by znaleźć przystanek</button>
+                    <button id="startSelectionBtn" class="start-btn">
+                        <span class="start-btn__title">Kliknij by znaleźć przystanek</span>
+                        <span class="start-btn__icon material-icons">assignment</span>
+                    </button>
                 </div>
             </div>
             <section id="citySelection" class="selection__slide">
                 <div class="selection__content">
                     <header class="selection__header">
-                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
+                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
                         <h3 class="selection__title">Wybierz miejscowość</h3>
-                        <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
+                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
                     </header>
                     <div id="citySelectionBtns" class="cities">
                         <button class="cities__city" data-value="stopSelection-0">
@@ -195,9 +204,9 @@
             <section id="stopSelection" class="selection__slide">
                 <div class="selection__content">
                     <header class="selection__header">
-                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
-                        <h3 class="selection__title">Wybierz przystanek z listy</h3>
-                        <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
+                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
+                        <h3 class="selection__title">Wybierz przystanek</h3>
+                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
                     </header>
                     <div id="stopSelection-0" class="selection__stops">
                         <h4>Bielawa</h4>
@@ -551,16 +560,16 @@
                 </div>
             </section>
             <section class="selection__slide">
-                <header class="selection__header">
-                    <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back">&larr;</button>
-                    <h3 class="selection__title">Twój przystanek</h3>
-                    <button title="Wyjdź" aria-label="Wyjdź" class="selection__button selection__button--reset">&#9587;</button>
-                </header>
                 <div class="selection__content">
+                    <header class="selection__header">
+                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
+                        <h3 class="selection__title">Wybrany przystanek</h3>
+                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
+                    </header>
                     <div id="schedule" class="selection__schedule">
                          <!-- live content -->
                     </div>
-                    <button class="button button--fav">Dodaj do ulubionych</button>
+                    <button class="button button--fav material-icons">favorite</button>
                 </div>
             </section>
         </div>
@@ -569,7 +578,7 @@
         <header class="fav-stops__header">
             <h2 class="fav-stops__title">Twoje ulubione przystanki</h2>
         </header>
-        <div id="favStops">
+        <div id="favStops" class="fav-stops__container">
             <!-- live content -->
         </div>
     </section>
@@ -580,6 +589,9 @@
             <p class="page-footer__text">Przystanki dodane do ulubionych są zapisywane lokalnie w pamięcie przeglądarki danego urządzenia aż do jej wyczyszczenia - ręcznego lub automatycznego.</p>
         </div>
     </footer>
+    <button title="Odśwież rozkłady" aria-label="Odśwież rozkłady" id="refreshBtn" class="refresh">
+        <span class="refresh__icon material-icons">refresh</span>
+    </button>
     <div id="messageBox" class="message-box">
          <!-- live content -->
     </div>

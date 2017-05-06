@@ -1,4 +1,9 @@
 .fav-stops {
+    width: 97.5%;
+
+    margin: 1rem auto;
+
+    @include mdShadow(2);
     
     &__header {
         @include sectionHeader();
@@ -6,5 +11,10 @@
 
     &__title {
         @include sectionTitle();
+    }
+
+    &__container {
+        display: flex;
+        flex-wrap: wrap;
     }
 }
