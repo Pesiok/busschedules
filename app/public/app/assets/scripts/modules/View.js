@@ -9,21 +9,28 @@ class View  {
         //DOM elements
         this.elements = elements;
         //initialize slider
-        this.slider = new Slider(elements.selectionSlider, elements.slidesContent);
+        const sliderElements = {
+            slider: elements.selectionSlider, 
+            slides: elements.slidesContent,
+            start: elements.startBtn,
+            back: elements.backBtn,
+            reset: elements.resetBtn
+        }
+        this.slider = new Slider(sliderElements);
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
-        //removeFavBtnHandler reference
+        //function references
         this.removeFav = this.removeFromFavHandler.bind(this);
         //initialize main events
         this.events()
     }
 
     events() {
-        //slider handlers//
-        this.elements.startBtn.addEventListener("click", () => this.slider.slide("next"));
-        this.elements.backBtns.forEach(element => element.addEventListener("click", () => this.slider.slide("prev")));
-        this.elements.resetBtns.forEach(element => element.addEventListener("click", () => this.slider.slide("reset")));
+        //slider nav handlers//
+        this.elements.startBtn.addEventListener("click", () => this.slider.slide("start"));
+        this.elements.backBtn.addEventListener("click", () => this.slider.slide("prev"));
+        this.elements.resetBtn.addEventListener("click", () => this.slider.slide("reset"));
 
         //selection handlers//
         const stopHandler = this.stopSelectionHandler.bind(this);
@@ -44,6 +51,7 @@ class View  {
         this.elements.refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
         
     }
+
     updateRemoveFavBtnsListeners() {
         //called whenever new remove btn is added
         this.elements.removeFromFavBtns = [...document.querySelectorAll(".schedule__button--remove")];
@@ -69,7 +77,7 @@ class View  {
         if (this.controller.removeFromFavourites(id)) {
             //remove old listener if action is valid
             btn.removeEventListener("click", this.removeFav);
-            //remove schedule with that id from the DOM
+            //remove schedule with specified id from the DOM
             const schedule = document.querySelector(`#favStops #stop-${id}`);
             schedule.parentNode.removeChild(schedule);
         }
@@ -91,11 +99,16 @@ class View  {
     stopSelectionHandler(event) {
         if (event.target && event.target.matches("button")) {
             const id = event.target.dataset.value;
-        
+            //request new Schedule
             this.controller.requestSchedule(id)
                 .then(this.renderSchedule.bind(this))
                 .then(this.displaySchedule.bind(this))
-                .catch(err => console.error(err));
+                .catch(() => {
+                    this.displaySchedule(`
+                        <p>Nie można było pobrać rozkładów. :<</p>
+                        <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                    `);
+                });
         }
     }
     
@@ -119,7 +132,7 @@ class View  {
                     <button data-value="${id}" 
                         title="Usuń z ulubionych" 
                         aria-label="Usuń z ulubionych" 
-                        class="schedule__button schedule__button--remove">&#9587;
+                        class="schedule__button schedule__button--remove material-icons">delete
                     </button>
                 </div>
                 <table class="schedule__table">
@@ -134,35 +147,62 @@ class View  {
         `)});
     }
 
+    showSchedules() {
+        const schedules = [...document.querySelectorAll(".schedule")];
+        const delay = 300;
+        let counter = 1;
+
+        //load-in animation witch delay between each element
+        schedules.forEach(schedule => {
+            schedule.classList.add("schedule--active");
+            setTimeout(() => schedule.classList.add("schedule--show"), delay * counter);
+            counter++;
+        });
+    }
+
     displaySchedule(htmlString, container = this.elements.scheduleContainer) {
         container.innerHTML = htmlString;
         this.slider.slide("next");
         this.updateRemoveFavBtnsListeners()
+        this.showSchedules();
     }
 
-    displayFavourites(schedules, container = this.elements.favStopsContainer) {
-        let htmlString = "";
-        schedules.forEach(schedule => htmlString += schedule);
-
-        if (htmlString.length > 0) {
-            container.innerHTML = htmlString;
-            this.updateRemoveFavBtnsListeners();
+    displayFavourites(schedules, htmlString = "", container = this.elements.favStopsContainer) {
+        if (schedules) {
+            schedules.forEach(schedule => htmlString += schedule)
+            if (htmlString.length > 0) {
+                //display fav stops
+                container.innerHTML = htmlString;
+                this.updateRemoveFavBtnsListeners();
+                this.showSchedules();
+            } else {
+                //no fav stops to display
+                container.innerHTML = `
+                <p>Brak ulubionych przystanków do wyświetlenia.</p>
+                <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" po wybraniu przystanku.</p>
+                `
+            } 
         } else {
-            container.innerHTML = `
-            <p>Brak ulubionych przystanków do wyświetlenia.</p>
-            <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" po wybraniu przystanku.</p>
-            `
-        } 
+            //custom msg
+            container.innerHTML = htmlString;
+        }
     }
     
-    renderFavourites() {
+    renderFavourites(array) {
         const favs = this.model.favouriteStops;
-        
+        //?????
+        console.log(array);
         //request schedule for each stop id in favourites
         Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
                         .then(json => this.renderSchedule(json, id))))
             .then(this.displayFavourites.bind(this))
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                this.displayFavourites(null, `
+                    <p>Nie można było pobrać rozkładów. :<</p>
+                    <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                `);
+            });
     }
 
     message(msg, timeout = 2000) {

@@ -10,7 +10,7 @@
     border: none;
     cursor: pointer;
     border-radius: 100%;
-    background-color: $secondary;
+    background-color: $secondaryDark;
 
     color: $text;
     @include mdShadow(4);

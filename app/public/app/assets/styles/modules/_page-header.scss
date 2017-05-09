@@ -1,39 +1,21 @@
 .page-header {
     width: 100%;
-    display: flex;
-    align-items: center;
 
-    height: 5rem;
+    margin: 0;
+    height: 4.5rem;
     padding: 1rem;
 
     background-color: $primaryDark;
     @include mdShadow(1);
+
+    font-size: 1.9rem;
+    color: $text;
+    text-align: center;
+
+    @include atSmall {
+        text-align: left;
+    }
+
     
-    &__title {
-        margin: 0;
-        
-        font-size: 2rem;
-        color: $text;
 
-        vertical-align: center;
-    }
-
-    &__refresh {
-        display: block;
-        cursor: pointer;
-
-        background: none;
-        border: none;
-
-        font-size: 2.5rem;
-
-        color: $text;
-
-        transition: color 0.1s ease-in;
-    }
-
-    &__refresh:hover,
-    &__refresh:focus {
-        color: $secondary;
-    }
 }

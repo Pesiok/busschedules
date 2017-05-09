@@ -3,19 +3,23 @@
     display: flex;
     flex-wrap: wrap;
 
-    margin: 2rem auto;
-    max-width: 100rem;
+    width: 100%;
 
     color: $text;
 
     &__city {
         z-index: 9999;
         position: relative;
+        flex: 1;
         cursor: pointer;
 
-        height: 4.5rem;
+        height: 5rem;
         min-width: 15rem;
-        margin: 1rem;
+        margin: 0.25rem;
+
+        @include atSmall {
+            margin: 1rem;
+        }
 
         border: none;
         background: none;
@@ -36,8 +40,9 @@
         display: block;
         position: absolute;
         pointer-events: none;
-        top: 0.5rem;
-        left: 0.5rem;
+
+        top: 50%;
+        transform: translateY(-50%);
         
         span {
             display: block;
@@ -45,20 +50,22 @@
     }
 
     &__name {
-        display: block;
+        display: inline-block;
 
         z-index: -4;
         pointer-events: none;
 
-        width: 100%;
-        height: 100%;
-
-        background-color: $secondaryDark;
+        margin-left: 1.9rem;
 
         color: $text;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         letter-spacing: 0.1rem;
-        text-align: right;
+
+        @include atSmall {
+            font-size: 1.8rem;
+        }
+
+        text-shadow: -1px -1px 5px $secondaryDark;
     }
 
     

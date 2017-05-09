@@ -106,7 +106,7 @@ var Controller = function () {
                 this.model.setFavourites(filtredArr);
             }
             //display favourite stops on load
-            //this.view.renderFavourites();
+            this.view.renderFavourites();
         }
     }, {
         key: "requestSchedule",
@@ -135,7 +135,7 @@ var Controller = function () {
                     if (saveToModel) _this.model.saveSchedule(json, stopNumber);
                     resolve(json);
                 }).catch(function (err) {
-                    _this.view.message("Couldn't get the shedule, try again later!", 10000);
+                    _this.view.message("Coś poszło nie tak. Sprawdzenie rozkładu nie powiodło się. Spróbuj później, lub odwiedź oficjalną stronę przewoźnika.", 10000);
                     reject(console.error(err));
                 });
             });
@@ -146,7 +146,7 @@ var Controller = function () {
             var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.stopId;
 
             if (this.model.favouriteStops.indexOf(id) >= 0) {
-                this.view.message("This stop is already in your favourites!");
+                this.view.message("Ten przystanek już jest w twoich ulubionych!");
                 return false;
             } else {
                 var favStops = this.model.favouriteStops;
@@ -155,8 +155,8 @@ var Controller = function () {
                 this.model.setFavourites(favStops);
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
                 //updating the view
-                this.view.renderFavourites();
-                this.view.message("Added to your favourites.");
+                this.view.renderFavourites([id]);
+                this.view.message("Dodano do ulubionych!");
                 return true;
             }
         }
@@ -164,7 +164,7 @@ var Controller = function () {
         key: "removeFromFavourites",
         value: function removeFromFavourites(id) {
             if (this.model.favouriteStops.indexOf(id) < 0) {
-                this.view.message("This stop is not yet in your favourites!");
+                this.view.message("Tego przystanku jeszcze nie ma w twoich ulubionych!");
                 return false;
             } else {
                 var filtredArr = this.model.favouriteStops.filter(function (element) {
@@ -173,7 +173,7 @@ var Controller = function () {
                 //saving current state to model and local storage
                 this.model.setFavourites(filtredArr);
                 localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
-                this.view.message("Removed from favourites!");
+                this.view.message("Usunięto z ulubionych!");
                 return true;
             }
         }
@@ -275,11 +275,18 @@ var View = function () {
         //DOM elements
         this.elements = elements;
         //initialize slider
-        this.slider = new _Slider2.default(elements.selectionSlider, elements.slidesContent);
+        var sliderElements = {
+            slider: elements.selectionSlider,
+            slides: elements.slidesContent,
+            start: elements.startBtn,
+            back: elements.backBtn,
+            reset: elements.resetBtn
+        };
+        this.slider = new _Slider2.default(sliderElements);
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
-        //removeFavBtnHandler reference
+        //function references
         this.removeFav = this.removeFromFavHandler.bind(this);
         //initialize main events
         this.events();
@@ -290,19 +297,15 @@ var View = function () {
         value: function events() {
             var _this = this;
 
-            //slider handlers//
+            //slider nav handlers//
             this.elements.startBtn.addEventListener("click", function () {
-                return _this.slider.slide("next");
+                return _this.slider.slide("start");
             });
-            this.elements.backBtns.forEach(function (element) {
-                return element.addEventListener("click", function () {
-                    return _this.slider.slide("prev");
-                });
+            this.elements.backBtn.addEventListener("click", function () {
+                return _this.slider.slide("prev");
             });
-            this.elements.resetBtns.forEach(function (element) {
-                return element.addEventListener("click", function () {
-                    return _this.slider.slide("reset");
-                });
+            this.elements.resetBtn.addEventListener("click", function () {
+                return _this.slider.slide("reset");
             });
 
             //selection handlers//
@@ -356,7 +359,7 @@ var View = function () {
             if (this.controller.removeFromFavourites(id)) {
                 //remove old listener if action is valid
                 btn.removeEventListener("click", this.removeFav);
-                //remove schedule with that id from the DOM
+                //remove schedule with specified id from the DOM
                 var schedule = document.querySelector("#favStops #stop-" + id);
                 schedule.parentNode.removeChild(schedule);
             }
@@ -378,11 +381,13 @@ var View = function () {
     }, {
         key: "stopSelectionHandler",
         value: function stopSelectionHandler(event) {
+            var _this3 = this;
+
             if (event.target && event.target.matches("button")) {
                 var id = event.target.dataset.value;
-
-                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function (err) {
-                    return console.error(err);
+                //request new Schedule
+                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function () {
+                    _this3.displaySchedule("\n                        <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                        <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    ");
                 });
             }
         }
@@ -420,7 +425,23 @@ var View = function () {
             }
 
             return new Promise(function (resolve) {
-                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <div class=\"schedule__header\">\n                    <h2 class=\"schedule__title\">" + schedule.stop + "</h2>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove\">&#9587;\n                    </button>\n                </div>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
+                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <div class=\"schedule__header\">\n                    <h2 class=\"schedule__title\">" + schedule.stop + "</h2>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove material-icons\">delete\n                    </button>\n                </div>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
+            });
+        }
+    }, {
+        key: "showSchedules",
+        value: function showSchedules() {
+            var schedules = [].concat(_toConsumableArray(document.querySelectorAll(".schedule")));
+            var delay = 300;
+            var counter = 1;
+
+            //load-in animation witch delay between each element
+            schedules.forEach(function (schedule) {
+                schedule.classList.add("schedule--active");
+                setTimeout(function () {
+                    return schedule.classList.add("schedule--show");
+                }, delay * counter);
+                counter++;
             });
         }
     }, {
@@ -431,38 +452,48 @@ var View = function () {
             container.innerHTML = htmlString;
             this.slider.slide("next");
             this.updateRemoveFavBtnsListeners();
+            this.showSchedules();
         }
     }, {
         key: "displayFavourites",
         value: function displayFavourites(schedules) {
-            var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.elements.favStopsContainer;
+            var htmlString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+            var container = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.elements.favStopsContainer;
 
-            var htmlString = "";
-            schedules.forEach(function (schedule) {
-                return htmlString += schedule;
-            });
-
-            if (htmlString.length > 0) {
-                container.innerHTML = htmlString;
-                this.updateRemoveFavBtnsListeners();
+            if (schedules) {
+                schedules.forEach(function (schedule) {
+                    return htmlString += schedule;
+                });
+                if (htmlString.length > 0) {
+                    //display fav stops
+                    container.innerHTML = htmlString;
+                    this.updateRemoveFavBtnsListeners();
+                    this.showSchedules();
+                } else {
+                    //no fav stops to display
+                    container.innerHTML = "\n                <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n                <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" po wybraniu przystanku.</p>\n                ";
+                }
             } else {
-                container.innerHTML = "\n            <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n            <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" po wybraniu przystanku.</p>\n            ";
+                //custom msg
+                container.innerHTML = htmlString;
             }
         }
     }, {
         key: "renderFavourites",
-        value: function renderFavourites() {
-            var _this3 = this;
+        value: function renderFavourites(array) {
+            var _this4 = this;
 
             var favs = this.model.favouriteStops;
-
+            //?????
+            console.log(array);
             //request schedule for each stop id in favourites
             Promise.all(favs.map(function (id) {
-                return _this3.controller.requestSchedule(id, false).then(function (json) {
-                    return _this3.renderSchedule(json, id);
+                return _this4.controller.requestSchedule(id, false).then(function (json) {
+                    return _this4.renderSchedule(json, id);
                 });
             })).then(this.displayFavourites.bind(this)).catch(function (err) {
-                return console.error(err);
+                console.error(err);
+                _this4.displayFavourites(null, "\n                    <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                    <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                ");
             });
         }
     }, {
@@ -522,34 +553,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-//DOM elements
-var elements = {
-    selectionSlider: document.querySelector(".selection__slider"),
-    slidesContent: [].concat(_toConsumableArray(document.querySelectorAll(".selection__content"))),
-    startSelection: document.getElementById("startSelection"),
-    citySelection: document.getElementById("citySelection"),
-    citySelectionBtns: document.getElementById("citySelectionBtns"),
-    stopSelection: document.getElementById("stopSelection"),
-    scheduleContainer: document.getElementById("schedule"),
-    favStopsContainer: document.getElementById("favStops"),
-    startBtn: document.getElementById("startSelectionBtn"),
-    backBtns: [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--back"))),
-    resetBtns: [].concat(_toConsumableArray(document.querySelectorAll(".selection__button--reset"))),
-    addToFavBtn: document.querySelector(".button--fav"),
-    refreshBtn: document.getElementById("refreshBtn"),
-    msgBox: document.getElementById("messageBox"),
-    removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")))
-};
+document.addEventListener("DOMContentLoaded", function () {
+    var elements = {
+        selectionSlider: document.querySelector(".selection__slider"),
+        slidesContent: [].concat(_toConsumableArray(document.querySelectorAll(".selection__content"))),
+        startSelection: document.getElementById("startSelection"),
+        citySelection: document.getElementById("citySelection"),
+        citySelectionBtns: document.getElementById("citySelectionBtns"),
+        stopSelection: document.getElementById("stopSelection"),
+        scheduleContainer: document.getElementById("schedule"),
+        favStopsContainer: document.getElementById("favStops"),
+        startBtn: document.getElementById("startSelectionBtn"),
+        backBtn: document.querySelector(".slider-navigation__button--back"),
+        resetBtn: document.querySelector(".slider-navigation__button--reset"),
+        addToFavBtn: document.querySelector(".button--fav"),
+        refreshBtn: document.getElementById("refreshBtn"),
+        msgBox: document.getElementById("messageBox"),
+        removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")))
+    };
 
-var init = function init() {
     var model = new _Model2.default();
     var controller = new _Controller2.default();
     var view = new _View2.default(model, controller, elements);
 
     controller.initialize(model, view);
-};
-
-document.addEventListener("DOMContentLoaded", init);
+});
 
 /***/ }),
 /* 4 */
@@ -557,8 +585,6 @@ document.addEventListener("DOMContentLoaded", init);
 
 "use strict";
 
-
-//priv variables
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -568,19 +594,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var translated = 0;
-var slideCounter = 0;
-
 var Slider = function () {
-    function Slider(slider, slides) {
-        var transitionTime = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
+    function Slider(elements) {
+        var transitionTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 300;
 
         _classCallCheck(this, Slider);
 
-        this.slider = slider;
-        this.slides = slides;
-        this.translateValue = 100 / slides.length;
+        //const variables
+        this.elements = elements;
+        this.translateValue = 100 / elements.slides.length;
         this.delay = transitionTime;
+        //working variables
+        this.translated = 0;
+        this.slideCounter = 0;
+        this.toggled = false;
     }
 
     _createClass(Slider, [{
@@ -588,36 +615,45 @@ var Slider = function () {
         value: function slide(value) {
             var _this = this;
 
-            var currentSlide = this.slides[slideCounter];
-            var nextSlide = this.slides[slideCounter + 1];
-            var prevSlide = this.slides[slideCounter - 1];
+            var currentSlide = this.elements.slides[this.slideCounter];
+            var nextSlide = this.elements.slides[this.slideCounter + 1];
+            var prevSlide = this.elements.slides[this.slideCounter - 1];
 
             switch (value) {
+                case "start":
+                    {
+                        this.toggleButtons();
+                        this.slide("next");
+                    }
+                    break;
                 case "next":
                     {
-                        translated -= this.translateValue;
+                        this.translated -= this.translateValue;
                         nextSlide.classList.add("selection__content--active");
+
                         setTimeout(function () {
                             return currentSlide.classList.remove("selection__content--active");
                         }, this.delay);
-                        slideCounter++;
+                        this.slideCounter++;
                     }
                     break;
                 case "prev":
                     {
-                        translated += this.translateValue;
+                        this.translated += this.translateValue;
                         prevSlide.classList.add("selection__content--active");
                         setTimeout(function () {
                             return currentSlide.classList.remove("selection__content--active");
                         }, this.delay);
-                        slideCounter--;
+                        this.slideCounter--;
+                        if (this.slideCounter === 0) this.toggleButtons();
                     }
                     break;
                 case "reset":
                     {
-                        translated = 0;
-                        slideCounter = 0;
-                        this.slides.forEach(function (element, index) {
+                        //reseting to the initial state of the slider
+                        this.translated = 0;
+                        this.slideCounter = 0;
+                        this.elements.slides.forEach(function (element, index) {
                             if (index == 0) {
                                 setTimeout(function () {
                                     return element.classList.add("selection__content--active");
@@ -628,15 +664,40 @@ var Slider = function () {
                                 }, _this.delay);
                             }
                         });
+                        this.toggleButtons();
                     }
                     break;
                 default:
                     {
-                        console.log("Incorrect input value");
+                        console.log("Input \"" + value + "\" is incorrect!");
                     }
             }
+            //translate slides in the slider
+            this.elements.slider.style.transform = "translateX(" + this.translated + "%)";
+        }
+    }, {
+        key: "toggleButtons",
+        value: function toggleButtons() {
+            var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 250;
 
-            this.slider.style.transform = "translateX(" + translated + "%)";
+            var backBtn = this.elements.back,
+                resetBtn = this.elements.reset;
+
+            // show Buttons: first = active, second = show
+            // hide Buttons: first = show, second = active
+            var first = this.toggled ? "show" : "active",
+                second = this.toggled ? "active" : "show";
+
+            backBtn.classList.toggle("slider-navigation__button--" + first);
+            resetBtn.classList.toggle("slider-navigation__button--" + first);
+
+            setTimeout(function () {
+                backBtn.classList.toggle("slider-navigation__button--" + second);
+                resetBtn.classList.toggle("slider-navigation__button--" + second);
+            }, delay);
+
+            //changing value to the opposite
+            this.toggled = !this.toggled;
         }
     }]);
 

@@ -1,9 +1,17 @@
 .selection {
-    width: 97.5%;
-    margin: 1rem auto;
+    margin: 1.5rem auto;
     overflow: hidden;
 
-    color: $text;
+    width: 100%;
+    @include atSmall {
+        width: 97.5%;
+    }
+    @include atLarge {
+        width: 95%;
+    }
+    @include atExtraLarge {
+        width: 90%;
+    }
 
     @include mdShadow(2);
 
@@ -15,7 +23,7 @@
         margin: 0;
         width: 400%;
 
-        transition: transform 0.35s ease-in-out;
+        transition: transform 0.3s ease-in-out;
     }  
 
     &__slide {
@@ -25,52 +33,49 @@
         
     }
 
-    &__header {
-        @include sectionHeader();
-    }
-
-    &__button {
-        display: none;
-        cursor: pointer;
-        background: none;
-        border: none;
-
-        transition: color 0.1s ease-in;
-        color: $text;
-
-        &--back:hover,
-        &--back:focus {
-            color: $secondary;
-        }
-        &--reset:hover,
-        &--reset:focus {
-            color: $secondary;
-        }
-    }
-
-    &__title {
-        @include sectionTitle();
-    }
-
     &__schedule {
         display: none;
     }
 
+    &__title {
+        margin: 0.5rem;
+        margin-left: 1rem;
+
+        color: $secondaryDark;
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-align: center;
+
+        @include atSmall() {
+            text-align: left;
+        }
+    }
+
     &__content {
+        min-height: 1rem;
+        padding: 0.5rem;
+        margin: 1rem auto;
+
+        width: 100%;
+        @include atSmall {
+            width: 97.5%;
+            padding: 2rem;
+        }
         
-        button {
+        @include focusable() {
             display: none;
         }
 
 
         &--active {
+            @include focusable() {
+                display: inherit;
+            }
+
             .selection__schedule {
                 display: block;
             }
 
-            button {
-                display: inherit;
-            }
         }
     }
 

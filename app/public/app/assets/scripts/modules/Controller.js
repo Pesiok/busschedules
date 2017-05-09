@@ -16,7 +16,7 @@ class Controller {
             this.model.setFavourites(filtredArr);
         } 
         //display favourite stops on load
-        //this.view.renderFavourites();
+        this.view.renderFavourites();
     }
 
     requestSchedule(stopNumber, saveToModel = true) {
@@ -41,7 +41,7 @@ class Controller {
                     resolve(json);
                 })
                 .catch(err => {
-                    this.view.message("Couldn't get the shedule, try again later!", 10000);
+                    this.view.message("Coś poszło nie tak. Sprawdzenie rozkładu nie powiodło się. Spróbuj później, lub odwiedź oficjalną stronę przewoźnika.", 10000);
                     reject(console.error(err));
                 });
         })
@@ -49,7 +49,7 @@ class Controller {
 
     addToFavourites(id = this.model.stopId) {
         if (this.model.favouriteStops.indexOf(id) >= 0) {
-            this.view.message("This stop is already in your favourites!");
+            this.view.message("Ten przystanek już jest w twoich ulubionych!");
             return false;
         } else {
             const favStops = this.model.favouriteStops;
@@ -58,8 +58,8 @@ class Controller {
             this.model.setFavourites(favStops);
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             //updating the view
-            this.view.renderFavourites();
-            this.view.message("Added to your favourites.");
+            this.view.renderFavourites([id]);
+            this.view.message("Dodano do ulubionych!");
             return true;
         }
         
@@ -67,14 +67,14 @@ class Controller {
 
     removeFromFavourites(id) {
         if (this.model.favouriteStops.indexOf(id) < 0) {
-            this.view.message("This stop is not yet in your favourites!");
+            this.view.message("Tego przystanku jeszcze nie ma w twoich ulubionych!");
             return false;
         } else {
             const filtredArr = this.model.favouriteStops.filter(element => element !== id);
             //saving current state to model and local storage
             this.model.setFavourites(filtredArr);
             localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
-            this.view.message("Removed from favourites!");
+            this.view.message("Usunięto z ulubionych!");
             return true;
         }
     }

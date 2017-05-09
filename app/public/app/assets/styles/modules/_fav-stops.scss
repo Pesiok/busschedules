@@ -1,5 +1,14 @@
 .fav-stops {
-    width: 97.5%;
+    width: 100%;
+    @include atSmall {
+        width: 97.5%;
+    }
+    @include atLarge {
+        width: 95%;
+    }
+    @include atExtraLarge {
+        width: 90%;
+    }
 
     margin: 1rem auto;
 
@@ -16,5 +25,9 @@
     &__container {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
+
+        min-height: 10rem;
+
     }
 }

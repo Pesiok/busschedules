@@ -8,6 +8,26 @@
   @else if $level == 5 {box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);}
 }
 
+//select all focusable elements
+@mixin focusable() {
+    a[href],
+    area[href],
+    details,
+    input,
+    select,
+    textarea,
+    button,
+    iframe,
+    [tabindex],
+    [contentEditable=true]
+    {
+        &:not([tabindex='-1'])
+        {
+            @content;
+        }
+    }
+}
+
 @mixin sectionHeader() {
     display: flex;
     justify-content: space-between;
@@ -20,11 +40,37 @@
 }
 
 @mixin sectionTitle() {
+    align-self: center;
+
     margin: 0.5rem;
     width: 100%;
 
     text-align: center;
-    vertical-align: middle;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     color: $text;
+}
+
+//media queries
+@mixin atSmall() {
+    @media (min-width: 576px) {
+        @content;
+    }
+}
+
+@mixin atMedium() {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin atLarge() {
+    @media (min-width: 992px) {
+        @content;
+    }
+}
+
+@mixin atExtraLarge() {
+    @media (min-width: 1200px) {
+        @content;
+    }
 }

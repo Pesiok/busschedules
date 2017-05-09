@@ -11,23 +11,16 @@
     <!-- endbuild -->
 </head>
 <body>
-    <header class="page-header">
-        <h1 class="page-header__title">ZKM Bielawa - Rozkład Jazdy</h1>
-    </header>
+    <h1 class="page-header">ZKM Bielawa - Rozkład Jazdy</h1>
     <section id="selectionContainer" class="selection">
-
-        <!--<header class="selection__header">
-            <button style="display: block" title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
-            <h3 class="selection__title">Dummy</h3>
-            <button style="display: block" title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
-        </header>-->
-
+        <header class="slider-navigation">
+            <button title="Cofnij" aria-label="Cofnij" class="slider-navigation__button slider-navigation__button--back material-icons">arrow_back</button>
+            <h2 class="slider-navigation__title">Znajdź przystanek</h2>
+            <button title="Zamknij" aria-label="Zamknij" class="slider-navigation__button slider-navigation__button--reset material-icons">close</button>
+        </header>
         <div class="selection__slider">
             <div id="startSelection" class="selection__slide">
                 <div class="selection__content selection__content--active">
-                    <header class="selection__header">
-                        <h2 class="selection__title">Znajdź przystanek</h2>
-                    </header>
                     <button id="startSelectionBtn" class="start-btn">
                         <span class="start-btn__title">Kliknij by znaleźć przystanek</span>
                         <span class="start-btn__icon material-icons">assignment</span>
@@ -36,11 +29,7 @@
             </div>
             <section id="citySelection" class="selection__slide">
                 <div class="selection__content">
-                    <header class="selection__header">
-                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
-                        <h3 class="selection__title">Wybierz miejscowość</h3>
-                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
-                    </header>
+                    <h3 class="selection__title">Wybierz miejscowość</h3>
                     <div id="citySelectionBtns" class="cities">
                         <button class="cities__city" data-value="stopSelection-0">
                             <span aria-hidden="true" class="cities__icon">
@@ -156,12 +145,6 @@
                             </span>
                             <span class="cities__name">Gilów</span>
                         </button>
-                        <button class="cities__city" data-value="stopSelection-18">
-                            <span aria-hidden="true" class="cities__icon">
-                                <span class="city-icon city-icon--niemcza"></span>
-                            </span>
-                            <span class="cities__name">Gola Dzierżoniowska</span>
-                        </button>
                         <button class="cities__city" data-value="stopSelection-19">
                             <span aria-hidden="true" class="cities__icon">
                                 <span class="city-icon city-icon--niemcza"></span>
@@ -173,18 +156,6 @@
                                 <span class="city-icon city-icon--niemcza"></span>
                             </span>
                             <span class="cities__name">Wilków Wielki</span>
-                        </button>
-                        <button class="cities__city" data-value="stopSelection-22">
-                            <span aria-hidden="true" class="cities__icon">
-                                <span class="city-icon city-icon--niemcza"></span>
-                            </span>
-                            <span class="cities__name">Nowa Wieś Niemczańska</span>
-                        </button>
-                        <button class="cities__city" data-value="stopSelection-23">
-                            <span aria-hidden="true" class="cities__icon">
-                                <span class="city-icon city-icon--niemcza"></span>
-                            </span>
-                            <span class="cities__name">Przerzeczyn Zdrój</span>
                         </button>
                         <button class="cities__city" data-value="stopSelection-24">
                             <span aria-hidden="true" class="cities__icon">
@@ -198,16 +169,30 @@
                             </span>
                             <span class="cities__name">Ligota Mała</span>
                         </button>
+                        <button class="cities__city" data-value="stopSelection-23">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Przerzeczyn Zdrój</span>
+                        </button>
+                         <button class="cities__city" data-value="stopSelection-22">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Nowa Wieś Niemczańska</span>
+                        </button>
+                        <button class="cities__city" data-value="stopSelection-18">
+                            <span aria-hidden="true" class="cities__icon">
+                                <span class="city-icon city-icon--niemcza"></span>
+                            </span>
+                            <span class="cities__name">Gola Dzierżoniowska</span>
+                        </button>
                     </div>
                 </div>
             </section>
             <section id="stopSelection" class="selection__slide">
                 <div class="selection__content">
-                    <header class="selection__header">
-                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
-                        <h3 class="selection__title">Wybierz przystanek</h3>
-                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
-                    </header>
+                    <h3 class="selection__title">Wybierz przystanek</h3>
                     <div id="stopSelection-0" class="selection__stops">
                         <h4>Bielawa</h4>
                         <button data-value="1">Bielawa Leśny Dworek</button>
@@ -561,13 +546,9 @@
             </section>
             <section class="selection__slide">
                 <div class="selection__content">
-                    <header class="selection__header">
-                        <button title="Cofnij" aria-label="Cofnij" class="selection__button selection__button--back material-icons">arrow_back</button>
-                        <h3 class="selection__title">Wybrany przystanek</h3>
-                        <button title="Zamknij" aria-label="Zamknij" class="selection__button selection__button--reset material-icons">close</button>
-                    </header>
+                    <h3 class="selection__title">Wybrany przystanek</h3>
                     <div id="schedule" class="selection__schedule">
-                         <!-- live content -->
+                            <!-- live content -->
                     </div>
                     <button class="button button--fav material-icons">favorite</button>
                 </div>
