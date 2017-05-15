@@ -369,12 +369,12 @@ var View = function () {
         value: function citySelectionHandler(event) {
             if (event.target && event.target.matches("button")) {
                 //hide prev city if there was any
-                if (this.chosenCity) this.chosenCity.classList.remove("selection__stops--active");
+                if (this.chosenCity) this.chosenCity.classList.remove("stops--active");
                 var value = event.target.dataset.value;
                 //get new city
                 this.chosenCity = this.elements.stopSelection.querySelector("#" + value);
                 //display only stops from chosen city
-                this.chosenCity.classList.add("selection__stops--active");
+                this.chosenCity.classList.add("stops--active");
                 this.slider.slide("next");
             }
         }
@@ -471,7 +471,7 @@ var View = function () {
                     this.showSchedules();
                 } else {
                     //no fav stops to display
-                    container.innerHTML = "\n                <p>Brak ulubionych przystank\xF3w do wy\u015Bwietlenia.</p>\n                <p>Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c \"dodaj do ulubonych\" po wybraniu przystanku.</p>\n                ";
+                    container.innerHTML = "\n                <div class=\"placeholder\">\n                    <p class=\"placeholder__title\">Brak ulubionych przystank\xF3w do wy\u015Bwietlenia. </p>\n                    <p class=\"placeholder__info\">Dodaj przystanki do ulubionych by mie\u0107 je pod r\u0119k\u0105 klikaj\u0105c w <span class=\"placeholder__icon material-icons\">favorite</span> po wybraniu przystanku.</p>\n                </div>\n                ";
                 }
             } else {
                 //custom msg
@@ -493,7 +493,7 @@ var View = function () {
                 });
             })).then(this.displayFavourites.bind(this)).catch(function (err) {
                 console.error(err);
-                _this4.displayFavourites(null, "\n                    <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                    <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                ");
+                _this4.displayFavourites(null, "\n                    <div class=\"placeholder\">\n                        <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                        <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    </div>\n                ");
             });
         }
     }, {
@@ -503,7 +503,7 @@ var View = function () {
 
             var msgBox = this.elements.msgBox;
 
-            msgBox.innerHTML = msg;
+            msgBox.innerHTML = "\n            <p><span aria-hidden=\"true\" class=\"material-icons\">info</span>" + msg + "</p>\n        ";
             //clearing last timeouts
             this.msgTimeoutIds.map(function (timeoutId) {
                 return clearTimeout(timeoutId);

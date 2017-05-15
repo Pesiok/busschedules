@@ -1,19 +1,44 @@
 .message-box {
     display: none;
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
+    position: fixed;
+    align-items: center;
+    z-index: 9999;
+    top: 2rem;
+    right: 0;
 
-    background-color: red;
+    transform: translateX(50%);
+    transition: transform 0.2s ease-in;
+
+    height: 5rem;
+    min-width: 12rem;
+
+    background-color: $secondaryDark;
+    color: $text;
+    font-size: 2rem;
+
+    @include mdShadow(4);
+
+    &::before {
+        z-index: -1;
+        position:absolute;
+        content: "";
+
+        left: -15%;
+
+        width: 5rem;
+        height: 5rem;
+
+         background-color: $secondaryDark;
+         border-radius: 30%;
+
+    }
 
     &--active {
-        display: block;
+        display: flex;
     }
 
     &--show {
-        opacity: 1;
+        transform: translateX(0);
     }
 
 }

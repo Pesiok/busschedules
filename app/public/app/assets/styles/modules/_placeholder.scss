@@ -1,0 +1,40 @@
+.placeholder {
+    text-align: center;
+
+    &__title {
+        display: block;
+        
+        font-size: 2rem;
+        font-weight: bold;
+
+        color: $secondary;
+    }
+
+    &__info {
+        display: block;
+        text-align: center;
+        font-size: 1.4rem;
+
+        @include atSmall() {
+            display: flex;
+        }
+
+    }
+
+    &__icon {
+        display: block;
+        align-self: center;
+
+        margin: 1rem;
+
+        color: $secondary;
+
+        @include atSmall() {
+            margin: 0 0.5rem;
+            font-size: 1.8rem;
+        }
+
+    }
+
+
+}

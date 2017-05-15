@@ -86,12 +86,12 @@ class View  {
     citySelectionHandler(event) {
         if (event.target && event.target.matches("button")) {
             //hide prev city if there was any
-            if (this.chosenCity) this.chosenCity.classList.remove("selection__stops--active");
+            if (this.chosenCity) this.chosenCity.classList.remove("stops--active");
             const value = event.target.dataset.value;
             //get new city
             this.chosenCity = this.elements.stopSelection.querySelector(`#${value}`);
             //display only stops from chosen city
-            this.chosenCity.classList.add("selection__stops--active");
+            this.chosenCity.classList.add("stops--active");
             this.slider.slide("next");
         }
     }
@@ -178,8 +178,10 @@ class View  {
             } else {
                 //no fav stops to display
                 container.innerHTML = `
-                <p>Brak ulubionych przystanków do wyświetlenia.</p>
-                <p>Dodaj przystanki do ulubionych by mieć je pod ręką klikając "dodaj do ulubonych" po wybraniu przystanku.</p>
+                <div class="placeholder">
+                    <p class="placeholder__title">Brak ulubionych przystanków do wyświetlenia. </p>
+                    <p class="placeholder__info">Dodaj przystanki do ulubionych by mieć je pod ręką klikając w <span class="placeholder__icon material-icons">favorite</span> po wybraniu przystanku.</p>
+                </div>
                 `
             } 
         } else {
@@ -199,8 +201,10 @@ class View  {
             .catch(err => {
                 console.error(err);
                 this.displayFavourites(null, `
-                    <p>Nie można było pobrać rozkładów. :<</p>
-                    <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                    <div class="placeholder">
+                        <p class="placeholder__title">Nie można było pobrać rozkładów.</p>
+                        <p class="placeholder__info">Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                    </div>
                 `);
             });
     }
@@ -208,7 +212,9 @@ class View  {
     message(msg, timeout = 2000) {
         const msgBox = this.elements.msgBox;
 
-        msgBox.innerHTML = msg;
+        msgBox.innerHTML = `
+            <p><span aria-hidden="true" class="material-icons">info</span>${msg}</p>
+        `
         //clearing last timeouts
         this.msgTimeoutIds.map(timeoutId => clearTimeout(timeoutId));
         //show msg

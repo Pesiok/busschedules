@@ -1,0 +1,46 @@
+.stops {
+    display: none;
+
+    margin-top: 0.25rem;
+
+    &--active {
+        display: block;
+    }
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+
+        margin: 0;
+        margin-top: 1rem;
+        padding: 0.5rem;
+
+        @include atSmall() {
+            margin: 0 1rem;
+            margin-top: 1rem;
+        }
+
+        background-color: $secondary;
+    }
+
+    &__icon {
+        display: block;
+    }
+
+    &__title {
+        display: block;
+
+        margin: 0;
+        margin-left: 0.8rem;
+
+        color: $text;
+        font-size: 2rem;
+    }
+
+}

@@ -1,0 +1,98 @@
+ .stop {
+    display: block;
+    cursor: pointer;
+    flex: 1;
+
+    &--single {
+        flex: 0 1 auto;
+    }
+
+    padding: 0;
+    margin: 0.25rem;
+    min-width: 15rem;
+
+    @include atSmall {
+        margin: 1rem;
+        min-width: 20rem;
+    }
+
+    border: none;
+    background: none;
+
+    @include mdShadow(2);
+    transition: box-shadow 0.3s ease-in;
+
+    &:focus,
+    &:hover {
+        @include mdShadow(4);
+    }
+    
+
+    &__name {
+        position: relative;
+        display: flex;
+        align-items: center;
+        
+        pointer-events: none;
+
+        height: 5rem;
+
+        background-color: $primaryLight;
+
+        color: $text;
+        text-align: center;
+        font-size: 1.5rem;
+
+        @include atSmall {
+            font-size: 1.8rem;
+            letter-spacing: 0.1rem;
+        }
+    }
+
+    &__icon {
+        display: block;
+        
+        margin: 0;
+        margin-left: 0.4rem;
+
+        color: $secondaryLight;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+
+            height: 100%;
+            margin: 0 0.4rem;
+
+            border-right: 0.1rem solid $primary;
+        }
+    }
+
+    &__title {
+        display: block;
+
+        
+        margin: 0;
+        margin-left: 0.6rem;
+
+        padding: 0.4rem;
+
+    }
+
+
+    &__direction {
+        display: block;
+        pointer-events: none;
+
+        padding: 0.2rem;
+        background-color: $primary;
+
+        color: $text;
+        font-size: 1.2rem;
+
+        @include atSmall {
+            font-size: 1.4rem;
+        }
+    }
+ }

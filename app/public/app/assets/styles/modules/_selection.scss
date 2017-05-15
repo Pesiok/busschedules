@@ -48,6 +48,7 @@
 
         @include atSmall() {
             text-align: left;
+            font-size: 2.5rem;
         }
     }
 
@@ -69,7 +70,7 @@
 
         &--active {
             @include focusable() {
-                display: inherit;
+                display: block;
             }
 
             .selection__schedule {
@@ -79,12 +80,4 @@
         }
     }
 
-    &__stops {
-        display: none;
-
-        &--active {
-            display: block;
-        }
-
-    }
 }
