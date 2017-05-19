@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         startBtn: document.getElementById("startSelectionBtn"),
         backBtn: document.querySelector(".slider-navigation__button--back"),
         resetBtn: document.querySelector(".slider-navigation__button--reset"),
-        addToFavBtn: document.querySelector(".button--fav"),
+        addToFavBtn: document.getElementById('favBtn'),
         refreshBtn: document.getElementById("refreshBtn"),
         msgBox: document.getElementById("messageBox"),
         removeFromFavBtns: [...document.querySelectorAll(".schedule__button--remove")]

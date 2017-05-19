@@ -1,10 +1,18 @@
 html {
     box-sizing: border-box;
 
+    height: 100%;
+
     font-size: 62.5%;
+
     font-family: 'Roboto', sans-serif;
+    line-height: normal;
 }
 
 *, *::after, *::before {
     box-sizing: inherit;
+}
+
+body {
+    height: 100%;
 }

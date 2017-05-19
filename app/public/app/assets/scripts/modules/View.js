@@ -53,7 +53,7 @@ class View  {
     }
 
     updateRemoveFavBtnsListeners() {
-        //called whenever new remove btn is added
+        //called whenever new remove btn is added...so terrible
         this.elements.removeFromFavBtns = [...document.querySelectorAll(".schedule__button--remove")];
 
         if (this.elements.removeFromFavBtns.length > 0) {
@@ -104,10 +104,13 @@ class View  {
                 .then(this.renderSchedule.bind(this))
                 .then(this.displaySchedule.bind(this))
                 .catch(() => {
-                    this.displaySchedule(`
-                        <p>Nie można było pobrać rozkładów. :<</p>
-                        <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
-                    `);
+                    //if slider is not closed and user is still wating for response, show error msg
+                    if (this.slider.isSliderReseted) {
+                        this.displaySchedule(`
+                            <p>Nie można było pobrać rozkładów. :<</p>
+                            <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                        `);
+                    }
                 });
         }
     }
@@ -117,7 +120,7 @@ class View  {
         
         for (let departure of schedule.departures) {
             departures += `
-            <tr class="schedule__row">
+            <tr class="schedule__table-row">
                 <td>${departure.time}</td>
                 <td>${departure.line}</td>
                 <td>${departure.destination}</td>
@@ -127,16 +130,16 @@ class View  {
         return new Promise(resolve => {
             resolve(`
             <div id="stop-${id}" class="schedule">
-                <div class="schedule__header">
-                    <h2 class="schedule__title">${schedule.stop}</h2>
+                <header class="schedule__header">
+                    <h3 class="schedule__title">${schedule.stop}</h3>
                     <button data-value="${id}" 
                         title="Usuń z ulubionych" 
                         aria-label="Usuń z ulubionych" 
                         class="schedule__button schedule__button--remove material-icons">delete
                     </button>
-                </div>
+                </header>
                 <table class="schedule__table">
-                    <tr class="schedule__headings">
+                    <tr class="schedule__table-headings">
                         <th>Odjazd</th>
                         <th>Linia</th>
                         <th>Kierunek</th>

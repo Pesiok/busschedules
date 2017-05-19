@@ -331,7 +331,7 @@ var View = function () {
         value: function updateRemoveFavBtnsListeners() {
             var _this2 = this;
 
-            //called whenever new remove btn is added
+            //called whenever new remove btn is added...so terrible
             this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")));
 
             if (this.elements.removeFromFavBtns.length > 0) {
@@ -387,7 +387,10 @@ var View = function () {
                 var id = event.target.dataset.value;
                 //request new Schedule
                 this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function () {
-                    _this3.displaySchedule("\n                        <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                        <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    ");
+                    //if slider is not closed and user is still wating for response, show error msg
+                    if (_this3.slider.isSliderReseted) {
+                        _this3.displaySchedule("\n                            <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                            <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                        ");
+                    }
                 });
             }
         }
@@ -407,7 +410,7 @@ var View = function () {
                 for (var _iterator = schedule.departures[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var departure = _step.value;
 
-                    departures += "\n            <tr class=\"schedule__row\">\n                <td>" + departure.time + "</td>\n                <td>" + departure.line + "</td>\n                <td>" + departure.destination + "</td>\n            </tr>\n                ";
+                    departures += "\n            <tr class=\"schedule__table-row\">\n                <td>" + departure.time + "</td>\n                <td>" + departure.line + "</td>\n                <td>" + departure.destination + "</td>\n            </tr>\n                ";
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -425,7 +428,7 @@ var View = function () {
             }
 
             return new Promise(function (resolve) {
-                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <div class=\"schedule__header\">\n                    <h2 class=\"schedule__title\">" + schedule.stop + "</h2>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove material-icons\">delete\n                    </button>\n                </div>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
+                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <header class=\"schedule__header\">\n                    <h3 class=\"schedule__title\">" + schedule.stop + "</h3>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove material-icons\">delete\n                    </button>\n                </header>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__table-headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
             });
         }
     }, {
@@ -566,7 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
         startBtn: document.getElementById("startSelectionBtn"),
         backBtn: document.querySelector(".slider-navigation__button--back"),
         resetBtn: document.querySelector(".slider-navigation__button--reset"),
-        addToFavBtn: document.querySelector(".button--fav"),
+        addToFavBtn: document.getElementById('favBtn'),
         refreshBtn: document.getElementById("refreshBtn"),
         msgBox: document.getElementById("messageBox"),
         removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")))
@@ -607,7 +610,8 @@ var Slider = function () {
         //working variables
         this.translated = 0;
         this.slideCounter = 0;
-        this.toggled = false;
+        this.areBtnsToggled = false;
+        this.isSliderReseted = true;
     }
 
     _createClass(Slider, [{
@@ -622,6 +626,7 @@ var Slider = function () {
             switch (value) {
                 case "start":
                     {
+                        this.isSliderReseted = false;
                         this.toggleButtons();
                         this.slide("next");
                     }
@@ -645,12 +650,17 @@ var Slider = function () {
                             return currentSlide.classList.remove("selection__content--active");
                         }, this.delay);
                         this.slideCounter--;
-                        if (this.slideCounter === 0) this.toggleButtons();
+
+                        if (this.slideCounter === 0) {
+                            this.toggleButtons();
+                            this.isSliderReseted = true;
+                        }
                     }
                     break;
                 case "reset":
                     {
                         //reseting to the initial state of the slider
+                        this.isSliderReseted = true;
                         this.translated = 0;
                         this.slideCounter = 0;
                         this.elements.slides.forEach(function (element, index) {
@@ -669,7 +679,7 @@ var Slider = function () {
                     break;
                 default:
                     {
-                        console.log("Input \"" + value + "\" is incorrect!");
+                        console.log("whaa input \"" + value + "\" is incorrect!");
                     }
             }
             //translate slides in the slider
@@ -685,8 +695,8 @@ var Slider = function () {
 
             // show Buttons: first = active, second = show
             // hide Buttons: first = show, second = active
-            var first = this.toggled ? "show" : "active",
-                second = this.toggled ? "active" : "show";
+            var first = this.areBtnsToggled ? "show" : "active",
+                second = this.areBtnsToggled ? "active" : "show";
 
             backBtn.classList.toggle("slider-navigation__button--" + first);
             resetBtn.classList.toggle("slider-navigation__button--" + first);
@@ -697,7 +707,7 @@ var Slider = function () {
             }, delay);
 
             //changing value to the opposite
-            this.toggled = !this.toggled;
+            this.areBtnsToggled = !this.areBtnsToggled;
         }
     }]);
 

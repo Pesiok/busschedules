@@ -3,20 +3,29 @@
 
     &__title {
         display: block;
+
+        margin: 2rem;
         
-        font-size: 2rem;
+        color: $secondary;
+        font-size: 1.7rem;
         font-weight: bold;
 
-        color: $secondary;
+        @include atSmall() {
+            font-size: 1.9rem;
+        }
     }
 
     &__info {
         display: block;
-        text-align: center;
-        font-size: 1.4rem;
+
+        margin: 0.5rem;
+        margin-bottom: 2rem;
+
+        font-size: 1.1rem;
 
         @include atSmall() {
             display: flex;
+            font-size: 1.3rem;
         }
 
     }

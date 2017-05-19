@@ -1,0 +1,11 @@
+.main-wrapper {
+    min-height: 100%;
+    margin-bottom: - $footerHeight;
+
+    &::after {
+        content: "";
+        display: block;
+
+        height: $footerHeight;
+    }
+}

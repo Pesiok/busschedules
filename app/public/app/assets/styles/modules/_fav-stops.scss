@@ -1,5 +1,7 @@
 .fav-stops {
+
     width: 100%;
+
     @include atSmall {
         width: 97.5%;
     }
@@ -26,8 +28,10 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        align-items: center;
 
-        min-height: 10rem;
+
+        min-height: 14.5rem;
 
     }
 

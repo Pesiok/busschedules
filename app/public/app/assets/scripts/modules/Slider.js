@@ -9,7 +9,8 @@ class Slider {
         //working variables
         this.translated = 0;
         this.slideCounter = 0;
-        this.toggled = false;
+        this.areBtnsToggled = false;
+        this.isSliderReseted = true;
     }
 
     slide(value) {
@@ -19,6 +20,7 @@ class Slider {
 
         switch(value) {
             case "start": {
+                this.isSliderReseted = false;
                 this.toggleButtons();
                 this.slide("next");
             }
@@ -37,12 +39,17 @@ class Slider {
                 prevSlide.classList.add("selection__content--active");
                 setTimeout(() => currentSlide.classList.remove("selection__content--active"), this.delay);
                 this.slideCounter--;
-                if (this.slideCounter === 0) this.toggleButtons();
+
+                if (this.slideCounter === 0) {
+                    this.toggleButtons();
+                    this.isSliderReseted = true;
+                }
                 
             }
             break;
             case "reset": {
                 //reseting to the initial state of the slider
+                this.isSliderReseted = true;
                 this.translated = 0;
                 this.slideCounter = 0;
                 this.elements.slides.forEach((element, index) => {
@@ -56,7 +63,7 @@ class Slider {
             }
             break;
             default: {
-                console.log(`Input "${value}" is incorrect!`);
+                console.log(`whaa input "${value}" is incorrect!`);
             }
         }
         //translate slides in the slider
@@ -69,8 +76,8 @@ class Slider {
 
         // show Buttons: first = active, second = show
         // hide Buttons: first = show, second = active
-        const first  = this.toggled ? "show" : "active",
-        second = this.toggled ? "active" : "show";
+        const first  = this.areBtnsToggled ? "show" : "active",
+        second = this.areBtnsToggled? "active" : "show";
 
         backBtn.classList.toggle(`slider-navigation__button--${first}`);
         resetBtn.classList.toggle(`slider-navigation__button--${first}`);
@@ -81,7 +88,7 @@ class Slider {
         }, delay);
 
         //changing value to the opposite
-        this.toggled = !this.toggled;
+        this.areBtnsToggled = !this.areBtnsToggled;
     }
 
 }
