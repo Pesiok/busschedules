@@ -32,60 +32,52 @@
         font-size: 1.7rem;
     }
 
-    &__button {
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        color: $text;
-
-        &--remove {
-            transition: color 0.1s ease-in;
-        }
-        &--remove:focus,
-        &--remove:hover {
-            color: $secondary;
-        }
+    &__button-remove {
+        @include button($text, $secondary);
+        
     }
 
     &__table {
-        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+        margin: 0.5rem auto;
+
         border-collapse: collapse;
 
     }
 
     &__table-headings {
         font-size: 1.5rem;
+        color: $secondary;
 
         th {
             min-width: 6rem;
             padding: 0.5rem;
 
-            background-color: $secondary;
+            background-color: $secondaryLight;
             color: $text;
 
-            border-bottom: 0.1rem solid $secondary;
-            border-right: 0.1rem solid $secondary;
+            border: 0.1rem solid $secondaryLight;
+            
         }
     }
 
     &__table-row {
         font-size: 1.4rem;
         text-align: center;
+        
 
         td {
             min-width: 6rem;
             padding: 0.5rem;
 
-            border-bottom: 0.1rem solid $secondary;
-            border-right: 0.1rem solid $secondary;
+            border: 0.1rem solid $secondaryLight;
+           
         }
 
         td:first-child {
-            font-size: 1.6rem;
-
-            background-color: $secondary;
-            color: $text;
+            font-size: 1.7rem;
+            color: $secondaryLight;
+            
         }
     }
 

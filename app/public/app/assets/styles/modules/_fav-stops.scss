@@ -1,20 +1,5 @@
 .fav-stops {
-
-    width: 100%;
-
-    @include atSmall {
-        width: 97.5%;
-    }
-    @include atLarge {
-        width: 95%;
-    }
-    @include atExtraLarge {
-        width: 90%;
-    }
-
-    margin: 1rem auto;
-
-    @include mdShadow(2);
+    @include mainWindow();
     
     &__header {
         @include sectionHeader();
@@ -28,8 +13,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
-
+        align-items: flex-start;
 
         min-height: 14.5rem;
 

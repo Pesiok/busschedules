@@ -1,4 +1,14 @@
 .fav-description {
+    flex: 1;
+
+    margin: 1rem;
+
+    @include mdShadow(2);
+
+    &__content {
+        padding: 1rem;
+    }
+
     &__header {
         display: flex;
         justify-content: space-between;
@@ -17,18 +27,13 @@
     }
 
     &__button {
-        background: none;
-        border: none;
-        cursor: pointer;
+        @include button($secondary, $secondaryLight);
+        
+    }
 
-        color: $secondary;
+    &__text {
+        margin: 1rem;
+        font-size: 1.4rem;
 
-        &--remove {
-            transition: color 0.1s ease-in;
-        }
-        &--remove:focus,
-        &--remove:hover {
-            color: $secondaryDark;
-        }
     }
 }

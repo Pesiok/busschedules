@@ -4,7 +4,9 @@
 @import 'base/_global.scss';
 @import 'base/_mixins.scss';
 @import 'modules/_main-wrapper.scss';
+@import 'modules/_main-slider.scss';
 @import 'modules/_page-header.scss';
+@import 'modules/_page-information.scss';
 @import 'modules/_stop.scss';
 @import 'modules/_stops.scss';
 @import 'modules/_selection.scss';
@@ -15,7 +17,6 @@
 @import 'modules/_sprite.scss';
 @import 'modules/_cities.scss';
 @import 'modules/_fav-stops.scss';
-@import 'modules/_page-footer.scss';
 @import 'modules/_refresh.scss';
 @import 'modules/_start-btn.scss';
 @import 'modules/_placeholder.scss';

@@ -8,23 +8,11 @@
     &__button {
         display: none;
         opacity: 0;
-        cursor: pointer;
-        background: none;
-        border: none;
 
-        transition: color 0.1s ease-in;
-        color: $text;
+        @include button($text, $secondary);
 
         transition: opacity 0.3s ease-in;
 
-        &--back:hover,
-        &--back:focus {
-            color: $secondary;
-        }
-        &--reset:hover,
-        &--reset:focus {
-            color: $secondary;
-        }
 
         &--active {
             display: block;

@@ -58,7 +58,7 @@ class Controller {
             this.model.setFavourites(favStops);
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
             //updating the view
-            this.view.renderFavourites([id]);
+            this.view.renderFavourites();
             this.view.message("Dodano do ulubionych!");
             return true;
         }
@@ -71,6 +71,10 @@ class Controller {
             return false;
         } else {
             const filtredArr = this.model.favouriteStops.filter(element => element !== id);
+
+            //render placeholder information
+            //if (filtredArr.length <= 0) this.view.displayFavourites([]);
+
             //saving current state to model and local storage
             this.model.setFavourites(filtredArr);
             localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));

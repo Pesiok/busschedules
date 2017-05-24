@@ -1,19 +1,8 @@
 .selection {
-    margin: 1.5rem auto;
     overflow: hidden;
 
-    width: 100%;
-    @include atSmall {
-        width: 97.5%;
-    }
-    @include atLarge {
-        width: 95%;
-    }
-    @include atExtraLarge {
-        width: 90%;
-    }
+    @include mainWindow();
 
-    @include mdShadow(2);
 
     &__slider {
         position: relative;
@@ -50,7 +39,10 @@
 
     &__schedule {
         display: none;
+        
         justify-content: space-between;
+        align-items: flex-start;
+
     }
 
     &__content {
@@ -75,7 +67,18 @@
             }
 
             .selection__schedule {
-                display: flex;
+                display: block;
+
+                .schedule__table {
+                    width: 100%;
+                }
+
+                .schedule__table-row {
+                    font-size: 1.6rem;
+                }
+
+                
+
             }
 
         }

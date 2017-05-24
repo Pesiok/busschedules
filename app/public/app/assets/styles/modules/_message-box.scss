@@ -12,26 +12,11 @@
     height: 5rem;
     min-width: 12rem;
 
-    background-color: $secondaryDark;
+    background-color: $primaryLight;
     color: $text;
-    font-size: 2rem;
+    font-size: 1.7rem;
 
     @include mdShadow(4);
-
-    &::before {
-        z-index: -1;
-        position:absolute;
-        content: "";
-
-        left: -15%;
-
-        width: 5rem;
-        height: 5rem;
-
-         background-color: $secondaryDark;
-         border-radius: 30%;
-
-    }
 
     &--active {
         display: flex;

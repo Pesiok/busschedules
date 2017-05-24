@@ -1,0 +1,32 @@
+.main-slider {
+    position: relative;
+    left: 0;
+    right: 0;
+
+    margin: 0;
+    width: 200%;
+   
+    transition: transform 0.3s ease-in-out;
+
+    &__slide {
+        float: left;
+
+        width: 50%;
+        
+    }
+
+    &__content {
+        
+        @include focusable() {
+            visibility: hidden;
+        }
+
+
+        &--active {
+            @include focusable() {
+                visibility: visible;
+            }
+            
+        }
+    }
+}

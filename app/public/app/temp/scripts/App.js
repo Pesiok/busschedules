@@ -155,7 +155,7 @@ var Controller = function () {
                 this.model.setFavourites(favStops);
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
                 //updating the view
-                this.view.renderFavourites([id]);
+                this.view.renderFavourites();
                 this.view.message("Dodano do ulubionych!");
                 return true;
             }
@@ -170,6 +170,10 @@ var Controller = function () {
                 var filtredArr = this.model.favouriteStops.filter(function (element) {
                     return element !== id;
                 });
+
+                //render placeholder information
+                //if (filtredArr.length <= 0) this.view.displayFavourites([]);
+
                 //saving current state to model and local storage
                 this.model.setFavourites(filtredArr);
                 localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
@@ -272,22 +276,32 @@ var View = function () {
 
         this.model = model;
         this.controller = controller;
+
         //DOM elements
         this.elements = elements;
-        //initialize slider
-        var sliderElements = {
+
+        //initialize main slider
+        this.mainSlider = new _Slider2.default({
+            slider: elements.mainSlider,
+            slides: elements.mainSliderSlides,
+            back: elements.mainBack,
+            reset: elements.infoBtn
+        }, "main-slider", "page-header");
+        //initialize selection slider
+        this.selectionSlider = new _Slider2.default({
             slider: elements.selectionSlider,
             slides: elements.slidesContent,
-            start: elements.startBtn,
             back: elements.backBtn,
             reset: elements.resetBtn
-        };
-        this.slider = new _Slider2.default(sliderElements);
+        }, "selection", "slider-navigation");
+
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
+
         //function references
         this.removeFav = this.removeFromFavHandler.bind(this);
+
         //initialize main events
         this.events();
     }
@@ -297,15 +311,23 @@ var View = function () {
         value: function events() {
             var _this = this;
 
-            //slider nav handlers//
+            //main slider nav handlers//
+            this.elements.infoBtn.addEventListener("click", function () {
+                return _this.mainSlider.slide("start");
+            });
+            this.elements.mainBack.addEventListener("click", function () {
+                return _this.mainSlider.slide("prev");
+            });
+
+            //selection slider nav handlers//
             this.elements.startBtn.addEventListener("click", function () {
-                return _this.slider.slide("start");
+                return _this.selectionSlider.slide("start");
             });
             this.elements.backBtn.addEventListener("click", function () {
-                return _this.slider.slide("prev");
+                return _this.selectionSlider.slide("prev");
             });
             this.elements.resetBtn.addEventListener("click", function () {
-                return _this.slider.slide("reset");
+                return _this.selectionSlider.slide("reset");
             });
 
             //selection handlers//
@@ -332,7 +354,7 @@ var View = function () {
             var _this2 = this;
 
             //called whenever new remove btn is added...so terrible
-            this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")));
+            this.elements.removeFromFavBtns = [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button-remove")));
 
             if (this.elements.removeFromFavBtns.length > 0) {
                 this.elements.removeFromFavBtns.forEach(function (element) {
@@ -362,6 +384,7 @@ var View = function () {
                 //remove schedule with specified id from the DOM
                 var schedule = document.querySelector("#favStops #stop-" + id);
                 schedule.parentNode.removeChild(schedule);
+                console.log("wennt00");
             }
         }
     }, {
@@ -375,7 +398,7 @@ var View = function () {
                 this.chosenCity = this.elements.stopSelection.querySelector("#" + value);
                 //display only stops from chosen city
                 this.chosenCity.classList.add("stops--active");
-                this.slider.slide("next");
+                this.selectionSlider.slide("next");
             }
         }
     }, {
@@ -388,7 +411,7 @@ var View = function () {
                 //request new Schedule
                 this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function () {
                     //if slider is not closed and user is still wating for response, show error msg
-                    if (_this3.slider.isSliderReseted) {
+                    if (_this3.selectionSlider.isSliderReseted) {
                         _this3.displaySchedule("\n                            <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                            <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                        ");
                     }
                 });
@@ -428,7 +451,7 @@ var View = function () {
             }
 
             return new Promise(function (resolve) {
-                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <header class=\"schedule__header\">\n                    <h3 class=\"schedule__title\">" + schedule.stop + "</h3>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button schedule__button--remove material-icons\">delete\n                    </button>\n                </header>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__table-headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
+                resolve("\n            <div id=\"stop-" + id + "\" class=\"schedule\">\n                <header class=\"schedule__header\">\n                    <h3 class=\"schedule__title\">" + schedule.stop + "</h3>\n                    <button data-value=\"" + id + "\" \n                        title=\"Usu\u0144 z ulubionych\" \n                        aria-label=\"Usu\u0144 z ulubionych\" \n                        class=\"schedule__button-remove material-icons\">delete\n                    </button>\n                </header>\n                <table class=\"schedule__table\">\n                    <tr class=\"schedule__table-headings\">\n                        <th>Odjazd</th>\n                        <th>Linia</th>\n                        <th>Kierunek</th>\n                    </tr>\n                    " + departures + "\n                </table>\n            </div>\n        ");
             });
         }
     }, {
@@ -453,7 +476,7 @@ var View = function () {
             var container = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.elements.scheduleContainer;
 
             container.innerHTML = htmlString;
-            this.slider.slide("next");
+            this.selectionSlider.slide("next");
             this.updateRemoveFavBtnsListeners();
             this.showSchedules();
         }
@@ -483,30 +506,32 @@ var View = function () {
         }
     }, {
         key: "renderFavourites",
-        value: function renderFavourites(array) {
+        value: function renderFavourites() {
             var _this4 = this;
 
             var favs = this.model.favouriteStops;
-            //?????
-            console.log(array);
             //request schedule for each stop id in favourites
-            Promise.all(favs.map(function (id) {
-                return _this4.controller.requestSchedule(id, false).then(function (json) {
-                    return _this4.renderSchedule(json, id);
+            if (favs.length >= 0) {
+                Promise.all(favs.map(function (id) {
+                    return _this4.controller.requestSchedule(id, false).then(function (json) {
+                        return _this4.renderSchedule(json, id);
+                    });
+                })).then(this.displayFavourites.bind(this)).catch(function (err) {
+                    console.error(err);
+                    _this4.displayFavourites(null, "\n                    <div class=\"placeholder\">\n                        <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                        <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    </div>\n                ");
                 });
-            })).then(this.displayFavourites.bind(this)).catch(function (err) {
-                console.error(err);
-                _this4.displayFavourites(null, "\n                    <div class=\"placeholder\">\n                        <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                        <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    </div>\n                ");
-            });
+            } else {
+                this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
+            }
         }
     }, {
         key: "message",
         value: function message(msg) {
-            var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
+            var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3500;
 
             var msgBox = this.elements.msgBox;
 
-            msgBox.innerHTML = "\n            <p><span aria-hidden=\"true\" class=\"material-icons\">info</span>" + msg + "</p>\n        ";
+            msgBox.innerHTML = "\n            <p><span aria-hidden=\"true\" class=\"material-icons\">announcement</span>" + msg + "</p>\n        ";
             //clearing last timeouts
             this.msgTimeoutIds.map(function (timeoutId) {
                 return clearTimeout(timeoutId);
@@ -567,12 +592,17 @@ document.addEventListener("DOMContentLoaded", function () {
         scheduleContainer: document.getElementById("schedule"),
         favStopsContainer: document.getElementById("favStops"),
         startBtn: document.getElementById("startSelectionBtn"),
-        backBtn: document.querySelector(".slider-navigation__button--back"),
-        resetBtn: document.querySelector(".slider-navigation__button--reset"),
+        backBtn: document.getElementById("navBack"),
+        resetBtn: document.getElementById("navReset"),
         addToFavBtn: document.getElementById('favBtn'),
         refreshBtn: document.getElementById("refreshBtn"),
         msgBox: document.getElementById("messageBox"),
-        removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button--remove")))
+        removeFromFavBtns: [].concat(_toConsumableArray(document.querySelectorAll(".schedule__button-remove"))),
+        mainSlider: document.querySelector(".main-slider"),
+        mainSliderSlides: [].concat(_toConsumableArray(document.querySelectorAll(".main-slider__content"))),
+        infoBtn: document.getElementById("infoBtn"),
+        mainBack: document.getElementById("mainBack")
+
     };
 
     var model = new _Model2.default();
@@ -598,13 +628,16 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Slider = function () {
-    function Slider(elements) {
-        var transitionTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 300;
+    function Slider(elements, blockCssClass) {
+        var navigationCssClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+        var transitionTime = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 300;
 
         _classCallCheck(this, Slider);
 
         //const variables
         this.elements = elements;
+        this.blockCssClass = blockCssClass;
+        this.navigationCssClass = navigationCssClass;
         this.translateValue = 100 / elements.slides.length;
         this.delay = transitionTime;
         //working variables
@@ -627,17 +660,17 @@ var Slider = function () {
                 case "start":
                     {
                         this.isSliderReseted = false;
-                        this.toggleButtons();
+                        if (this.navigationCssClass) this.toggleButtons();
                         this.slide("next");
                     }
                     break;
                 case "next":
                     {
                         this.translated -= this.translateValue;
-                        nextSlide.classList.add("selection__content--active");
+                        nextSlide.classList.add(this.blockCssClass + "__content--active");
 
                         setTimeout(function () {
-                            return currentSlide.classList.remove("selection__content--active");
+                            return currentSlide.classList.remove(_this.blockCssClass + "__content--active");
                         }, this.delay);
                         this.slideCounter++;
                     }
@@ -645,14 +678,14 @@ var Slider = function () {
                 case "prev":
                     {
                         this.translated += this.translateValue;
-                        prevSlide.classList.add("selection__content--active");
+                        prevSlide.classList.add(this.blockCssClass + "__content--active");
                         setTimeout(function () {
-                            return currentSlide.classList.remove("selection__content--active");
+                            return currentSlide.classList.remove(_this.blockCssClass + "__content--active");
                         }, this.delay);
                         this.slideCounter--;
 
                         if (this.slideCounter === 0) {
-                            this.toggleButtons();
+                            if (this.navigationCssClass) this.toggleButtons();
                             this.isSliderReseted = true;
                         }
                     }
@@ -666,15 +699,15 @@ var Slider = function () {
                         this.elements.slides.forEach(function (element, index) {
                             if (index == 0) {
                                 setTimeout(function () {
-                                    return element.classList.add("selection__content--active");
+                                    return element.classList.add(_this.blockCssClass + "__content--active");
                                 }, _this.delay);
                             } else {
                                 setTimeout(function () {
-                                    return element.classList.remove("selection__content--active");
+                                    return element.classList.remove(_this.blockCssClass + "__content--active");
                                 }, _this.delay);
                             }
                         });
-                        this.toggleButtons();
+                        if (this.navigationCssClass) this.toggleButtons();
                     }
                     break;
                 default:
@@ -696,14 +729,15 @@ var Slider = function () {
             // show Buttons: first = active, second = show
             // hide Buttons: first = show, second = active
             var first = this.areBtnsToggled ? "show" : "active",
-                second = this.areBtnsToggled ? "active" : "show";
+                second = this.areBtnsToggled ? "active" : "show",
+                navigationClass = this.navigationCssClass;
 
-            backBtn.classList.toggle("slider-navigation__button--" + first);
-            resetBtn.classList.toggle("slider-navigation__button--" + first);
+            if (backBtn) backBtn.classList.toggle(navigationClass + "__button--" + first);
+            if (resetBtn) resetBtn.classList.toggle(navigationClass + "__button--" + first);
 
             setTimeout(function () {
-                backBtn.classList.toggle("slider-navigation__button--" + second);
-                resetBtn.classList.toggle("slider-navigation__button--" + second);
+                if (backBtn) backBtn.classList.toggle(navigationClass + "__button--" + second);
+                if (resetBtn) resetBtn.classList.toggle(navigationClass + "__button--" + second);
             }, delay);
 
             //changing value to the opposite

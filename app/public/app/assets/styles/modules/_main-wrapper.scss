@@ -1,11 +1,4 @@
 .main-wrapper {
-    min-height: 100%;
-    margin-bottom: - $footerHeight;
+    overflow: hidden;
 
-    &::after {
-        content: "";
-        display: block;
-
-        height: $footerHeight;
-    }
 }

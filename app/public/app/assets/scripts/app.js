@@ -15,12 +15,17 @@ document.addEventListener("DOMContentLoaded", () => {
         scheduleContainer: document.getElementById("schedule"),
         favStopsContainer: document.getElementById("favStops"),
         startBtn: document.getElementById("startSelectionBtn"),
-        backBtn: document.querySelector(".slider-navigation__button--back"),
-        resetBtn: document.querySelector(".slider-navigation__button--reset"),
+        backBtn: document.getElementById("navBack"),
+        resetBtn: document.getElementById("navReset"),
         addToFavBtn: document.getElementById('favBtn'),
         refreshBtn: document.getElementById("refreshBtn"),
         msgBox: document.getElementById("messageBox"),
-        removeFromFavBtns: [...document.querySelectorAll(".schedule__button--remove")]
+        removeFromFavBtns: [...document.querySelectorAll(".schedule__button-remove")],
+        mainSlider: document.querySelector(".main-slider"),
+        mainSliderSlides: [...document.querySelectorAll(".main-slider__content")],
+        infoBtn: document.getElementById("infoBtn"),
+        mainBack: document.getElementById("mainBack")
+
     }
 
     const model = new Model();

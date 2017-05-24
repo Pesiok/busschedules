@@ -1,9 +1,11 @@
 "use strict";
 
 class Slider {
-    constructor(elements, transitionTime = 300) {
+    constructor(elements, blockCssClass, navigationCssClass = null, transitionTime = 300) {
         //const variables
         this.elements = elements;
+        this.blockCssClass = blockCssClass;
+        this.navigationCssClass = navigationCssClass;
         this.translateValue = 100 / elements.slides.length;
         this.delay = transitionTime;
         //working variables
@@ -21,27 +23,27 @@ class Slider {
         switch(value) {
             case "start": {
                 this.isSliderReseted = false;
-                this.toggleButtons();
+                if (this.navigationCssClass) this.toggleButtons();
                 this.slide("next");
             }
             break;
             case "next": {
                 this.translated -= this.translateValue;
-                nextSlide.classList.add("selection__content--active");
+                nextSlide.classList.add(`${this.blockCssClass}__content--active`);
 
-                setTimeout(() => currentSlide.classList.remove("selection__content--active"), this.delay);
+                setTimeout(() => currentSlide.classList.remove(`${this.blockCssClass}__content--active`), this.delay);
                 this.slideCounter++;
                 
             }
             break;
             case "prev": {
                 this.translated += this.translateValue;
-                prevSlide.classList.add("selection__content--active");
-                setTimeout(() => currentSlide.classList.remove("selection__content--active"), this.delay);
+                prevSlide.classList.add(`${this.blockCssClass}__content--active`);
+                setTimeout(() => currentSlide.classList.remove(`${this.blockCssClass}__content--active`), this.delay);
                 this.slideCounter--;
 
                 if (this.slideCounter === 0) {
-                    this.toggleButtons();
+                    if (this.navigationCssClass) this.toggleButtons();
                     this.isSliderReseted = true;
                 }
                 
@@ -54,12 +56,12 @@ class Slider {
                 this.slideCounter = 0;
                 this.elements.slides.forEach((element, index) => {
                     if (index == 0) {
-                        setTimeout(() => element.classList.add("selection__content--active"), this.delay);
+                        setTimeout(() => element.classList.add(`${this.blockCssClass}__content--active`), this.delay);
                     } else {
-                        setTimeout(() => element.classList.remove("selection__content--active"), this.delay);
+                        setTimeout(() => element.classList.remove(`${this.blockCssClass}__content--active`), this.delay);
                     }
                 });
-                this.toggleButtons();
+                if (this.navigationCssClass) this.toggleButtons();
             }
             break;
             default: {
@@ -77,14 +79,15 @@ class Slider {
         // show Buttons: first = active, second = show
         // hide Buttons: first = show, second = active
         const first  = this.areBtnsToggled ? "show" : "active",
-        second = this.areBtnsToggled? "active" : "show";
+        second = this.areBtnsToggled? "active" : "show",
+        navigationClass = this.navigationCssClass;
 
-        backBtn.classList.toggle(`slider-navigation__button--${first}`);
-        resetBtn.classList.toggle(`slider-navigation__button--${first}`);
+        if (backBtn) backBtn.classList.toggle(`${navigationClass}__button--${first}`);
+        if (resetBtn) resetBtn.classList.toggle(`${navigationClass}__button--${first}`);
 
         setTimeout(() => {
-            backBtn.classList.toggle(`slider-navigation__button--${second}`);
-            resetBtn.classList.toggle(`slider-navigation__button--${second}`);
+            if (backBtn) backBtn.classList.toggle(`${navigationClass}__button--${second}`);
+            if (resetBtn) resetBtn.classList.toggle(`${navigationClass}__button--${second}`);
         }, delay);
 
         //changing value to the opposite

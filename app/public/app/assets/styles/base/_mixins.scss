@@ -50,6 +50,44 @@
     color: $text;
 }
 
+@mixin button($from, $to) {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    transition: color 0.15s ease-in;
+    color: $from;
+    
+    &:focus,
+    &:hover {
+        color: $to;
+    }
+}
+
+@mixin mainWindow() {
+    width: 100%;
+    max-width: 130rem;
+
+    margin: 2rem auto;
+
+    background-color: $materialColor;
+
+    @include mdShadow(2);
+
+    @include atSmall() {
+        width: 97.5%;
+        margin-top: 3rem;
+    }
+    @include atLarge() {
+        width: 95%;
+        margin-top: 6rem;
+    }
+    @include atExtraLarge() {
+        width: 90%;
+       
+    }
+}
+
 //media queries
 @mixin atSmall() {
     @media (min-width: 576px) {

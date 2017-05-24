@@ -1,0 +1,25 @@
+.page-information {
+    @include mainWindow();
+
+    &__content {
+        padding: 2rem;
+    }
+
+    &__text {
+        font-size: 1.4rem;
+    }
+
+    &__link {
+        text-decoration: none;
+
+        color: $secondaryLight;
+    }
+
+    &__header {
+        @include sectionHeader();
+    }
+
+    &__title {
+        @include sectionTitle();
+    }
+}

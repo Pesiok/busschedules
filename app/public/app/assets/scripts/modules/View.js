@@ -6,31 +6,45 @@ class View  {
     constructor(model, controller, elements) {
         this.model = model;
         this.controller = controller;
+
         //DOM elements
         this.elements = elements;
-        //initialize slider
-        const sliderElements = {
+
+        //initialize main slider
+        this.mainSlider = new Slider({
+            slider: elements.mainSlider,
+            slides: elements.mainSliderSlides,
+            back: elements.mainBack,
+            reset: elements.infoBtn
+        }, "main-slider", "page-header");
+        //initialize selection slider
+        this.selectionSlider = new Slider({
             slider: elements.selectionSlider, 
             slides: elements.slidesContent,
-            start: elements.startBtn,
             back: elements.backBtn,
             reset: elements.resetBtn
-        }
-        this.slider = new Slider(sliderElements);
+        }, "selection", "slider-navigation");
+
         //temp variables
         this.chosenCity = null;
         this.msgTimeoutIds = [];
+
         //function references
         this.removeFav = this.removeFromFavHandler.bind(this);
+
         //initialize main events
         this.events()
     }
 
     events() {
-        //slider nav handlers//
-        this.elements.startBtn.addEventListener("click", () => this.slider.slide("start"));
-        this.elements.backBtn.addEventListener("click", () => this.slider.slide("prev"));
-        this.elements.resetBtn.addEventListener("click", () => this.slider.slide("reset"));
+        //main slider nav handlers//
+        this.elements.infoBtn.addEventListener("click", () => this.mainSlider.slide("start"));
+        this.elements.mainBack.addEventListener("click", () => this.mainSlider.slide("prev"));
+
+        //selection slider nav handlers//
+        this.elements.startBtn.addEventListener("click", () => this.selectionSlider.slide("start"));
+        this.elements.backBtn.addEventListener("click", () => this.selectionSlider.slide("prev"));
+        this.elements.resetBtn.addEventListener("click", () => this.selectionSlider.slide("reset"));
 
         //selection handlers//
         const stopHandler = this.stopSelectionHandler.bind(this);
@@ -54,7 +68,7 @@ class View  {
 
     updateRemoveFavBtnsListeners() {
         //called whenever new remove btn is added...so terrible
-        this.elements.removeFromFavBtns = [...document.querySelectorAll(".schedule__button--remove")];
+        this.elements.removeFromFavBtns = [...document.querySelectorAll(".schedule__button-remove")];
 
         if (this.elements.removeFromFavBtns.length > 0) {
             this.elements.removeFromFavBtns.forEach(element => element.addEventListener("click", this.removeFav));
@@ -80,6 +94,7 @@ class View  {
             //remove schedule with specified id from the DOM
             const schedule = document.querySelector(`#favStops #stop-${id}`);
             schedule.parentNode.removeChild(schedule);
+            console.log("wennt00");
         }
     }
 
@@ -92,7 +107,7 @@ class View  {
             this.chosenCity = this.elements.stopSelection.querySelector(`#${value}`);
             //display only stops from chosen city
             this.chosenCity.classList.add("stops--active");
-            this.slider.slide("next");
+            this.selectionSlider.slide("next");
         }
     }
 
@@ -105,7 +120,7 @@ class View  {
                 .then(this.displaySchedule.bind(this))
                 .catch(() => {
                     //if slider is not closed and user is still wating for response, show error msg
-                    if (this.slider.isSliderReseted) {
+                    if (this.selectionSlider.isSliderReseted) {
                         this.displaySchedule(`
                             <p>Nie można było pobrać rozkładów. :<</p>
                             <p>Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
@@ -135,7 +150,7 @@ class View  {
                     <button data-value="${id}" 
                         title="Usuń z ulubionych" 
                         aria-label="Usuń z ulubionych" 
-                        class="schedule__button schedule__button--remove material-icons">delete
+                        class="schedule__button-remove material-icons">delete
                     </button>
                 </header>
                 <table class="schedule__table">
@@ -165,8 +180,8 @@ class View  {
 
     displaySchedule(htmlString, container = this.elements.scheduleContainer) {
         container.innerHTML = htmlString;
-        this.slider.slide("next");
-        this.updateRemoveFavBtnsListeners()
+        this.selectionSlider.slide("next");
+        this.updateRemoveFavBtnsListeners();
         this.showSchedules();
     }
 
@@ -193,12 +208,11 @@ class View  {
         }
     }
     
-    renderFavourites(array) {
+    renderFavourites() {
         const favs = this.model.favouriteStops;
-        //?????
-        console.log(array);
         //request schedule for each stop id in favourites
-        Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
+        if (favs.length >= 0) {
+            Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
                         .then(json => this.renderSchedule(json, id))))
             .then(this.displayFavourites.bind(this))
             .catch(err => {
@@ -210,13 +224,16 @@ class View  {
                     </div>
                 `);
             });
+        } else {
+            this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
+        }
     }
 
-    message(msg, timeout = 2000) {
+    message(msg, timeout = 3500) {
         const msgBox = this.elements.msgBox;
 
         msgBox.innerHTML = `
-            <p><span aria-hidden="true" class="material-icons">info</span>${msg}</p>
+            <p><span aria-hidden="true" class="material-icons">announcement</span>${msg}</p>
         `
         //clearing last timeouts
         this.msgTimeoutIds.map(timeoutId => clearTimeout(timeoutId));

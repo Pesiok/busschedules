@@ -1,4 +1,10 @@
 .page-header {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     width: 100%;
 
     margin: 0;
@@ -8,12 +14,45 @@
     background-color: $primaryDark;
     @include mdShadow(1);
 
-    font-size: 1.9rem;
-    color: $text;
-    text-align: center;
+    &__title {
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        
+        top: 1.25rem;
+        left: 50%;
+        transform: translateX(-50%);
 
-    @include atSmall {
-        text-align: left;
+
+        margin: 0;
+
+        font-size: 1.7rem;
+        color: $text;
+        text-align: center;
+
+        @include atSmall {
+            font-size: 1.9rem;
+            top: 1rem;
+        }
+    }
+
+    &__button {
+        display: none;
+        z-index: 99;
+        opacity: 0;
+
+        @include button($text, $secondary);
+
+        transition: opacity 0.3s ease-in;
+
+
+        &--active {
+            display: block;
+        }
+
+        &--show {
+            opacity: 1;
+        }
     }
 
     
