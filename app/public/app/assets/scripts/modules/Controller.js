@@ -72,9 +72,6 @@ class Controller {
         } else {
             const filtredArr = this.model.favouriteStops.filter(element => element !== id);
 
-            //render placeholder information
-            //if (filtredArr.length <= 0) this.view.displayFavourites([]);
-
             //saving current state to model and local storage
             this.model.setFavourites(filtredArr);
             localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));

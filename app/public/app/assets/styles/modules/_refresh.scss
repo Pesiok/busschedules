@@ -1,7 +1,12 @@
 .refresh {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: 1rem;
+    right: 1rem;
+
+    @include atSmall() {
+        bottom: 2rem;
+        right: 2rem;
+    }
 
     width: 5rem;
     height: 5rem;
@@ -20,8 +25,6 @@
     &:focus {
         @include mdShadow(5);
     }
-
-   
 
     &:hover &__icon,
     &:focus &__icon {

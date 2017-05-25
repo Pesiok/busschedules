@@ -171,9 +171,6 @@ var Controller = function () {
                     return element !== id;
                 });
 
-                //render placeholder information
-                //if (filtredArr.length <= 0) this.view.displayFavourites([]);
-
                 //saving current state to model and local storage
                 this.model.setFavourites(filtredArr);
                 localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
@@ -287,6 +284,7 @@ var View = function () {
             back: elements.mainBack,
             reset: elements.infoBtn
         }, "main-slider", "page-header");
+
         //initialize selection slider
         this.selectionSlider = new _Slider2.default({
             slider: elements.selectionSlider,
@@ -346,7 +344,9 @@ var View = function () {
             this.updateRemoveFavBtnsListeners();
 
             //refresh handler//
-            this.elements.refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
+            this.elements.refreshBtn.addEventListener("click", function () {
+                return _this.refreshFavourites();
+            });
         }
     }, {
         key: "updateRemoveFavBtnsListeners",
@@ -384,7 +384,8 @@ var View = function () {
                 //remove schedule with specified id from the DOM
                 var schedule = document.querySelector("#favStops #stop-" + id);
                 schedule.parentNode.removeChild(schedule);
-                console.log("wennt00");
+                //render placeholder information if favs are empty
+                if (this.model.favouriteStops <= 0) this.displayFavourites([]);
             }
         }
     }, {
@@ -481,6 +482,18 @@ var View = function () {
             this.showSchedules();
         }
     }, {
+        key: "refreshFavourites",
+        value: function refreshFavourites() {
+            var favs = this.model.favouriteStops;
+
+            if (favs.length > 0) {
+                this.renderFavourites(favs);
+                this.message("Odświeżono!", 2000);
+            } else {
+                this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
+            }
+        }
+    }, {
         key: "displayFavourites",
         value: function displayFavourites(schedules) {
             var htmlString = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
@@ -509,20 +522,17 @@ var View = function () {
         value: function renderFavourites() {
             var _this4 = this;
 
-            var favs = this.model.favouriteStops;
+            var favs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.favouriteStops;
+
             //request schedule for each stop id in favourites
-            if (favs.length >= 0) {
-                Promise.all(favs.map(function (id) {
-                    return _this4.controller.requestSchedule(id, false).then(function (json) {
-                        return _this4.renderSchedule(json, id);
-                    });
-                })).then(this.displayFavourites.bind(this)).catch(function (err) {
-                    console.error(err);
-                    _this4.displayFavourites(null, "\n                    <div class=\"placeholder\">\n                        <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                        <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                    </div>\n                ");
+            Promise.all(favs.map(function (id) {
+                return _this4.controller.requestSchedule(id, false).then(function (json) {
+                    return _this4.renderSchedule(json, id);
                 });
-            } else {
-                this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
-            }
+            })).then(this.displayFavourites.bind(this)).catch(function (err) {
+                console.error(err);
+                _this4.displayFavourites(null, "\n                <div class=\"placeholder\">\n                    <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                    <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                </div>\n            ");
+            });
         }
     }, {
         key: "message",
@@ -530,8 +540,9 @@ var View = function () {
             var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3500;
 
             var msgBox = this.elements.msgBox;
+            var timeoutDelay = 300;
 
-            msgBox.innerHTML = "\n            <p><span aria-hidden=\"true\" class=\"material-icons\">announcement</span>" + msg + "</p>\n        ";
+            msgBox.innerHTML = "\n            <span class=\"message-box__icon material-icons\" aria-hidden=\"true\">announcement</span>\n            <p class=\"message-box__text\">" + msg + "</p>\n        ";
             //clearing last timeouts
             this.msgTimeoutIds.map(function (timeoutId) {
                 return clearTimeout(timeoutId);
@@ -540,14 +551,14 @@ var View = function () {
             msgBox.classList.add('message-box--active');
             var id1 = setTimeout(function () {
                 return msgBox.classList.add('message-box--show');
-            }, 150);
+            }, timeoutDelay);
             //remove msg after timeout
             var id2 = setTimeout(function () {
                 return msgBox.classList.remove('message-box--show');
-            }, timeout);
+            }, timeout - timeoutDelay);
             var id3 = setTimeout(function () {
                 return msgBox.classList.remove('message-box--active');
-            }, timeout + 150);
+            }, timeout + timeoutDelay);
             //saving id's
             this.msgTimeoutIds.push(id1, id2, id3);
         }

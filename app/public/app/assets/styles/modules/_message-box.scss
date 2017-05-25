@@ -2,21 +2,41 @@
     display: none;
     position: fixed;
     align-items: center;
+    justify-content: center;
     z-index: 9999;
-    top: 2rem;
+    top: 1rem;
     right: 0;
 
-    transform: translateX(50%);
-    transition: transform 0.2s ease-in;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in;
 
     height: 5rem;
-    min-width: 12rem;
+    padding: 2rem;
 
     background-color: $primaryLight;
     color: $text;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+
+    @include atMedium() {
+        font-size: 1.7rem;
+    }
 
     @include mdShadow(4);
+
+    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+
+    &__icon {
+        display: block;
+        padding-right: 1.5rem;
+    }
+
+    &__text {
+        display: block;
+        margin: 0;
+
+        text-align: center;
+    }
 
     &--active {
         display: flex;

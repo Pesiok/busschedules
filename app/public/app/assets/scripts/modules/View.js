@@ -17,6 +17,7 @@ class View  {
             back: elements.mainBack,
             reset: elements.infoBtn
         }, "main-slider", "page-header");
+
         //initialize selection slider
         this.selectionSlider = new Slider({
             slider: elements.selectionSlider, 
@@ -62,7 +63,7 @@ class View  {
         this.updateRemoveFavBtnsListeners();
 
         //refresh handler//
-        this.elements.refreshBtn.addEventListener("click", this.renderFavourites.bind(this));
+        this.elements.refreshBtn.addEventListener("click", () => this.refreshFavourites());
         
     }
 
@@ -94,7 +95,8 @@ class View  {
             //remove schedule with specified id from the DOM
             const schedule = document.querySelector(`#favStops #stop-${id}`);
             schedule.parentNode.removeChild(schedule);
-            console.log("wennt00");
+            //render placeholder information if favs are empty
+            if (this.model.favouriteStops <= 0) this.displayFavourites([]);
         }
     }
 
@@ -185,6 +187,17 @@ class View  {
         this.showSchedules();
     }
 
+    refreshFavourites() {
+        const favs = this.model.favouriteStops;
+
+        if (favs.length > 0) {
+            this.renderFavourites(favs);
+            this.message("Odświeżono!", 2000);
+        } else {
+            this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
+        }
+    }
+
     displayFavourites(schedules, htmlString = "", container = this.elements.favStopsContainer) {
         if (schedules) {
             schedules.forEach(schedule => htmlString += schedule)
@@ -208,41 +221,38 @@ class View  {
         }
     }
     
-    renderFavourites() {
-        const favs = this.model.favouriteStops;
+    renderFavourites(favs = this.model.favouriteStops) {
         //request schedule for each stop id in favourites
-        if (favs.length >= 0) {
-            Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
-                        .then(json => this.renderSchedule(json, id))))
-            .then(this.displayFavourites.bind(this))
-            .catch(err => {
-                console.error(err);
-                this.displayFavourites(null, `
-                    <div class="placeholder">
-                        <p class="placeholder__title">Nie można było pobrać rozkładów.</p>
-                        <p class="placeholder__info">Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
-                    </div>
-                `);
-            });
-        } else {
-            this.message("Nie ma w ulubionych żadnych przystanków do odświeżenia!");
-        }
+        Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
+                    .then(json => this.renderSchedule(json, id))))
+        .then(this.displayFavourites.bind(this))
+        .catch(err => {
+            console.error(err);
+            this.displayFavourites(null, `
+                <div class="placeholder">
+                    <p class="placeholder__title">Nie można było pobrać rozkładów.</p>
+                    <p class="placeholder__info">Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
+                </div>
+            `);
+        });
     }
 
     message(msg, timeout = 3500) {
         const msgBox = this.elements.msgBox;
+        const timeoutDelay = 300;
 
         msgBox.innerHTML = `
-            <p><span aria-hidden="true" class="material-icons">announcement</span>${msg}</p>
+            <span class="message-box__icon material-icons" aria-hidden="true">announcement</span>
+            <p class="message-box__text">${msg}</p>
         `
         //clearing last timeouts
         this.msgTimeoutIds.map(timeoutId => clearTimeout(timeoutId));
         //show msg
         msgBox.classList.add('message-box--active');
-        const id1 = setTimeout(() => msgBox.classList.add('message-box--show'), 150);
+        const id1 = setTimeout(() => msgBox.classList.add('message-box--show'), timeoutDelay);
         //remove msg after timeout
-        const id2 = setTimeout(() => msgBox.classList.remove('message-box--show'), timeout);
-        const id3 = setTimeout(() => msgBox.classList.remove('message-box--active'), timeout + 150);
+        const id2 = setTimeout(() => msgBox.classList.remove('message-box--show'), timeout - timeoutDelay);
+        const id3 = setTimeout(() => msgBox.classList.remove('message-box--active'), timeout + timeoutDelay);
         //saving id's
         this.msgTimeoutIds.push(id1, id2, id3);
     }
