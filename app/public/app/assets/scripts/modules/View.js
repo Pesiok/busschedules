@@ -116,12 +116,22 @@ class View  {
     stopSelectionHandler(event) {
         if (event.target && event.target.matches("button")) {
             const id = event.target.dataset.value;
+
+            //add loading animation
+            this.chosenCity.classList.add("stops--loading");
+
             //request new Schedule
             this.controller.requestSchedule(id)
                 .then(this.renderSchedule.bind(this))
-                .then(this.displaySchedule.bind(this))
+                .then(htmlString => {
+                    //remove loading animation
+                    this.chosenCity.classList.remove("stops--loading");
+                    this.displaySchedule(htmlString);
+                })
                 .catch(() => {
-                    //if slider is not closed and user is still wating for response, show error msg
+                    //remove loading animation
+                    this.chosenCity.classList.remove("stops--loading");
+                    //if slider is not closed and user is still wating for response, show placeholder msg
                     if (this.selectionSlider.isSliderReseted) {
                         this.displaySchedule(`
                             <p>Nie można było pobrać rozkładów. :<</p>
@@ -222,18 +232,31 @@ class View  {
     }
     
     renderFavourites(favs = this.model.favouriteStops) {
+        const container = this.elements.favStopsContainer;
+
+        //add loading animation
+        container.classList.add("fav-stops__container--loading");
+
         //request schedule for each stop id in favourites
         Promise.all(favs.map(id => this.controller.requestSchedule(id, false)
                     .then(json => this.renderSchedule(json, id))))
-        .then(this.displayFavourites.bind(this))
+        .then(schedules => {
+            //remove loading animation
+            container.classList.remove("fav-stops__container--loading");
+            //display rendered favs
+            this.displayFavourites(schedules, "", container);
+        })
         .catch(err => {
             console.error(err);
+            //remove loading animation
+            container.classList.remove("fav-stops__container--loading");
+            //display placeholder information
             this.displayFavourites(null, `
                 <div class="placeholder">
                     <p class="placeholder__title">Nie można było pobrać rozkładów.</p>
                     <p class="placeholder__info">Spróbuj ponownie później lub skorzystaj z oficjalnej strony przewoźnika</p>
                 </div>
-            `);
+            `, container);
         });
     }
 

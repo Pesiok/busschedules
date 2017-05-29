@@ -409,9 +409,19 @@ var View = function () {
 
             if (event.target && event.target.matches("button")) {
                 var id = event.target.dataset.value;
+
+                //add loading animation
+                this.chosenCity.classList.add("stops--loading");
+
                 //request new Schedule
-                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(this.displaySchedule.bind(this)).catch(function () {
-                    //if slider is not closed and user is still wating for response, show error msg
+                this.controller.requestSchedule(id).then(this.renderSchedule.bind(this)).then(function (htmlString) {
+                    //remove loading animation
+                    _this3.chosenCity.classList.remove("stops--loading");
+                    _this3.displaySchedule(htmlString);
+                }).catch(function () {
+                    //remove loading animation
+                    _this3.chosenCity.classList.remove("stops--loading");
+                    //if slider is not closed and user is still wating for response, show placeholder msg
                     if (_this3.selectionSlider.isSliderReseted) {
                         _this3.displaySchedule("\n                            <p>Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w. :<</p>\n                            <p>Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                        ");
                     }
@@ -524,14 +534,27 @@ var View = function () {
 
             var favs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.model.favouriteStops;
 
+            var container = this.elements.favStopsContainer;
+
+            //add loading animation
+            container.classList.add("fav-stops__container--loading");
+
             //request schedule for each stop id in favourites
             Promise.all(favs.map(function (id) {
                 return _this4.controller.requestSchedule(id, false).then(function (json) {
                     return _this4.renderSchedule(json, id);
                 });
-            })).then(this.displayFavourites.bind(this)).catch(function (err) {
+            })).then(function (schedules) {
+                //remove loading animation
+                container.classList.remove("fav-stops__container--loading");
+                //display rendered favs
+                _this4.displayFavourites(schedules, "", container);
+            }).catch(function (err) {
                 console.error(err);
-                _this4.displayFavourites(null, "\n                <div class=\"placeholder\">\n                    <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                    <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                </div>\n            ");
+                //remove loading animation
+                container.classList.remove("fav-stops__container--loading");
+                //display placeholder information
+                _this4.displayFavourites(null, "\n                <div class=\"placeholder\">\n                    <p class=\"placeholder__title\">Nie mo\u017Cna by\u0142o pobra\u0107 rozk\u0142ad\xF3w.</p>\n                    <p class=\"placeholder__info\">Spr\xF3buj ponownie p\xF3\u017Aniej lub skorzystaj z oficjalnej strony przewo\u017Anika</p>\n                </div>\n            ", container);
             });
         }
     }, {

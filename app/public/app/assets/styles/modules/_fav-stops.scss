@@ -17,6 +17,27 @@
 
         min-height: 14.5rem;
 
+        &--loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.5;
+            
+            &::after {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 7rem;
+                height: 7rem;
+                border-radius: 50%;
+                border: 0.7rem solid $secondaryDark;
+                border-right-color: $secondaryLight;
+                transform: translate(-50%, -50%) rotate(0deg);
+                content:'';
+                animation: loadingAnimation 0.5s infinite linear;
+                z-index: 100;
+            }
+        }
+
     }
 
 }

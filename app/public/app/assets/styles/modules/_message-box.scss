@@ -10,8 +10,8 @@
     transform: translateX(100%);
     transition: transform 0.3s ease-in;
 
-    height: 5rem;
-    padding: 2rem;
+    min-height: 5rem;
+    padding: 1.25rem;
 
     background-color: $primaryLight;
     color: $text;

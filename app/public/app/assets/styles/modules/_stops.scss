@@ -7,6 +7,28 @@
         display: block;
     }
 
+    &--loading {
+        position: relative;
+        pointer-events: none;
+        opacity: 0.5;
+        
+        &::after {
+            position: absolute;
+            right: 0.05rem;
+            top: 2.2rem;
+            width: 3.7rem;
+            height: 3.7rem;
+            border-radius: 50%;
+            border: 0.5rem solid $secondaryDark;
+            border-right-color: $secondaryLight;
+            transform: translate(-50%, -50%) rotate(0deg);
+            content:'';
+            animation: loadingAnimation 0.5s infinite linear;
+            z-index: 100;
+        }
+    }
+
+
     &__content {
         display: flex;
         flex-wrap: wrap;
