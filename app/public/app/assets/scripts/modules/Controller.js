@@ -23,15 +23,12 @@ class Controller {
         console.log("requested new schedule");
 
         const options = {
-            method: "POST",
+            method: "GET",
             headers: new Headers({
                 "Content-type": "application/json"
             }),
-            body: JSON.stringify({
-                stop: stopNumber
-            }), 
         }
-        const url = "/schedule";
+        const url = `/schedule?stop=${stopNumber}`;
 
         return new Promise((resolve, reject) => {
             fetch(url, options)

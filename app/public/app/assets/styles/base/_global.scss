@@ -1,8 +1,6 @@
 html {
     box-sizing: border-box;
 
-    height: 100%;
-
     font-size: 62.5%;
 
     font-family: 'Roboto', sans-serif;
@@ -13,7 +11,10 @@ html {
     box-sizing: inherit;
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 body {
-    height: 100%;
     background-color: $materialBackground;
 }

@@ -1,6 +1,4 @@
-const cheerio = require('cheerio'),
-bodyParser = require('body-parser'),
-jsonParser = bodyParser.json();
+const cheerio = require('cheerio');
 
 //written by https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
 const request = function(url) {
@@ -38,8 +36,8 @@ const requestHandler = function(resp) {
     }
 
 module.exports = function(app) {
-    app.post('/schedule', jsonParser, (req, res) => {
-        const url = `http://bielawa.trapeze.fi/bussit/web?command=fullscreen2&stop=${req.body.stop}`;
+    app.get('/schedule', (req, res) => {
+        const url = `http://bielawa.trapeze.fi/bussit/web?command=fullscreen2&stop=${req.query.stop}`;
 
         request(url)
             .then(requestHandler)
