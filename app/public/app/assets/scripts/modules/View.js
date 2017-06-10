@@ -1,6 +1,6 @@
 "use strict";
 
-import Slider from "./Slider"; 
+import Slider from "../utilis/Slider"; 
 
 class View  {
     constructor(model, controller, elements) {
@@ -39,8 +39,8 @@ class View  {
 
     events() {
         //main slider nav handlers//
-        this.elements.infoBtn.addEventListener("click", () => this.mainSlider.slide("start"));
-        this.elements.mainBack.addEventListener("click", () => this.mainSlider.slide("prev"));
+        this.elements.infoBtn.addEventListener("click", () => this.controller.navigate('/informacje'));
+        this.elements.mainBack.addEventListener("click", () => this.controller.navigate('/'));
 
         //selection slider nav handlers//
         this.elements.startBtn.addEventListener("click", () => this.selectionSlider.slide("start"));

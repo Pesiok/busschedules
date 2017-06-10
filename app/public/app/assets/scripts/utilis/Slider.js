@@ -50,11 +50,16 @@ class Slider {
             }
             break;
             case "reset": {
-                //reseting to the initial state of the slider
-                this.isSliderReseted = true;
-                this.translated = 0;
-                this.slideCounter = 0;
-                this.elements.slides.forEach((element, index) => {
+                if (this.isSliderReseted) {
+                    //do nothing if slider is already reseted
+                    break;
+                } else {
+                    //reseting to the initial state of the slider
+                    this.isSliderReseted = true;
+                    
+                    this.translated = 0;
+                    this.slideCounter = 0;
+                    this.elements.slides.forEach((element, index) => {
                     if (index == 0) {
                         setTimeout(() => element.classList.add(`${this.blockCssClass}__content--active`), this.delay);
                     } else {
@@ -62,6 +67,7 @@ class Slider {
                     }
                 });
                 if (this.navigationCssClass) this.toggleButtons();
+                }
             }
             break;
             default: {

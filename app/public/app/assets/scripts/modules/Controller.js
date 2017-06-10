@@ -1,11 +1,32 @@
 "use strict";
 
+import Router from "../utilis/Router";
+
 class Controller {
     initialize(model, view) {
         this.model = model;
         this.view = view;
 
+        //initialize router
+        this.router = new Router();
+        this.routerInit();
+
+        //initialize storage
         this.storageInit();
+    }
+
+    routerInit() {
+         this.router
+            .add('/informacje', () => this.view.mainSlider.slide("start"))
+            .add('/', () => this.view.mainSlider.slide("reset"))
+            .listen()
+            .check();
+    }
+
+    navigate(path) {
+        this.router
+            .setState(path)
+            .check();
     }
 
     storageInit() {
@@ -59,7 +80,6 @@ class Controller {
             this.view.message("Dodano do ulubionych!");
             return true;
         }
-        
     }
 
     removeFromFavourites(id) {
