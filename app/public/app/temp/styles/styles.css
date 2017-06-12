@@ -598,10 +598,26 @@ body {
   .page-information__content {
     padding: 2rem; }
   .page-information__text {
+    margin: 1.5rem 0;
     font-size: 1.4rem; }
   .page-information__link {
     text-decoration: none;
     color: #ff5c8d; }
+    .page-information__link:hover, .page-information__link:focus {
+      color: #d81b60; }
+  .page-information__contact {
+    text-align: center; }
+    @media (min-width: 576px) {
+      .page-information__contact {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: distribute;
+        justify-content: space-around; } }
+  .page-information__icon {
+    vertical-align: middle; }
+  .page-information__description {
+    vertical-align: middle; }
   .page-information__header {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1220,9 +1236,6 @@ body {
     animation: rotate 0.6s forwards; }
 
 .start-btn {
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
   cursor: pointer;
   padding: 1rem;
   margin: 1.5rem auto;

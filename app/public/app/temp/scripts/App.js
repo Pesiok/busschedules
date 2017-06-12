@@ -3418,9 +3418,11 @@ var Controller = function () {
             } else {
                 var favStops = this.model.favouriteStops;
                 favStops.push(id);
+
                 //saving current state to model and local storage
                 this.model.setFavourites(favStops);
                 localStorage.setItem("favouriteStops", JSON.stringify(favStops));
+
                 //updating the view
                 this.view.renderFavourites();
                 this.view.message("Dodano do ulubionych!");
@@ -3432,6 +3434,7 @@ var Controller = function () {
         value: function removeFromFavourites(id) {
             if (this.model.favouriteStops.indexOf(id) < 0) {
                 this.view.message("Tego przystanku jeszcze nie ma w twoich ulubionych!");
+
                 return false;
             } else {
                 var filtredArr = this.model.favouriteStops.filter(function (element) {
@@ -3442,6 +3445,7 @@ var Controller = function () {
                 this.model.setFavourites(filtredArr);
                 localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
                 this.view.message("Usunięto z ulubionych!");
+
                 return true;
             }
         }

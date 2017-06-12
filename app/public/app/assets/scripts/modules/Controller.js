@@ -72,9 +72,11 @@ class Controller {
         } else {
             const favStops = this.model.favouriteStops;
             favStops.push(id);
+
             //saving current state to model and local storage
             this.model.setFavourites(favStops);
             localStorage.setItem("favouriteStops", JSON.stringify(favStops));
+
             //updating the view
             this.view.renderFavourites();
             this.view.message("Dodano do ulubionych!");
@@ -85,6 +87,7 @@ class Controller {
     removeFromFavourites(id) {
         if (this.model.favouriteStops.indexOf(id) < 0) {
             this.view.message("Tego przystanku jeszcze nie ma w twoich ulubionych!");
+
             return false;
         } else {
             const filtredArr = this.model.favouriteStops.filter(element => element !== id);
@@ -93,6 +96,7 @@ class Controller {
             this.model.setFavourites(filtredArr);
             localStorage.setItem("favouriteStops", JSON.stringify(filtredArr));
             this.view.message("Usunięto z ulubionych!");
+            
             return true;
         }
     }

@@ -1,7 +1,7 @@
 const express = require('express');
 requestController = require('./controllers/requestController')
 port = process.env.PORT || 3000,
-directory = 'app';
+directory = 'docs';
 
 const app = express();
 
