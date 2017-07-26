@@ -3,7 +3,7 @@
 import "babel-polyfill";
 import "whatwg-fetch";
 
-import Model from "./modules/Model.js";
+import State from "./modules/State.js";
 import View from "./modules/View.js";
 import Controller from "./modules/Controller.js";
 
@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //initialize application
-    const model = new Model();
+    const state = new State();
     const controller = new Controller();
-    const view = new View(model, controller, elements);
-    controller.initialize(model, view);
+    const view = new View(state, controller, elements);
+    controller.initialize(state, view);
 });

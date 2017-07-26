@@ -4376,9 +4376,9 @@ __webpack_require__(117);
 
 __webpack_require__(118);
 
-var _Model = __webpack_require__(115);
+var _State = __webpack_require__(115);
 
-var _Model2 = _interopRequireDefault(_Model);
+var _State2 = _interopRequireDefault(_State);
 
 var _View = __webpack_require__(116);
 
@@ -4429,10 +4429,10 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     //initialize application
-    var model = new _Model2.default();
+    var state = new _State2.default();
     var controller = new _Controller2.default();
-    var view = new _View2.default(model, controller, elements);
-    controller.initialize(model, view);
+    var view = new _View2.default(state, controller, elements);
+    controller.initialize(state, view);
 });
 
 /***/ }),

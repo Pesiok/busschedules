@@ -3,10 +3,13 @@ del = require('del'),
 usemin = require('gulp-usemin'),
 rev = require('gulp-rev'),
 cssnano = require('gulp-cssnano'),
-uglify = require('gulp-uglify');
+uglify = require('gulp-uglify'),
+htmlmin = require('gulp-htmlmin');
 
 gulp.task('deleteDistFolder', function() {
-    return del("docs");
+    return del(['../public'], { force: true }).then(paths => {
+        console.log('Deleted files and folders:\n', paths.join('\n'));
+    });
 });
 
 gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
@@ -21,7 +24,7 @@ gulp.task('copyGeneralFiles', ['deleteDistFolder'], function() {
     ]
     
     return gulp.src(paths)
-        .pipe(gulp.dest("./docs"));
+        .pipe(gulp.dest("../public"));
 });
 
 gulp.task('useminTrigger', ['deleteDistFolder'], function(){
@@ -32,9 +35,10 @@ gulp.task('usemin', ['styles', 'scripts'], function() {
     return gulp.src("app/index.html")
         .pipe(usemin({
             css: [function() {return rev()}, function() {return cssnano()}],
+            html: [function() {return htmlmin({collapseWhitespace: true})}],
             js: [function() {return rev()}, function() {return uglify()}]
         }))
-        .pipe(gulp.dest("./docs"));
+        .pipe(gulp.dest("../public"));
 });
 
 gulp.task('build', ['deleteDistFolder', 'copyGeneralFiles', 'useminTrigger']);
