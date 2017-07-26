@@ -8,4 +8,4 @@ Used tools, libraries, techniques etc. :
 * Backend: Node.js, Express, Cherio, Compression
 * Frontend: Gulp, Webpack, SASS, BEM methodology
 
-[Live link](safe-inlet-31992.herokuapp.com) - first connection always takes up much longer than should have in reality. It's because heroku puts app to sleep after 30 mins of inactivity.
+[Live link](https://safe-inlet-31992.herokuapp.com/) - first connection always takes up much longer than should have in reality. It's because heroku puts app to sleep after 30 mins of inactivity.
