@@ -9,6 +9,10 @@ gulp.task('watch', function() {
 
     watch('app/assets/scripts/**/*.js', function() {
         gulp.start('scripts');
-    })
+    });
+
+    watch('app/assets/views/**/*.ejs', function() {
+        gulp.start('views');
+    });
     
 });

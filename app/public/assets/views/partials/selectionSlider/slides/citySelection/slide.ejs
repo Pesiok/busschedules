@@ -1,0 +1,10 @@
+<section id="citySelection" class="selection__slide">
+    <div class="selection__content">
+        <h3 class="selection__title">Wybierz miejscowość</h3>
+        <div id="citySelectionBtns" class="cities">
+           <% cities.forEach(function(city){ %>
+                <%- include('cityButton', { city: city }); %>
+           <% }); %>
+        </div>
+    </div>
+</section>

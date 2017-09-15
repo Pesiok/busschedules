@@ -1,0 +1,11 @@
+<section id="stopSelection-<%= city.value %>" class="stops">
+    <header class="stops__header">
+        <span aria-hidden="true" class="stops__icon city-icon city-icon--<%= city.icon %>"></span>
+        <h4 class="stops__title"><%= city.name %></h4>
+    </header>
+    <div class="stops__content">
+      <% stops.forEach(function(stop){ %>
+          <%- include('stopButton', { stop: stop }); %>
+      <% }); %>
+    </div>
+</section>

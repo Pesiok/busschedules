@@ -1,0 +1,8 @@
+<section id="stopSelection" class="selection__slide">
+    <div class="selection__content">
+        <h3 class="selection__title">Wybierz przystanek</h3>
+        <% cities.forEach(function(city){ %>
+            <%- include('cityStops', { city: city, stops: stops[city.value] }); %>
+        <% }); %>
+    </div>
+</section>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Dostęp do rozkładów jazdy ZKM Bielawa w bardziej znośnej formie. Dodawaj przystanki do ulubionych by mieć je zawsze pod ręką.">
+    <title>Rozkład Jazdy</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- build:css assets/styles/styles.css -->
+    <link rel="stylesheet" href="temp/styles/styles.css">
+    <!-- endbuild -->
+</head>
+<body>
+    <%- include('../partials/header') -%>
+    <main class="main-wrapper">
+        <%- include('../partials/mainSlider/slider') -%>
+    </main>
+    <%- include('../partials/refreshButton') -%>
+    <%- include('../partials/messageBox') -%>
+
+    <!-- build:js assets/scripts/app.js -->
+    <script src="/temp/scripts/app.js"></script>
+    <!-- endbuild -->
+</body>
+</html>
