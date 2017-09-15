@@ -1,0 +1,127 @@
+[
+  {
+     "name": "Bielawa",
+     "icon": "bielawa",
+     "value": 0
+  },
+  {
+     "name": "Dzierżoniów",
+     "icon": "dzierzoniow",
+     "value": 2
+  },
+  {
+     "name": "Jodłownik",
+     "icon": "dzierzoniow-commune",
+     "value": 1
+  },
+  {
+     "name": "Piława Dolna",
+     "icon": "dzierzoniow-commune",
+     "value": 8
+  },
+  {
+     "name": "Ostroszowice",
+     "icon": "dzierzoniow-commune",
+     "value": 11
+  },
+  {
+     "name": "Dobrocin",
+     "icon": "dzierzoniow-commune",
+     "value": 14
+  },
+  {
+     "name": "Roztocznik",
+     "icon": "dzierzoniow-commune",
+     "value": 15
+  },
+  {
+     "name": "Pieszyce",
+     "icon": "pieszyce",
+     "value": 3
+  },
+  {
+     "name": "Kamionki",
+     "icon": "pieszyce",
+     "value": 4
+  },
+  {
+     "name": "Rościszów",
+     "icon": "pieszyce",
+     "value": 5
+  },
+  {
+     "name": "Piskorzów",
+     "icon": "pieszyce",
+     "value": 6
+  },
+  {
+     "name": "Bratoszów",
+     "icon": "pieszyce",
+     "value": 7
+  },
+  {
+     "name": "Piława Górna",
+     "icon": "pilawa-gorna",
+     "value": 9
+  },
+  {
+     "name": "Kośmin",
+     "icon": "pilawa-gorna",
+     "value": 10
+  },
+  {
+     "name": "Rudnica",
+     "icon": "placeholder",
+     "value": 12
+  },
+  {
+     "name": "Jemna",
+     "icon": "placeholder",
+     "value": 13
+  },
+  {
+     "name": "Niemcza",
+     "icon": "niemcza",
+     "value": 21
+  },
+  {
+     "name": "Gilów",
+     "icon": "niemcza",
+     "value": 17
+  },
+  {
+     "name": "Kietlin",
+     "icon": "niemcza",
+     "value": 19
+  },
+  {
+     "name": "Wilków Wielki",
+     "icon": "niemcza",
+     "value": 20
+  },
+  {
+     "name": "Podlesie",
+     "icon": "niemcza",
+     "value": 24
+  },
+  {
+     "name": "Ligota Mała",
+     "icon": "niemcza",
+     "value": 25
+  },
+  {
+     "name": "Przerzeczyn Zdrój",
+     "icon": "niemcza",
+     "value": 23
+  },
+  {
+     "name": "Nowa Wieś Niemczańska",
+     "icon": "niemcza",
+     "value": 22
+  },
+  {
+     "name": "Gola Dzierżoniowska",
+     "icon": "niemcza",
+     "value": 18
+  }
+]
